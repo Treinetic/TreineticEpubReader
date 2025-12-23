@@ -9,6 +9,7 @@ export class ReaderView {
 
     constructor(container: HTMLElement) {
         this.container = container;
+        this.container.addEventListener('scroll', this.onContainerScroll.bind(this));
     }
 
     openBook(epubPackage: Package) {
@@ -51,15 +52,35 @@ export class ReaderView {
         }
     }
 
-    async openSpineItem(item: SpineItem) {
-        // 1. Create/Reuse Iframe
-        if (!this.iframe) {
-            this.iframe = document.createElement('iframe');
-            this.iframe.style.width = "100%";
-            this.iframe.style.height = "100%";
-            this.iframe.style.border = "none";
-            this.container.appendChild(this.iframe);
+    async openSpineItem(item: SpineItem, append: boolean = false) {
+        // 1. Manage Frames
+        if (!append) {
+            // Clear existing frames
+            this.container.innerHTML = '';
+            this.frames = [];
+            this.iframe = undefined;
         }
+
+        // Create new Iframe
+        const iframe = document.createElement('iframe');
+        iframe.style.width = "100%";
+        iframe.style.border = "none";
+
+        // Initial stlyes based on mode
+        if (this.currentSettings.scroll === 'scroll-continuous') {
+            iframe.style.height = "100vh"; // Temp until loaded
+            iframe.scrolling = "no";
+            this.container.style.overflowY = "auto";
+        } else {
+            iframe.style.height = "100%";
+            this.container.style.overflowY = "hidden";
+        }
+
+        this.container.appendChild(iframe);
+        this.frames.push({ item, element: iframe });
+
+        // Keep reference to "main" iframe for paginated logic
+        if (!append) this.iframe = iframe;
 
         // 2. Load Content
         if (this.epubPackage) {
@@ -92,20 +113,41 @@ export class ReaderView {
             }
 
             if (content) {
-                // ... (rest of logic handles injected content)
-
-                // Render
-                this.iframe.srcdoc = content;
-
-                this.iframe.onload = () => {
-                    this.initFrameContent();
+                iframe.srcdoc = content;
+                iframe.onload = () => {
+                    this.initFrameContent(iframe);
                 };
 
                 console.log(`Loading spine item: ${item.href}`);
-                this.currentItem = item;
+                if (!append) this.currentItem = item;
             } else {
                 console.error("Failed to load content for", item.href);
             }
+        }
+    }
+
+    private onContainerScroll() {
+        if (this.currentSettings.scroll !== 'scroll-continuous') return;
+        if (this.isLoadingNext) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = this.container;
+        // Threshold to load next (e.g. 500px before end)
+        if (scrollTop + clientHeight > scrollHeight - 500) {
+            this.loadNextChapter();
+        }
+    }
+
+    private async loadNextChapter() {
+        if (!this.epubPackage || !this.frames.length) return;
+
+        const lastFrame = this.frames[this.frames.length - 1];
+        const nextItem = this.epubPackage.spine.nextLinear(lastFrame.item);
+
+        if (nextItem) {
+            console.log("Auto-loading next chapter:", nextItem.href);
+            this.isLoadingNext = true;
+            await this.openSpineItem(nextItem, true);
+            this.isLoadingNext = false;
         }
     }
 
@@ -115,11 +157,15 @@ export class ReaderView {
     private pageCount = 0;
     private currentSettings: any = {};
 
-    private initFrameContent() {
-        if (!this.iframe || !this.iframe.contentDocument) return;
+    // Frame Management
+    private frames: { item: SpineItem, element: HTMLIFrameElement }[] = [];
+    private isLoadingNext = false;
 
-        console.log("initFrameContent: applying settings and pagination");
-        const doc = this.iframe.contentDocument;
+    private initFrameContent(iframe: HTMLIFrameElement) {
+        if (!iframe || !iframe.contentDocument) return;
+
+        // console.log("initFrameContent: applying settings and pagination");
+        const doc = iframe.contentDocument;
         const html = doc.documentElement;
         const body = doc.body;
 
@@ -139,20 +185,37 @@ export class ReaderView {
         });
 
         // Apply Styles
-        this.applySettingsToDoc(doc);
+        this.applySettingsToDoc(doc, iframe);
 
-        // Setup Pagination (CSS Columns)
-        // Wait for images? or assume loaded?
-        // Let's force a layout update
-        this.updatePagination();
+        // Setup Pagination (CSS Columns) or Content Height
+        this.updatePagination(iframe);
 
         // Listen for Resize
         window.addEventListener('resize', () => {
-            this.updatePagination();
+            this.updatePagination(iframe);
         });
 
+        // Scroll Mode: Resize iframe to fit content
+        if (this.currentSettings.scroll === 'scroll-continuous') {
+            const updateHeight = () => {
+                if (iframe.contentDocument) {
+                    const newHeight = iframe.contentDocument.documentElement.scrollHeight;
+                    iframe.style.height = `${newHeight}px`;
+                }
+            };
+            // Initial sizing
+            setTimeout(updateHeight, 100);
+
+            // Observe changes
+            const observer = new ResizeObserver(updateHeight);
+            observer.observe(body);
+            // Also listen to images load?
+            iframe.contentWindow?.addEventListener('load', updateHeight);
+        }
+
         // Handle case where we came from previous chapter and need to go to last page
-        if (this.currentPageIndex < 0) {
+        // Only for paginated mode
+        if (this.currentSettings.scroll !== 'scroll-continuous' && this.currentPageIndex < 0) {
             this.currentPageIndex = this.pageCount - 1;
             this.scrollToPage(this.currentPageIndex);
         }
@@ -160,45 +223,59 @@ export class ReaderView {
 
     public updateSettings(settings: any) {
         this.currentSettings = { ...this.currentSettings, ...settings };
-        if (this.iframe && this.iframe.contentDocument) {
-            this.applySettingsToDoc(this.iframe.contentDocument);
-            this.updatePagination();
+
+        // Apply to ALL active frames
+        this.frames.forEach(f => {
+            if (f.element.contentDocument) {
+                this.applySettingsToDoc(f.element.contentDocument, f.element);
+                this.updatePagination(f.element);
+            }
+        });
+
+        // Handle scroll mode container style update
+        if (this.currentSettings.scroll === 'scroll-continuous') {
+            this.container.style.overflowY = "auto";
+        } else {
+            this.container.style.overflowY = "hidden";
         }
     }
 
     public setBookStyles(styles: any[]) {
-        if (!this.iframe || !this.iframe.contentDocument) return;
-        const doc = this.iframe.contentDocument;
+        this.frames.forEach(f => {
+            const iframe = f.element;
+            if (!iframe || !iframe.contentDocument) return;
+            const doc = iframe.contentDocument;
 
-        // Remove old theme styles
-        const oldStyle = doc.getElementById('readium-theme-style');
-        if (oldStyle) oldStyle.remove();
+            // Remove old theme styles
+            const oldStyle = doc.getElementById('readium-theme-style');
+            if (oldStyle) oldStyle.remove();
 
-        const styleEl = doc.createElement('style');
-        styleEl.id = 'readium-theme-style';
+            const styleEl = doc.createElement('style');
+            styleEl.id = 'readium-theme-style';
 
-        let css = '';
-        styles.forEach(s => {
-            let decls = '';
-            for (const [prop, val] of Object.entries(s.declarations)) {
-                // Convert camelCase to kebab-case
-                const kebabWrapper = prop.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
-                decls += `${kebabWrapper}: ${val} !important; `;
-            }
-            css += `${s.selector} { ${decls} } \n`;
+            let css = '';
+            styles.forEach(s => {
+                let decls = '';
+                for (const [prop, val] of Object.entries(s.declarations)) {
+                    // Convert camelCase to kebab-case
+                    const kebabWrapper = prop.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+                    decls += `${kebabWrapper}: ${val} !important; `;
+                }
+                css += `${s.selector} { ${decls} } \n`;
+            });
+
+            // FIX: Inject structural styles for decent pagination and scroll
+            css += `
+                 img { max-width: 100%; box-sizing: border-box; break-inside: avoid; page-break-inside: avoid; }
+                 p, h1, h2, h3, h4, h5, h6 { break-inside: avoid; page-break-inside: avoid; }
+             `;
+
+            styleEl.textContent = css;
+            doc.head.appendChild(styleEl);
         });
-
-        // FIX: Inject structural styles for decent pagination
-        css += `
-            img { max-width: 100%; box-sizing: border-box; break-inside: avoid; page-break-inside: avoid; }
-            p, h1, h2, h3, h4, h5, h6 { break-inside: avoid; page-break-inside: avoid; }
-        `;
-
-        styleEl.textContent = css;
-        doc.head.appendChild(styleEl);
     }
 
-    private applySettingsToDoc(doc: Document) {
+    private applySettingsToDoc(doc: Document, iframe: HTMLIFrameElement) {
         const html = doc.documentElement;
         const body = doc.body;
 
@@ -231,7 +308,7 @@ export class ReaderView {
             // Reset positioning
             html.style.position = 'static';
             html.style.left = '0';
-            this.iframe!.style.overflow = 'auto'; // enable iframe scroll
+            iframe.style.overflow = 'hidden'; // Hide scrollbars on iframe, container handles it
         } else {
             // Paginated Mode (CSS Columns)
             html.style.height = `${height}px`;
@@ -268,7 +345,7 @@ export class ReaderView {
             body.style.padding = '0';
 
             // Hide scrollbars on the IFRAME itself
-            if (this.iframe) this.iframe.style.overflow = 'hidden';
+            if (iframe) iframe.style.overflow = 'hidden';
         }
     }
 
@@ -306,19 +383,19 @@ export class ReaderView {
         }
     }
 
-    private updatePagination() {
-        if (!this.iframe || !this.iframe.contentDocument) return;
+    private updatePagination(iframe: HTMLIFrameElement) {
+        if (!iframe || !iframe.contentDocument) return;
 
         // Skip pagination logic if in scroll mode
         if (this.currentSettings.scroll === 'scroll-continuous') return;
 
         console.log("updatePagination executing...");
 
-        const html = this.iframe.contentDocument.documentElement;
+        const html = iframe.contentDocument.documentElement;
 
         // Measure exact column width (might slightly differ from calc)
         // Legacy assumes fixed width columns based on viewport
-        const viewWidth = this.iframe.clientWidth;
+        const viewWidth = iframe.clientWidth;
 
         // Total width of the paginated content
         const fullWidth = html.scrollWidth;
