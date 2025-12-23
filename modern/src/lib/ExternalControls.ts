@@ -111,9 +111,8 @@ export class ExternalControls {
     }
 
     public goToPage(href: string): void {
-        // We assume currentPackageDocument has getToc() - legacy logic
-        const tocUrl = this.currentPackageDocument ? this.currentPackageDocument.getToc() : undefined;
-        if (this.reader) this.reader.openContentUrl(href, tocUrl, undefined);
+        // Fix: Package model doesn't have getToc(), and ReaderView only needs href
+        if (this.reader) this.reader.openContentUrl(href);
     }
 
     // Settings
@@ -128,6 +127,11 @@ export class ExternalControls {
 
     public setTheme(theme_id: string): void {
         this.readerSettings = this.cloneUpdate(this.readerSettings, "theme", theme_id);
+        if (this.reader) TreineticHelpers.updateReader(this.reader, this.readerSettings);
+    }
+
+    public setScrollOption(type: 'auto' | 'scroll-continuous'): void {
+        this.readerSettings = this.cloneUpdate(this.readerSettings, "scroll", type);
         if (this.reader) TreineticHelpers.updateReader(this.reader, this.readerSettings);
     }
 

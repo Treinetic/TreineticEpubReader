@@ -55,6 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
         TreineticEpubReader.prevPage();
     });
 
+    let isScroll = false;
+    document.getElementById('btn-toggle-scroll')?.addEventListener('click', () => {
+        isScroll = !isScroll;
+        TreineticEpubReader.setScrollOption(isScroll ? 'scroll-continuous' : 'auto');
+
+        const navbar = document.querySelector('.bottom-nav-bar') as HTMLElement;
+        if (navbar) navbar.style.display = isScroll ? 'none' : 'flex';
+
+        console.log("Scroll Mode:", isScroll);
+    });
+
     // Initialize Reader
     const controls = TreineticEpubReader.init('#epub-reader-frame');
     if (controls) {
@@ -87,15 +98,39 @@ function renderTOC(data: any) {
     function build(items: any[]) {
         let html = '';
         items.forEach(i => {
-            html += `<li style="border-bottom:1px solid #eee;">
-                        <a href="#" data-href="${i.Id_link}" 
-                           style="display:block; padding:12px 15px; color:#333; text-decoration:none; font-size:14px;">
-                           ${i.name}
-                        </a>`;
-            if (i.sub && i.sub.length) {
-                html += '<ul style="list-style:none; padding-left:20px;">' + build(i.sub) + '</ul>';
+            const hasSingleChild = i.sub && i.sub.length === 1;
+
+            if (hasSingleChild) {
+                // Special handling for Number -> Title hierarchy: Render inline
+                const child = i.sub[0];
+                html += `<li style="border-bottom:1px solid #eee; display: flex; flex-direction: row; align-items: baseline;">
+                            <a href="#" data-href="${i.Id_link}" 
+                               style="display:inline-block; padding:12px 5px 12px 15px; color:#333; text-decoration:none; font-size:14px; font-weight:bold;">
+                               ${i.name}
+                            </a>
+                            <a href="#" data-href="${child.Id_link}" 
+                               style="display:inline-block; padding:12px 15px 12px 0px; color:#333; text-decoration:none; font-size:14px; flex: 1;">
+                               ${child.name}
+                            </a>
+                         </li>`;
+                // Note: We don't recurse further on the child because we consumed it effectively.
+                // If the child had ITS OWN children (grand-children), we might be hiding them.
+                // Assuming depth is shallow for this pattern. 
+                // To be safe, if child has subs, we should append them?
+                if (child.sub && child.sub.length > 0) {
+                    html += '<ul style="list-style:none; padding-left:20px;">' + build(child.sub) + '</ul>';
+                }
+            } else {
+                html += `<li style="border-bottom:1px solid #eee;">
+                            <a href="#" data-href="${i.Id_link}" 
+                               style="display:block; padding:12px 15px; color:#333; text-decoration:none; font-size:14px;">
+                               ${i.name}
+                            </a>`;
+                if (i.sub && i.sub.length) {
+                    html += '<ul style="list-style:none; padding-left:20px;">' + build(i.sub) + '</ul>';
+                }
+                html += '</li>';
             }
-            html += '</li>';
         });
         return html;
     }

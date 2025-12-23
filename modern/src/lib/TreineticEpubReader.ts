@@ -155,5 +155,8 @@ export const TreineticEpubReader = {
     setFontSize: (size: number) => {
         ExternalControls.getInstance().changeFontSize(size);
     },
+    setScrollOption: (type: 'auto' | 'scroll-continuous') => {
+        ExternalControls.getInstance().setScrollOption(type);
+    }
 };
 

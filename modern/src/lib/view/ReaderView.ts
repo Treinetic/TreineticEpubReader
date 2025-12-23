@@ -94,6 +94,7 @@ export class ReaderView {
     private initFrameContent() {
         if (!this.iframe || !this.iframe.contentDocument) return;
 
+        console.log("initFrameContent: applying settings and pagination");
         const doc = this.iframe.contentDocument;
         const html = doc.documentElement;
         const body = doc.body;
@@ -148,6 +149,12 @@ export class ReaderView {
             css += `${s.selector} { ${decls} } \n`;
         });
 
+        // FIX: Inject structural styles for decent pagination
+        css += `
+            img { max-width: 100%; box-sizing: border-box; break-inside: avoid; page-break-inside: avoid; }
+            p, h1, h2, h3, h4, h5, h6 { break-inside: avoid; page-break-inside: avoid; }
+        `;
+
         styleEl.textContent = css;
         doc.head.appendChild(styleEl);
     }
@@ -166,32 +173,70 @@ export class ReaderView {
         const height = this.iframe!.clientHeight;
 
         // Legacy Reflowable Logic mimic
-        // We set styles on HTML to create columns that overflow horizontally
-        html.style.height = `${height}px`;
-        html.style.width = '100%'; // Not 100vw, but 100% of iframe
+        const isScroll = this.currentSettings.scroll === 'scroll-continuous';
 
-        // Important: Position relative to allow shifting
-        html.style.position = 'relative';
-        html.style.margin = '0';
-        html.style.padding = '0';
-        html.style.top = '0';
-        html.style.left = '0'; // Start at 0
+        if (isScroll) {
+            // Vertical Scroll Mode
+            html.style.height = 'auto'; // let it grow
+            html.style.width = '100vw'; // full width usually
+            html.style.overflowY = 'auto';
+            html.style.overflowX = 'hidden';
 
-        // Create Columns
-        html.style.columnWidth = `${width - this.columnGap}px`;
-        html.style.columnGap = `${this.columnGap}px`;
-        html.style.columnFill = 'auto';
+            html.style.columnWidth = 'auto';
+            html.style.columnGap = '0';
 
-        // Ensure body doesn't mess it up
-        body.style.margin = '0';
-        body.style.padding = '0';
+            // Reset positioning
+            html.style.position = 'static';
+            html.style.left = '0';
+            this.iframe!.style.overflow = 'auto'; // enable iframe scroll
+        } else {
+            // Paginated Mode (CSS Columns)
+            html.style.height = `${height}px`;
+            html.style.width = '100%'; // Not 100vw, but 100% of iframe
 
-        // Hide scrollbars on the IFRAME itself
-        if (this.iframe) this.iframe.style.overflow = 'hidden';
+            // Important: Position relative to allow shifting
+            html.style.position = 'relative';
+            html.style.margin = '0';
+            html.style.padding = '0';
+            html.style.top = '0';
+            html.style.left = '0'; // Start at 0
+
+            // Create Columns
+            // Check for Double Page Spread
+            const isLandscape = width > height;
+            const spreadSetting = this.currentSettings.syntheticSpread;
+            let forceDouble = spreadSetting === 'double';
+            if (!spreadSetting || spreadSetting === 'auto') {
+                forceDouble = isLandscape && width > 800; // Heuristic: Landscape and wide enough
+            }
+
+            if (forceDouble) {
+                const colWidth = (width - this.columnGap) / 2;
+                html.style.columnWidth = `${colWidth}px`;
+            } else {
+                html.style.columnWidth = `${width - this.columnGap}px`;
+            }
+
+            html.style.columnGap = `${this.columnGap}px`;
+            html.style.columnFill = 'auto';
+
+            // Ensure body doesn't mess it up
+            body.style.margin = '0';
+            body.style.padding = '0';
+
+            // Hide scrollbars on the IFRAME itself
+            if (this.iframe) this.iframe.style.overflow = 'hidden';
+        }
     }
 
     private updatePagination() {
         if (!this.iframe || !this.iframe.contentDocument) return;
+
+        // Skip pagination logic if in scroll mode
+        if (this.currentSettings.scroll === 'scroll-continuous') return;
+
+        console.log("updatePagination executing...");
+
         const html = this.iframe.contentDocument.documentElement;
 
         // Measure exact column width (might slightly differ from calc)
@@ -224,6 +269,8 @@ export class ReaderView {
         // offset = index * (width + gap)
         const offset = index * (viewWidth + this.columnGap);
 
+        console.log(`scrollToPage: index=${index}, offset=${offset}`);
+
         // Use 'left' as legacy did
         html.style.left = `-${offset}px`;
     }
@@ -233,16 +280,83 @@ export class ReaderView {
 
     async openContentUrl(href: string) {
         if (!this.epubPackage) return;
+        console.log("ReaderView.openContentUrl called with:", href);
         // Strip anchor
         const [path, anchor] = href.split('#');
+        console.log("Looking for spine item with path:", path);
         const item = this.epubPackage.spine.getItemByHref(path);
         if (item) {
+            console.log("Found item:", item);
+
+            // If it's the same item, just scroll
+            if (this.currentItem && this.currentItem.href === item.href) {
+                if (anchor) this.scrollToAnchor(anchor);
+                return;
+            }
+
             this.currentPageIndex = 0;
             await this.openSpineItem(item);
-            // TODO: Handle anchor scrolling
+
+            if (anchor) {
+                // Give the DOM a moment to render/layout before calculating offset
+                // Using a small timeout to let the browser paint/layout the new content
+                setTimeout(() => {
+                    this.scrollToAnchor(anchor);
+                }, 100);
+            }
         }
-        else console.warn("Item not found for href", href);
+        else {
+            console.warn("Item not found for href", href);
+            console.log("Available spine items:", this.epubPackage.spine.items.map(i => i.href));
+        }
     }
+
+    private scrollToAnchor(anchor: string) {
+        if (!this.iframe || !this.iframe.contentDocument) return;
+        const doc = this.iframe.contentDocument;
+        const el = doc.getElementById(anchor);
+        if (el) {
+            const html = doc.documentElement;
+            // Calculate page index
+            // In horizontal paginated mode (CSS columns):
+            // The element's offsetLeft tells us how far 'right' it is in the scrollable strip.
+
+            // Note: In Chrome/Webkit CSS columns, getBoundingClientRect().left is relative to viewport? 
+            // Better to use offsets relative to the scrolled document if possible, 
+            // but the doc itself is shifted.
+
+            // Current shift
+            const currentLeftShift = Math.abs(parseFloat(html.style.left || "0"));
+
+            const rect = el.getBoundingClientRect();
+            // True offset from start of book content = visible_position + current_scrolled_amount
+            const absoluteLeft = rect.left + currentLeftShift;
+
+            const viewWidth = this.iframe.clientWidth;
+            const singlePageWidth = viewWidth + this.columnGap;
+
+            // Page Index
+            // We verify if we are in scroll mode or paginated
+            if (this.currentSettings.scroll === 'scroll-continuous') {
+                el.scrollIntoView();
+                return;
+            }
+
+            let pageIndex = Math.floor(absoluteLeft / singlePageWidth);
+
+            console.log(`Scrolling to anchor #${anchor}: absLeft=${absoluteLeft}, pageIndex=${pageIndex}`);
+
+            this.currentPageIndex = pageIndex;
+            // Clamp
+            if (this.currentPageIndex >= this.pageCount) this.currentPageIndex = this.pageCount - 1;
+            if (this.currentPageIndex < 0) this.currentPageIndex = 0;
+
+            this.scrollToPage(this.currentPageIndex);
+        } else {
+            console.warn(`Anchor element #${anchor} not found`);
+        }
+    }
+
 
     private async injectResources(html: string, contextHref: string): Promise<string> {
         // Simple regex or DOM parser to replace src="..."

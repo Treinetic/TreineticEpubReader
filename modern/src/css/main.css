@@ -184,6 +184,8 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    padding: 20px;
+    /* User requested "healthy" padding around content */
 }
 
 /* BOTTOM NAV BAR (New) */
@@ -230,6 +232,36 @@ body {
     flex: 1;
     width: 100%;
     position: relative;
+}
+
+#epub-reader-frame {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    /* overflow: auto;  Managed by ReaderView logic now */
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    box-sizing: border-box;
+    /* Important so width 100% includes border? No, default is content-box. */
+}
+
+/* Legacy min.css used default box-sizing (content-box usually) so width 100% + border = overflow? 
+   No, usually you want border-box if width is 100%. 
+   Let's assume legacy worked. If it was content-box, width 100% would be 100% + 80px.
+   If parent has overflow hidden, it's fine.
+   Let's replicate exactly what I saw in min.css minus overflow which clearly conflicts with my logic 
+*/
+#epub-reader-frame {
+    display: block;
+    /* modern resets */
+    height: 100%;
+    width: 100%;
+    position: relative;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    box-sizing: border-box;
+    /* Safer choice for modern layout */
 }
 
 /* Overlay Buttons (Legacy - can hide or keep as option, assume hiding for now) */

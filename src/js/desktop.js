@@ -13,6 +13,15 @@ $(document).ready(function() {
     console.log("Initializing Desktop Reader...");
     
     // Config
+    // FIX: Clear corrupted settings from previous modern reader testing
+    try {
+        var saved = JSON.parse(localStorage.getItem('reader'));
+        if (saved && saved.theme && !saved.theme.includes('-theme')) {
+             console.warn("Detected corrupted theme setting, clearing...", saved.theme);
+             localStorage.removeItem('reader');
+        }
+    } catch(e) { localStorage.removeItem('reader'); }
+    
     var config = TreineticEpubReader.config();
     config.jsLibRoot = "./dist/workers/"; 
 
