@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    TreineticEpubReader.open('/modern/public/epubs/epub_1.epub'); // Correct path for root-served project
+    TreineticEpubReader.open('/modern/public/epubs/alice.epub'); // Correct path for root-served project
 });
 
 function renderTOC(data: any) {
@@ -113,36 +113,43 @@ function renderTOC(data: any) {
     function build(items: any[]) {
         let html = '';
         items.forEach(i => {
+            // Improved heuristic: Only treat as "Number -> Title" row if the parent is short or looks like a number.
+            // This avoids collapsing "PART ONE ... " into a side-by-side view if it happens to have one child.
+            // Heuristic Update:
+            // 1. If it's a Number + Title (e.g. "1" -> "The ...") -> Render Inline (Number left, Title right)
+            // 2. If it's a Text + Text (e.g. "PART TWO" -> "The Sea Cook") -> FLATTEN it. (Show Parent + Child on one line?)
+            //    ACTUALLY, User said "taking them out". 
+            //    If we just show the Child at the root level? "The Sea Cook"
+            //    BUT we might lose "PART TWO".
+            //    Let's try "Inline" for everything that has a single child, REGARDLESS of number.
+            //    This creates "PART TWO   The Sea Cook" on one line.
+
+            const cleanName = i.name.replace(/<[^>]*>?/gm, '').trim();
+            // const isLikelyChapterNum = /^\d+\.?$/.test(cleanName); // REMOVED STRICT CHECK
+
+            // If it has ONE child, we treat it as a "Header -> SubHeader" pair and flatten it into one inline row.
             const hasSingleChild = i.sub && i.sub.length === 1;
 
             if (hasSingleChild) {
-                // Special handling for Number -> Title hierarchy: Render inline
+                // Render inline: Parent (Bold/Gray) -> Child (Normal)
                 const child = i.sub[0];
-                html += `<li style="border-bottom:1px solid #eee; display: flex; flex-direction: row; align-items: baseline;">
-                            <a href="#" data-href="${i.Id_link}" 
-                               style="display:inline-block; padding:12px 5px 12px 15px; color:#333; text-decoration:none; font-size:14px; font-weight:bold;">
+                html += `<li class="toc-item toc-item-row">
+                            <a href="#" data-href="${i.Id_link}" class="toc-link toc-link-number" style="width:auto; min-width:30px;">
                                ${i.name}
                             </a>
-                            <a href="#" data-href="${child.Id_link}" 
-                               style="display:inline-block; padding:12px 15px 12px 0px; color:#333; text-decoration:none; font-size:14px; flex: 1;">
+                            <a href="#" data-href="${child.Id_link}" class="toc-link toc-link-title">
                                ${child.name}
                             </a>
                          </li>`;
-                // Note: We don't recurse further on the child because we consumed it effectively.
-                // If the child had ITS OWN children (grand-children), we might be hiding them.
-                // Assuming depth is shallow for this pattern. 
-                // To be safe, if child has subs, we should append them?
-                if (child.sub && child.sub.length > 0) {
-                    html += '<ul style="list-style:none; padding-left:20px;">' + build(child.sub) + '</ul>';
-                }
+
+                // We consume the child here.
             } else {
-                html += `<li style="border-bottom:1px solid #eee;">
-                            <a href="#" data-href="${i.Id_link}" 
-                               style="display:block; padding:12px 15px; color:#333; text-decoration:none; font-size:14px;">
+                html += `<li class="toc-item">
+                            <a href="#" data-href="${i.Id_link}" class="toc-link">
                                ${i.name}
                             </a>`;
                 if (i.sub && i.sub.length) {
-                    html += '<ul style="list-style:none; padding-left:20px;">' + build(i.sub) + '</ul>';
+                    html += '<ul class="toc-sub-list">' + build(i.sub) + '</ul>';
                 }
                 html += '</li>';
             }

@@ -63,12 +63,36 @@ export class ReaderView {
 
         // 2. Load Content
         if (this.epubPackage) {
-            let content = await this.epubPackage.loadFile(item.href);
-            if (content) {
+            let content: string | null = null;
+
+            // Handle Image Spine Items (Cover or full page images)
+            if (item.media_type && item.media_type.startsWith('image/')) {
+                const blob = await this.epubPackage.loadBlob(item.href);
+                if (blob) {
+                    const url = URL.createObjectURL(blob);
+                    content = `<!DOCTYPE html>
+                    <html style="height:100%"><head>
+                        <title>Image Content</title>
+                        <style>
+                            body { margin:0; padding:0; height:100%; display:flex; 
+                                   align-items:center; justify-content:center; }
+                            img { max-height:100%; max-width:100%; object-fit:contain; }
+                        </style>
+                    </head><body>
+                        <img src="${url}">
+                    </body></html>`;
+                }
+            } else {
+                // Text/HTML Content
+                content = await this.epubPackage.loadFile(item.href);
                 // 2.b Process content for resources if zipped
-                if (this.epubPackage.zip) {
+                if (content && this.epubPackage.zip) {
                     content = await this.injectResources(content, item.href);
                 }
+            }
+
+            if (content) {
+                // ... (rest of logic handles injected content)
 
                 // Render
                 this.iframe.srcdoc = content;
@@ -98,6 +122,21 @@ export class ReaderView {
         const doc = this.iframe.contentDocument;
         const html = doc.documentElement;
         const body = doc.body;
+
+        // INTERCEPT CLICKS
+        body.addEventListener('click', (e) => {
+            let target = e.target as HTMLElement;
+            while (target && target !== body && target.tagName !== 'A') {
+                target = target.parentElement as HTMLElement;
+            }
+            if (target && target.tagName === 'A') {
+                const href = target.getAttribute('href');
+                if (href) {
+                    e.preventDefault();
+                    this.handleLinkClick(href);
+                }
+            }
+        });
 
         // Apply Styles
         this.applySettingsToDoc(doc);
@@ -182,6 +221,10 @@ export class ReaderView {
             html.style.overflowY = 'auto';
             html.style.overflowX = 'hidden';
 
+            // Ensure body allows scrolling
+            body.style.height = 'auto';
+            body.style.overflowY = 'visible';
+
             html.style.columnWidth = 'auto';
             html.style.columnGap = '0';
 
@@ -226,6 +269,40 @@ export class ReaderView {
 
             // Hide scrollbars on the IFRAME itself
             if (this.iframe) this.iframe.style.overflow = 'hidden';
+        }
+    }
+
+    private handleLinkClick(href: string) {
+        console.log("Internal link clicked:", href);
+        // If external (http), let it open in new tab?
+        if (href.startsWith('http')) {
+            window.open(href, '_blank');
+            return;
+        }
+
+        // If relative, resolve against current item
+        if (this.currentItem) {
+            // Check if it's just an anchor on same page
+            if (href.startsWith('#')) {
+                this.scrollToAnchor(href.substring(1));
+                return;
+            }
+
+            // Complex relative URL resolution
+            // href: "../Text/chap01.xhtml"
+            // current: "OEBPS/Text/intro.xhtml"
+            // This needs a proper resolver. 
+            // Ideally we just pass it to openContentUrl which should handle finding the spine item.
+            // But we need to make sure openContentUrl can handle relative paths if provided?
+            // Actually openContentUrl logic:
+            // const item = this.epubPackage.spine.getItemByHref(path);
+            // getItemByHref expects specific path.
+
+            // Let's rely on resolvePath util to get absolute path from root
+            const absolutePath = this.resolvePath(this.currentItem.href, href);
+            console.log("Resolved link path:", absolutePath);
+
+            this.openContentUrl(absolutePath);
         }
     }
 
@@ -363,7 +440,7 @@ export class ReaderView {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
 
-        // Handle Images
+        // Handle Images <img>
         const images = Array.from(doc.querySelectorAll('img'));
         for (const img of images) {
             const src = img.getAttribute('src');
@@ -373,6 +450,21 @@ export class ReaderView {
                 const blob = await this.epubPackage?.loadBlob(relativePath);
                 if (blob) {
                     img.src = URL.createObjectURL(blob);
+                }
+            }
+        }
+
+        // Handle SVG Images <image xlink:href="...">
+        const svgImages = Array.from(doc.querySelectorAll('image'));
+        for (const img of svgImages) {
+            const href = img.getAttribute('xlink:href') || img.getAttribute('href');
+            if (href && !href.startsWith('http') && !href.startsWith('data:')) {
+                const relativePath = this.resolvePath(contextHref, href);
+                const blob = await this.epubPackage?.loadBlob(relativePath);
+                if (blob) {
+                    // Set BOTH for compatibility
+                    img.setAttribute('xlink:href', URL.createObjectURL(blob));
+                    img.setAttribute('href', URL.createObjectURL(blob));
                 }
             }
         }
@@ -396,15 +488,23 @@ export class ReaderView {
     }
 
     private resolvePath(base: string, relative: string): string {
-        const stack = base.split("/");
-        stack.pop(); // remove current filename
+        try {
+            // Handle absolute paths /OEBPS/... (unlikely in standard hrefs but possible)
+            if (relative.startsWith('/')) return relative.substring(1);
 
-        const parts = relative.split("/");
-        for (const part of parts) {
-            if (part === ".") continue;
-            if (part === "..") stack.pop();
-            else stack.push(part);
+            const stack = base.split("/");
+            stack.pop(); // remove current filename
+
+            const parts = relative.split("/");
+            for (const part of parts) {
+                if (part === ".") continue;
+                if (part === "..") stack.pop();
+                else stack.push(part);
+            }
+            return stack.join("/");
+        } catch (e) {
+            console.error("Path resolution error", base, relative);
+            return relative;
         }
-        return stack.join("/");
     }
 }

@@ -159,7 +159,109 @@ body {
 
 .desktop-sidebar.visible {
     transform: translateX(0);
-    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 700;
+    font-size: 18px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-close-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.sidebar-close-btn:hover {
+    color: #333;
+}
+
+/* --- Modern TOC Styles --- */
+/* --- Modern TOC Styles --- */
+#toc-list {
+    padding: 0 0 20px 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.toc-item {
+    border-bottom: 1px solid #f0f0f0;
+    /* Very subtle divider */
+    transition: background 0.2s;
+}
+
+.toc-item:last-child {
+    border-bottom: none;
+}
+
+.toc-link {
+    display: block;
+    padding: 12px 20px;
+    color: #444;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.toc-link:hover {
+    background: #fdfdfd;
+    color: #000;
+    border-left-color: #4caf50;
+    /* Accent color */
+    padding-left: 25px;
+    /* Slight movement effect */
+}
+
+/* Single Line Layout (Number + Title) */
+.toc-item-row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.toc-link-number {
+    display: inline-block;
+    padding-right: 10px;
+    font-weight: 700;
+    color: #888;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.toc-link-title {
+    display: inline-block;
+    flex: 1;
+    padding-left: 0;
+}
+
+/* Nested Lists */
+.toc-sub-list {
+    list-style: none;
+    padding: 0;
+    background: #fafafa;
+}
+
+.toc-sub-list .toc-link {
+    padding-left: 40px;
+    font-size: 14px;
+    color: #666;
+}
+
+.toc-sub-list .toc-link:hover {
+    padding-left: 45px;
 }
 
 /* Reader Container (Desktop) */

@@ -27,7 +27,7 @@ $(document).ready(function() {
 
     // Init Reader
     TreineticEpubReader.create("#epub-reader-frame");
-    TreineticEpubReader.open("./dist/sample/assets/epub/epub_1.epub");
+    TreineticEpubReader.open("/modern/public/epubs/alice.epub");
 
     // Handlers
     var controls = TreineticEpubReader.handler();
