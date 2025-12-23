@@ -55,16 +55,31 @@ document.addEventListener('DOMContentLoaded', () => {
         TreineticEpubReader.prevPage();
     });
 
+    // Keyboard Support
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') TreineticEpubReader.prevPage();
+        if (e.key === 'ArrowRight') TreineticEpubReader.nextPage();
+    });
+
     let isScroll = false;
+
+    const updateNavVisibility = () => {
+        const btns = document.querySelectorAll('.nav-overlay-btn');
+        btns.forEach(b => {
+            if (isScroll) b.classList.remove('visible');
+            else b.classList.add('visible');
+        });
+    };
+
     document.getElementById('btn-toggle-scroll')?.addEventListener('click', () => {
         isScroll = !isScroll;
         TreineticEpubReader.setScrollOption(isScroll ? 'scroll-continuous' : 'auto');
-
-        const navbar = document.querySelector('.bottom-nav-bar') as HTMLElement;
-        if (navbar) navbar.style.display = isScroll ? 'none' : 'flex';
-
+        updateNavVisibility();
         console.log("Scroll Mode:", isScroll);
     });
+
+    // Initial state
+    updateNavVisibility();
 
     // Initialize Reader
     const controls = TreineticEpubReader.init('#epub-reader-frame');

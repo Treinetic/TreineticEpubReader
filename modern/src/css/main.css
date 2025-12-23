@@ -188,43 +188,49 @@ body {
     /* User requested "healthy" padding around content */
 }
 
-/* BOTTOM NAV BAR (New) */
-.bottom-nav-bar {
+/* Navigation Overlays */
+.nav-overlay-btn {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: #fff;
-    /* White strip */
-    border-top: 1px solid #eee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-shrink: 0;
-    z-index: 10;
-}
-
-/* Button style */
-.nav-circle-btn {
-    width: 32px;
-    height: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 1px solid #ddd;
-    background: #f9f9f9;
-    color: #666;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    color: #555;
+    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    /* Hidden by default or managed by JS */
 }
 
-.nav-circle-btn:hover {
-    background: #eee;
-    color: #333;
-    border-color: #bbb;
+/* Show when active class added */
+.nav-overlay-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.nav-overlay-btn:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.nav-overlay-btn.prev {
+    left: 20px;
+}
+
+.nav-overlay-btn.next {
+    right: 20px;
 }
 
 /* The actual reader iframe container should fill remaining space */
