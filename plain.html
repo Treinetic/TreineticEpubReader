@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plain Reader - Treinetic</title>
+    <!-- Legacy Styles -->
+    <link rel="stylesheet" href="./dist/TreineticEpubReader.min.css">
+    <!-- Shared Modern CSS -->
+    <link rel="stylesheet" href="./src/css/main_v3.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #e0e0e0;
+        }
+
+        .view-section {
+            display: flex !important;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="position: absolute; top: 10px; left: 10px; z-index: 100;">
+        <a href="index.html" style="color: #333; text-decoration: none; font-size: 24px;"><i
+                class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <!-- Plain View Structure -->
+    <section id="plain-view" class="view-section" style="background: #f0f0f0;">
+
+        <!-- Detached Controls -->
+        <div class="plain-controls">
+            <h3>External Controls</h3>
+            <p>This panel mimics an external app controlling the reader via API.</p>
+
+            <button class="plain-btn" onclick="nextPage()">Next Page</button>
+            <button class="plain-btn" onclick="prevPage()">Prev Page</button>
+
+            <hr>
+            <label>Theme</label>
+            <button class="plain-btn" onclick="setTheme('day')">Day</button>
+            <button class="plain-btn" onclick="setTheme('night')">Night</button>
+
+            <hr>
+            <label>Custom Injection</label>
+            <button class="plain-btn accent" onclick="injectCSS()">Inject Red Text CSS</button>
+        </div>
+
+        <!-- Plain Reader Area -->
+        <div class="plain-reader-area">
+            <div id="epub-reader-frame" class="plain-frame"></div>
+        </div>
+
+    </section>
+
+    <!-- Scripts -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./dist/TreineticEpubReader.min.js"></script>
+    <script src="./src/js/plain.js"></script>
+</body>
+
+</html>

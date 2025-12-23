@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinetic Reader - Legacy & Modern Demos</title>
+    <!-- Legacy Styles for consistency -->
+    <link rel="stylesheet" href="./dist/TreineticEpubReader.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #222;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .menu-card {
+            background: #333;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.2s, background 0.2s;
+            border: 1px solid #444;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            background: #444;
+            border-color: #4caf50;
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #4caf50;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img src="https://avatars.githubusercontent.com/u/13243179?s=200&v=4" alt="Treinetic Logo"
+        style="width: 80px; margin-bottom: 20px; border-radius: 50%;">
+    <h1>Treinetic Epub Reader Implementation</h1>
+
+    <div class="menu-grid">
+        <a href="desktop.html" class="menu-card">
+            <div class="card-icon"><i class="fas fa-desktop"></i></div>
+            <div class="card-title">Desktop Reader</div>
+            <div class="card-desc">Full-featured desktop view with Sidebar, Gradient Toolbar, and Scroll Controls.</div>
+        </a>
+
+        <a href="mobile.html" class="menu-card">
+            <div class="card-icon"><i class="fas fa-mobile-alt"></i></div>
+            <div class="card-title">Mobile Reader</div>
+            <div class="card-desc">Native-app simulation with bottom sheet menus and improved touch UI.</div>
+        </a>
+
+        <a href="plain.html" class="menu-card">
+            <div class="card-icon"><i class="fas fa-code"></i></div>
+            <div class="card-title">Plain / API View</div>
+            <div class="card-desc">Minimalist reader with detached controls demonstrating the programmatic API.</div>
+        </a>
+    </div>
+
+    <p style="margin-top: 40px; color: #666; font-size: 12px;">v3.0.0 - Multi-Page Architecture</p>
+
+</body>
+
+</html>

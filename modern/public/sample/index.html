@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Reader</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/TreineticEpubReader.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div class="container-fluid" style="overflow: hidden">
+    <div class="row justify-content-center reader-parent">
+        <div class="col-md-8 reader-section">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar nav-design">
+                        <div class="buttonwrap theme-buttons-section">
+                            <div class="drawer-box material-icons">dehaze</div>
+                        </div>
+                        <div>
+                            <div class="font-size-block decrease-font-size">-</div>
+                            <div class="font-size-block-size font-size-view"></div>
+                            <div class="font-size-block increase-font-size">+</div>
+                        </div>
+                        <div class="buttonwrap text-right">
+                            <div class="image-buttons horizontal-view">
+                                <img src="assets/images/horizontal.png"/>
+                            </div>
+                            <div class="image-buttons vertical-view">
+                                <img src="assets/images/vertical.png"/>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <div class="col-12">
+                    <div class="drawer-backdrop">
+                        <div class="drawer-section"></div>
+                    </div>
+                    <div id="app-container" style="min-height: 600px !important;">
+                        <div id="reading-area" role="main">
+                            <div id="epub-reader-container">
+                                <div id="epub-reader-frame">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 page-controls">
+                            <div class="page-c-wrapper text-center pre-next-wrapper">
+                                <div class="prev-button material-icons">navigate_before</div>
+                                <div class="next-button material-icons">navigate_next</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="js/TreineticEpubReader.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

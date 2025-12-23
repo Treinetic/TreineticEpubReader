@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Reader - Treinetic</title>
+    <!-- Legacy Styles -->
+    <link rel="stylesheet" href="./dist/TreineticEpubReader.min.css">
+    <!-- Shared Modern CSS -->
+    <link rel="stylesheet" href="./src/css/main_v3.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #333;
+        }
+
+        .view-section {
+            display: flex !important;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Ensure bottom sheet works */
+        .mobile-bottom-sheet {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="position: absolute; top: 10px; left: 10px; z-index: 100;">
+        <a href="index.html" style="color: white; text-decoration: none; font-size: 24px;"><i
+                class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <!-- Mobile View Structure -->
+    <section id="mobile-view" class="view-section">
+
+        <div class="mobile-device iphone" id="mobile-device-frame" style="margin: auto;">
+            <div class="mobile-screen">
+                <!-- Status Bar -->
+                <div class="mobile-statusbar">
+                    <span>9:41</span>
+                    <span><i class="fas fa-wifi"></i> 100%</span>
+                </div>
+
+                <!-- Native App Navbar -->
+                <div class="mobile-nav">
+                    <i class="fas fa-bars" onclick="alert('Menu')"></i>
+                    <span>Treasure Island</span>
+                    <i class="fas fa-font" onclick="toggleMobileSheet()"></i>
+                </div>
+
+                <!-- Reader Frame -->
+                <div id="epub-reader-frame" class="mobile-reader-frame"></div>
+
+                <!-- Bottom Nav Bar -->
+                <div class="mobile-bottom-bar">
+                    <button class="nav-circle-btn" onclick="TreineticEpubReader.handler().prevPage()"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <button class="nav-circle-btn" onclick="TreineticEpubReader.handler().nextPage()"><i
+                            class="fas fa-chevron-right"></i></button>
+                </div>
+
+                <!-- Backdrop -->
+                <div id="mob-backdrop" class="mobile-backdrop" onclick="toggleMobileSheet()"></div>
+
+                <!-- Bottom Sheet -->
+                <div id="mob-sheet" class="mobile-bottom-sheet">
+                    <div class="sheet-handle"></div>
+                    <h4 style="margin:0 0 15px 0; text-align:center; color:#333;">Appearance</h4>
+
+                    <div class="mobile-theme-row">
+                        <div class="swatch swatch-default" onclick="setTheme('day')"></div>
+                        <div class="swatch swatch-night" onclick="setTheme('night')"></div>
+                        <div class="swatch swatch-sepia" onclick="setTheme('sepia')"></div>
+                    </div>
+
+                    <div class="mobile-slider-row">
+                        <label>Font Size</label>
+                        <input type="range" min="50" max="150" value="100" oninput="setFont(this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Switcher -->
+        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">
+            <button onclick="setFrame('iphone')">iPhone</button>
+            <button onclick="setFrame('pixel')">Pixel</button>
+        </div>
+
+    </section>
+
+    <!-- Scripts -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./dist/TreineticEpubReader.min.js"></script>
+    <script src="./src/js/mobile.js"></script>
+</body>
+
+</html>

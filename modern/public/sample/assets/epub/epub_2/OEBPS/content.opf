@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<package xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="id">
+  <metadata>
+    <dc:rights>Public domain in the USA.</dc:rights>
+    <dc:identifier id="id" opf:scheme="URI">http://www.gutenberg.org/ebooks/2852</dc:identifier>
+    <dc:creator opf:file-as="Doyle, Arthur Conan">Arthur Conan Doyle</dc:creator>
+    <dc:title>The Hound of the Baskervilles</dc:title>
+    <dc:language xsi:type="dcterms:RFC4646">en</dc:language>
+    <dc:subject>Holmes, Sherlock (Fictitious character) -- Fiction</dc:subject>
+    <dc:subject>Private investigators -- England -- Fiction</dc:subject>
+    <dc:subject>Dogs -- Fiction</dc:subject>
+    <dc:subject>Detective and mystery stories</dc:subject>
+    <dc:subject>Blessing and cursing -- Fiction</dc:subject>
+    <dc:subject>Dartmoor (England) -- Fiction</dc:subject>
+    <dc:date opf:event="publication">2001-10-01</dc:date>
+    <dc:date opf:event="conversion">2019-07-19T17:40:15.123927+00:00</dc:date>
+    <dc:source>http://www.gutenberg.org/files/2852/2852-h/2852-h.htm</dc:source>
+    <meta content="item1" name="cover"/>
+  </metadata>
+  <manifest>
+    <!--Image: 445 x 700 size=120058 q=85-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@images@cover.jpg" media-type="image/jpeg" id="item1"/>
+    <item href="pgepub.css" media-type="text/css" id="item2"/>
+    <item href="0.css" media-type="text/css" id="item3"/>
+    <item href="1.css" media-type="text/css" id="item4"/>
+    <!--Chunk: size=2017 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-0.htm.html" media-type="application/xhtml+xml" id="item5"/>
+    <!--Chunk: size=1281 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-1.htm.html" media-type="application/xhtml+xml" id="item6"/>
+    <!--Chunk: size=4094 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-2.htm.html" media-type="application/xhtml+xml" id="item7"/>
+    <!--Chunk: size=14987 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-3.htm.html" media-type="application/xhtml+xml" id="item8"/>
+    <!--Chunk: size=23344 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-4.htm.html" media-type="application/xhtml+xml" id="item9"/>
+    <!--Chunk: size=19413 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-5.htm.html" media-type="application/xhtml+xml" id="item10"/>
+    <!--Chunk: size=26101 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-6.htm.html" media-type="application/xhtml+xml" id="item11"/>
+    <!--Chunk: size=22405 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-7.htm.html" media-type="application/xhtml+xml" id="item12"/>
+    <!--Chunk: size=21248 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-8.htm.html" media-type="application/xhtml+xml" id="item13"/>
+    <!--Chunk: size=30046 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-9.htm.html" media-type="application/xhtml+xml" id="item14"/>
+    <!--Chunk: size=16065 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-10.htm.html" media-type="application/xhtml+xml" id="item15"/>
+    <!--Chunk: size=37867 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-11.htm.html" media-type="application/xhtml+xml" id="item16"/>
+    <!--Chunk: size=21858 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-12.htm.html" media-type="application/xhtml+xml" id="item17"/>
+    <!--Chunk: size=27291 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-13.htm.html" media-type="application/xhtml+xml" id="item18"/>
+    <!--Chunk: size=29776 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-14.htm.html" media-type="application/xhtml+xml" id="item19"/>
+    <!--Chunk: size=21737 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-15.htm.html" media-type="application/xhtml+xml" id="item20"/>
+    <!--Chunk: size=24796 Split on div.chapter-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-16.htm.html" media-type="application/xhtml+xml" id="item21"/>
+    <!--Chunk: size=45310-->
+    <item href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-17.htm.html" media-type="application/xhtml+xml" id="item22"/>
+    <item href="toc.ncx" media-type="application/x-dtbncx+xml" id="ncx"/>
+    <item href="wrap0000.html" media-type="application/xhtml+xml" id="coverpage-wrapper"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref linear="no" idref="coverpage-wrapper"/>
+    <itemref linear="yes" idref="item5"/>
+    <itemref linear="yes" idref="item6"/>
+    <itemref linear="yes" idref="item7"/>
+    <itemref linear="yes" idref="item8"/>
+    <itemref linear="yes" idref="item9"/>
+    <itemref linear="yes" idref="item10"/>
+    <itemref linear="yes" idref="item11"/>
+    <itemref linear="yes" idref="item12"/>
+    <itemref linear="yes" idref="item13"/>
+    <itemref linear="yes" idref="item14"/>
+    <itemref linear="yes" idref="item15"/>
+    <itemref linear="yes" idref="item16"/>
+    <itemref linear="yes" idref="item17"/>
+    <itemref linear="yes" idref="item18"/>
+    <itemref linear="yes" idref="item19"/>
+    <itemref linear="yes" idref="item20"/>
+    <itemref linear="yes" idref="item21"/>
+    <itemref linear="yes" idref="item22"/>
+  </spine>
+  <guide>
+    <reference href="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-2.htm.html#pgepubid00002" type="toc" title="Contents"/>
+    <reference href="wrap0000.html" type="cover" title="Cover"/>
+  </guide>
+</package>

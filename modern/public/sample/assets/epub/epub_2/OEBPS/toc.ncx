@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE ncx PUBLIC '-//NISO//DTD ncx 2005-1//EN' 'http://www.daisy.org/z3986/2005/ncx-2005-1.dtd'>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+  <head>
+    <meta content="http://www.gutenberg.org/ebooks/2852" name="dtb:uid"/>
+    <meta content="2" name="dtb:depth"/>
+    <meta content="Ebookmaker 0.4.0a5 by Marcello Perathoner &lt;webmaster@gutenberg.org&gt;" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>The Hound of the Baskervilles</text>
+  </docTitle>
+  <navMap>
+    <navPoint playOrder="1" id="np-1">
+      <navLabel>
+        <text>THE HOUND OF THE BASKERVILLES</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-0.htm.html#pgepubid00000"/>
+    </navPoint>
+    <navPoint playOrder="2" id="np-2">
+      <navLabel>
+        <text>Another Adventure of Sherlock Holmes</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-0.htm.html#pgepubid00001"/>
+      <navPoint playOrder="3" id="np-3">
+        <navLabel>
+          <text>Contents</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-2.htm.html#pgepubid00002"/>
+      </navPoint>
+      <navPoint playOrder="4" id="np-4">
+        <navLabel>
+          <text>Chapter 1. Mr. Sherlock Holmes</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-3.htm.html#pgepubid00003"/>
+      </navPoint>
+      <navPoint playOrder="5" id="np-5">
+        <navLabel>
+          <text>Chapter 2. The Curse of the Baskervilles</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-4.htm.html#pgepubid00004"/>
+      </navPoint>
+      <navPoint playOrder="6" id="np-6">
+        <navLabel>
+          <text>Chapter 3. The Problem</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-5.htm.html#pgepubid00005"/>
+      </navPoint>
+      <navPoint playOrder="7" id="np-7">
+        <navLabel>
+          <text>Chapter 4. Sir Henry Baskerville</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-6.htm.html#pgepubid00006"/>
+      </navPoint>
+      <navPoint playOrder="8" id="np-8">
+        <navLabel>
+          <text>Chapter 5. Three Broken Threads</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-7.htm.html#pgepubid00007"/>
+      </navPoint>
+      <navPoint playOrder="9" id="np-9">
+        <navLabel>
+          <text>Chapter 6. Baskerville Hall</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-8.htm.html#pgepubid00008"/>
+      </navPoint>
+      <navPoint playOrder="10" id="np-10">
+        <navLabel>
+          <text>Chapter 7. The Stapletons of Merripit House</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-9.htm.html#pgepubid00009"/>
+      </navPoint>
+      <navPoint playOrder="11" id="np-11">
+        <navLabel>
+          <text>Chapter 8. First Report of Dr. Watson</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-10.htm.html#pgepubid00010"/>
+      </navPoint>
+      <navPoint playOrder="12" id="np-12">
+        <navLabel>
+          <text>Chapter 9. The Light upon the Moor [Second Report of Dr. Watson]</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-11.htm.html#pgepubid00011"/>
+      </navPoint>
+      <navPoint playOrder="13" id="np-13">
+        <navLabel>
+          <text>Chapter 10. Extract from the Diary of Dr. Watson</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-12.htm.html#pgepubid00012"/>
+      </navPoint>
+      <navPoint playOrder="14" id="np-14">
+        <navLabel>
+          <text>Chapter 11. The Man on the Tor</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-13.htm.html#pgepubid00013"/>
+      </navPoint>
+      <navPoint playOrder="15" id="np-15">
+        <navLabel>
+          <text>Chapter 12. Death on the Moor</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-14.htm.html#pgepubid00014"/>
+      </navPoint>
+      <navPoint playOrder="16" id="np-16">
+        <navLabel>
+          <text>Chapter 13. Fixing the Nets</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-15.htm.html#pgepubid00015"/>
+      </navPoint>
+      <navPoint playOrder="17" id="np-17">
+        <navLabel>
+          <text>Chapter 14. The Hound of the Baskervilles</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-16.htm.html#pgepubid00016"/>
+      </navPoint>
+      <navPoint playOrder="18" id="np-18">
+        <navLabel>
+          <text>Chapter 15. A Retrospection</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@2852@2852-h@2852-h-17.htm.html#pgepubid00017"/>
+      </navPoint>
+    </navPoint>
+  </navMap>
+</ncx>

@@ -1,0 +1,293 @@
+/* Modern Demo Styles v2 */
+:root {
+    --primary-gradient: linear-gradient(90deg, #b8860b, #4caf50, #009688);
+    /* Gold to Green gradient approximation from image */
+    --bg-app: #333333;
+    --bg-reader: #ffffff;
+    --sidebar-width: 250px;
+    --toolbar-height: 60px;
+    --text-color: #333;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-app);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* --- Header / Tabs (Demo Navigation) --- */
+.app-header {
+    background-color: #222;
+    color: #fff;
+    padding: 0 20px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+}
+
+.logo {
+    font-weight: bold;
+    color: #e0e0e0;
+}
+
+.tab-container button {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 0 10px;
+    height: 40px;
+    transition: color 0.2s;
+}
+
+.tab-container button.active {
+    color: #fff;
+    border-bottom: 2px solid #4caf50;
+}
+
+/* --- Main Layout --- */
+.content-area {
+    flex: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-app);
+    /* The dark background "so we know which area is reader" */
+}
+
+/* --- Custom Reader Interface (Toolbar + Container) --- */
+.reader-interface {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* Centering the reader layout on desktop */
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+/* Toolbar styled like the reference image */
+.reader-toolbar {
+    height: var(--toolbar-height);
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    justify-content: space-between;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+}
+
+.toolbar-left,
+.toolbar-center,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Buttons */
+.icon-btn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: background 0.2s;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.icon-btn i {
+    font-style: normal;
+    font-size: 18px;
+}
+
+/* Theme Swatches */
+.theme-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-swatch:hover {
+    transform: scale(1.1);
+}
+
+.swatch-default {
+    background: #fff;
+}
+
+/* Day */
+.swatch-night {
+    background: #333;
+}
+
+/* Night */
+.swatch-sepia {
+    background: #f4ecd8;
+}
+
+/* Sepia */
+.swatch-blue {
+    background: #1c2938;
+}
+
+/* Blue/Navy */
+.swatch-silver {
+    background: #e0e0e0;
+}
+
+/* Silver/Gray */
+
+/* Font Control */
+.font-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    position: absolute;
+    top: var(--toolbar-height);
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 1px solid #ddd;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.active {
+    transform: translateX(0);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    padding: 15px;
+    background: #f9f9f9;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+}
+
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.toc-list li a {
+    display: block;
+    padding: 12px 20px;
+    color: #444;
+    text-decoration: none;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 14px;
+}
+
+.toc-list li a:hover {
+    background: #f0f0f0;
+    color: #000;
+}
+
+/* Nested TOC indentation */
+.toc-list ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.toc-list ul li a {
+    padding-left: 40px;
+}
+
+/* --- Reader Frame --- */
+.reader-frame-container {
+    flex: 1;
+    position: relative;
+    background: #fff;
+    /* Paper color */
+}
+
+/* Mobile specific overrides */
+#mobile .reader-interface {
+    margin: 0;
+    max-width: none;
+    height: 100%;
+    width: 100%;
+    box-shadow: none;
+}
+
+/* Mobile Simulator Container (for the wrapper view) */
+.mobile-view-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-shell-outer {
+    background: #111;
+    border-radius: 36px;
+    padding: 15px 15px 25px 15px;
+    /* Bezel */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 2px solid #444;
+}
+
+.mobile-screen {
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+    border-radius: 4px;
+    /* Slight inner radius */
+}
+
+/* Native App StatusBar Simulation */
+.status-bar {
+    height: 20px;
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+/* Button to apply styling to toolbar for mobile feel */
+#mobile .reader-toolbar {
+    height: 50px;
+    /* Slightly smaller on mobile */
+    padding: 0 10px;
+}
