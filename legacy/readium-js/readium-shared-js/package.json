@@ -1,0 +1,105 @@
+{
+  "name": "readium-shared-js",
+  "version": "0.31.1",
+  "engines": {
+    "node": ">=4",
+    "npm": ">=2",
+    "yarn": ">=0.23"
+  },
+  "description": "Readium - shared javascript module",
+  "keywords": [
+    "readium",
+    "epub",
+    "epub3"
+  ],
+  "author": {
+    "name": "Readium (Daniel Weck)",
+    "email": "daniel.weck@gmail.com",
+    "url": "http://github.com/readium"
+  },
+  "license": "BSD-3-Clause",
+  "licenses": [
+    {
+      "type": "BSD-3-Clause",
+      "url": "http://opensource.org/licenses/BSD-3-Clause"
+    }
+  ],
+  "homepage": "http://github.com/Treinetic/readium-shared-js",
+  "bugs": {
+    "url": "http://github.com/Treinetic/readium-shared-js/issues",
+    "email": "daniel.weck@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Treinetic/readium-shared-js.git"
+  },
+  "files": [
+    "build-output/",
+    "dev/",
+    "license.txt",
+    "README.md"
+  ],
+  "main": "build-output/_umd-bundle/readium-shared-js.js",
+  "types": "dev/readium-shared-js.d.ts",
+  "dependencies": {
+    "readium-cfi-js": "github:readium/readium-cfi-js#0.31.0"
+  },
+  "devDependencies": {
+    "almond": "^0.3.3",
+    "amdclean": "github:JCCR/amdclean#master",
+    "backbone": "^1.4.0",
+    "concat-with-sourcemaps": "^1.0.5",
+    "concurrently": "^3.5.0",
+    "cpy-cli": "^2.0.0",
+    "cson": "^5.1.0",
+    "css-element-queries": "github:danielweck/css-element-queries#master",
+    "cssom": "github:danielweck/CSSOM#master",
+    "domReady": "github:requirejs/domReady#master",
+    "es6-shim": "^0.35.5",
+    "eventemitter3": "^3.1.2",
+    "glob": "^7.1.4",
+    "http-server": "github:danielweck/http-server#master",
+    "jquery": "2.x.x",
+    "jquery-sizes": "github:JCCR/jquery-sizes#master",
+    "jshint": "^2.10.2",
+    "json": "^9.0.6",
+    "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
+    "npm-run-all": "^4.1.5",
+    "opener": "^1.5.1",
+    "requirejs": "^2.3.6",
+    "rimraf": "^2.7.1",
+    "sorcery": "^0.10.0",
+    "underscore": "^1.8.3",
+    "urijs": "github:danielweck/URI.js#master",
+    "watch": "^1.0.2",
+    "yuidocjs": "^0.10.2"
+  },
+  "scripts": {
+    "cson2json": "json -I -f package.json -e \"this.scripts=$(cat package-scripts.cson | cson2json)\" && node readium-build-tools/optimizePackageJsonScripts.js",
+    "prepare:all": "npm run prepare:local",
+    "prepare:local": "(npm outdated || echo outdated) && (npm ci || npm install) && npm run prepare:local:common",
+    "prepare:yarn:all": "yarn run prepare:yarn:local",
+    "prepare:yarn:local": "(yarn outdated || echo outdated) && yarn install && yarn run prepare:local:common",
+    "prepare:local:common": "node readium-build-tools/gitHubForksUpdater.js",
+    "clean": "(yarn --version || echo noyarn) && node --version && npm --version && rimraf build-output/* && rimraf api-docs/*",
+    "apidocs": "node ./node_modules/yuidocjs/lib/cli.js -N -C -c yuidocs.json",
+    "prebuild": "npm run clean",
+    "build": "npm run build:styles && npm run build:scripts",
+    "lint": "node ./readium-build-tools/jshint_glob.js \"js/**.js\"",
+    "genPluginsConfig": "node readium-build-tools/pluginsConfigMaker.js",
+    "prebuild:scripts": "npm run genPluginsConfig --readium-shared-js:RJS_PLUGINS_OVERRIDE=no",
+    "build:scripts": "npm run build:scripts:multiple --readium-shared-js:RJS_UGLY=no && npm run build:scripts:single --readium-shared-js:RJS_UGLY=no && npm run build:scripts:umd --readium-shared-js:RJS_UGLY=no",
+    "build:scripts:multiple": "node ./node_modules/requirejs/bin/r.js -o ./readium-build-tools/RequireJS_config.js --rjs_bundle=multiple",
+    "postbuild:scripts:multiple": "node ./node_modules/rimraf/bin.js build-output/_multiple-bundles/RequireJS.js.src.js",
+    "build:scripts:single": "node ./node_modules/requirejs/bin/r.js -o ./readium-build-tools/RequireJS_config.js --rjs_bundle=single",
+    "build:scripts:umd": "node ./node_modules/requirejs/bin/r.js -o ./readium-build-tools/RequireJS_config.js --rjs_bundle=umd",
+    "prebuild:styles": "mkdirp build-output/css/",
+    "build:styles": "cpy static/sdk.css build-output/css/",
+    "http:watch": "echo > open_webbrowser.js && run-p \"dowatch\" \"httpServe\"",
+    "http": "npm run genPluginsConfig && npm run httpServe",
+    "dowatch": "watch \"npm run build && node readium-build-tools/webbrowser.js && rimraf open_webbrowser.js\" dev/ js/ plugins/",
+    "watch": "watch \"npm run build\" dev/ js/ plugins/",
+    "httpServe": "node readium-build-tools/http-server.js -LOGFILE http.log -OPEN /dev/ -c-1 -a 127.0.0.1 -p 9090 --cors ."
+  }
+}

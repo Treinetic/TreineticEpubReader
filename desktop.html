@@ -4,34 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desktop Reader - Treinetic</title>
-    <!-- Legacy Styles -->
-    <link rel="stylesheet" href="./dist/TreineticEpubReader.min.css">
-    <!-- Shared Modern CSS -->
-    <link rel="stylesheet" href="./src/css/settings.css">
-    <link rel="stylesheet" href="./src/css/main_v3.css">
+    <title>Desktop Reader - Modern</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./src/css/main.css">
     <style>
-        /* Desktop Specific Overrides to ensure 100% height without tabs */
+        /* Specific overrides for desktop layout */
         body {
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             background: #333;
-        }
-
-        .view-section {
-            display: flex !important;
-            height: 100%;
-            width: 100%;
-        }
-
-        /* Ensure sidebar works with this layout */
-        .desktop-sidebar {
-            top: var(--toolbar-height);
-            height: calc(100% - var(--toolbar-height));
         }
 
         .desktop-reader-wrapper {
@@ -42,66 +26,60 @@
 
 <body>
 
-    <!-- Desktop View Structure -->
-    <section id="desktop-view" class="view-section">
-
+    <section id="desktop-view" class="view-section active" style="display:flex;">
         <!-- Toolbar -->
         <div class="desktop-toolbar">
             <div class="toolbar-group">
-                <a href="index.html" class="icon-btn" title="Back to Home"><i class="fas fa-home"></i></a>
-                <button class="icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <a href="#" class="icon-btn" title="Back to Home"><i class="fas fa-home"></i></a>
+                <button id="btn-toggle-sidebar" class="icon-btn"><i class="fas fa-bars"></i></button>
                 <!-- Themes -->
-                <div class="swatch swatch-default" onclick="setTheme('day')" title="Day"></div>
-                <div class="swatch swatch-night" onclick="setTheme('night')" title="Night"></div>
-                <div class="swatch swatch-sepia" onclick="setTheme('sepia')" title="Sepia"></div>
-                <div class="swatch swatch-blue" onclick="setTheme('navy')" title="Navy"></div>
+                <div class="swatch swatch-default" data-theme="default-theme" title="Day"></div>
+                <div class="swatch swatch-night" data-theme="night-theme" title="Night"></div>
+                <div class="swatch swatch-sepia" data-theme="parchment-theme" title="Sepia"></div>
+                <div class="swatch swatch-blue" data-theme="ballard-theme" title="Navy"></div>
             </div>
 
             <div class="toolbar-group">
-                <span style="color:white; font-weight:bold; font-size:18px;">Treasure Island</span>
+                <span id="book-title" style="color:white; font-weight:bold; font-size:18px;">Treasure Island</span>
             </div>
 
             <div class="toolbar-group">
-                <button class="icon-btn" onclick="adjustFont(-10)"><i class="fas fa-minus"></i></button>
+                <button id="btn-font-dec" class="icon-btn"><i class="fas fa-minus"></i></button>
                 <span id="font-val" style="color:white; font-weight:bold;">100%</span>
-                <button class="icon-btn" onclick="adjustFont(10)"><i class="fas fa-plus"></i></button>
-                <button class="icon-btn" onclick="toggleScroll()" title="Toggle Scroll Mode"><i
+                <button id="btn-font-inc" class="icon-btn"><i class="fas fa-plus"></i></button>
+                <button id="btn-toggle-scroll" class="icon-btn" title="Toggle Scroll Mode"><i
                         class="fas fa-scroll"></i></button>
             </div>
         </div>
 
         <!-- Sidebar -->
         <aside id="sidebar" class="desktop-sidebar">
-            <div
-                style="padding:15px; background:#f5f5f5; border-bottom:1px solid #ccc; font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+            <div class="sidebar-header">
                 <span>Table of Contents</span>
-                <button onclick="toggleSidebar()" style="border:none; background:none; cursor:pointer;"><i
-                        class="fas fa-times"></i></button>
+                <button id="btn-close-sidebar" class="sidebar-close-btn"><i class="fas fa-times"></i></button>
             </div>
-            <ul id="toc-list" style="list-style:none; padding:0; margin:0; overflow-y:auto; flex:1;">
+            <ul id="toc-list">
                 <li style="padding:20px; color:#666;">Loading...</li>
             </ul>
         </aside>
 
         <!-- Reader Wrapper -->
         <div class="desktop-reader-wrapper">
-            <!-- Reader Frame -->
             <div id="epub-reader-frame" class="desktop-reader-frame"></div>
 
-            <!-- Bottom Nav Bar -->
-            <div class="bottom-nav-bar">
-                <button class="nav-circle-btn" onclick="prevPage()"><i class="fas fa-chevron-left"></i></button>
-                <button class="nav-circle-btn" onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
-            </div>
+            <!-- Navigation Overlay Buttons -->
+            <button id="btn-prev" class="nav-overlay-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <button id="btn-next" class="nav-overlay-btn next"><i class="fas fa-chevron-right"></i></button>
         </div>
-
     </section>
 
-    <!-- Scripts -->
-    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="./dist/TreineticEpubReader.min.js"></script>
-    <script src="./src/js/desktop.js"></script>
+    <!-- Inject Legacy Bundle for Readium Engine -->
+    <!-- Legacy Bundle Removed -->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- Note: jQuery might be needed by the legacy bundle -->
+
+    <!-- Main Logic -->
+    <script type="module" src="./src/main.ts"></script>
 </body>
 
 </html>

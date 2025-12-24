@@ -16,3 +16,14 @@ dev/grunt_build/node_modules
 dev/grunt_build/js/TreineticEpubReader.js
 dev/grunt_build/css/TreineticEpubReader.css
 
+# Build Artifacts
+/dist
+dist-modern
+coverage
+*.local
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
