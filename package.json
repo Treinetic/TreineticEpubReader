@@ -1,6 +1,6 @@
 {
     "name": "@treinetic/treinetic-epub-reader",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "type": "module",
     "description": "A modern, lightweight, and framework-agnostic EPUB reader for the web, built with TypeScript.",
     "keywords": [
@@ -46,6 +46,7 @@
         "jsdom": "^27.3.0",
         "typescript": "^5.2.2",
         "vite": "^5.0.0",
+        "vite-plugin-dts": "^4.5.4",
         "vitest": "^4.0.16"
     },
     "dependencies": {

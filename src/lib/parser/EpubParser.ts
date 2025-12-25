@@ -17,9 +17,9 @@ export class EpubParser {
         if (rootUrl.toLowerCase().endsWith('.epub')) {
             try {
                 const response = await fetch(rootUrl);
-                const blob = await response.blob();
+                const buffer = await response.arrayBuffer();
                 // Basic check if zip signature or just try
-                const loadedZip = await JSZip.loadAsync(blob);
+                const loadedZip = await JSZip.loadAsync(buffer);
                 zip = loadedZip;
                 fileFetcher = async (p) => {
                     const file = zip?.file(p);

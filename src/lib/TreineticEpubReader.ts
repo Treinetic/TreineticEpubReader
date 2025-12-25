@@ -26,19 +26,31 @@ const TreineticEpubReader = {
     ebookURL_filepath: null as string | null,
     embeded: true,
 
-    init: (elementSelector: string) => {
+    init: (selectorOrElement: string | HTMLElement) => {
         console.log("Initializing Modern TreineticEpubReader...");
-
         Keyboard.init();
 
-        const element = document.querySelector(elementSelector) as HTMLElement;
+        let element: HTMLElement | null;
+        if (typeof selectorOrElement === 'string') {
+            element = document.querySelector(selectorOrElement) as HTMLElement;
+        } else {
+            element = selectorOrElement;
+        }
+
         if (!element) {
-            console.error(`Element ${elementSelector} not found`);
-            return;
+            console.error("TreineticEpubReader: Element not found", selectorOrElement);
+            return null;
         }
 
         TreineticEpubReader.initReader(element);
         return ExternalControls.getInstance();
+    },
+
+    /**
+     * Alias for init() to align with standard library patterns.
+     */
+    create: (selectorOrElement: string | HTMLElement) => {
+        return TreineticEpubReader.init(selectorOrElement);
     },
 
     open: (epubUrlOrFolder: string) => {
@@ -177,6 +189,5 @@ const TreineticEpubReader = {
         console.log("Reader settings cleared.");
     }
 };
-
 
 export default TreineticEpubReader;
