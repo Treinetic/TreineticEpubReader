@@ -33,6 +33,16 @@
             <h3 style="margin-top:0;">Debug Controls</h3>
 
             <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+                <strong>Select Book</strong><br>
+                <select id="book-selector" style="width:100%; padding:5px; margin-top:5px;">
+                    <option value="/epubs/alice.epub">Alice in Wonderland</option>
+                    <option value="/public/epubs/sherlock.epub">Sherlock Holmes</option>
+                    <option value="/public/epubs/moby-dick.epub">Moby Dick</option>
+                    <option value="/public/epubs/frankenstein.epub">Frankenstein</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
                 <strong>Navigation</strong><br>
                 <button id="btn-prev" style="padding:5px 10px;">Prev</button>
                 <button id="btn-next" style="padding:5px 10px;">Next</button>
@@ -74,7 +84,9 @@
         <div id="section-b"
             style="flex:1; position:relative; overflow:hidden; background:purple; padding:100px 0; box-sizing:border-box;">
             <!-- Inner Wrapper for Reader Area -->
-            <div id="reader-wrapper" style="width:100%; height:100%; background:#fff; position:relative;">
+            <!-- User Request: Center this container (width 80%) inside B -->
+            <div id="reader-wrapper"
+                style="width:80%; height:100%; background:#fff; position:relative; margin: 0 auto;">
                 <!-- The Reader Frame -->
                 <div id="epub-reader-frame" style="width:100%; height:100%;"></div>
             </div>

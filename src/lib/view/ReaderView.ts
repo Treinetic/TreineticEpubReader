@@ -305,55 +305,8 @@ export class ReaderView {
             this.updatePagination(iframe);
         });
 
-        // Scroll Mode: Resize iframe to fit content
-        if (this.currentSettings.scroll === 'scroll-continuous') {
-            if (isSingleImage) {
-                // FIXED HEIGHT MODE for Covers/Images
-                if (this.activeFrameObserver) {
-                    this.activeFrameObserver.disconnect();
-                    this.activeFrameObserver = null;
-                }
-                // FIX: Force to viewport height so object-fit: contain works against the screen size
-                // REVERTED: User asked to apply this to the SVG instead.
-                iframe.style.height = "100%";
-                // Also ensure scrolling='no' is enforced (it is in createIframe but double check)
-                iframe.scrolling = "no";
-            } else {
-                // NORMAL TEXT MODE
-                const updateHeight = () => {
-                    // Safety: Don't resize if we switched to paginated
-                    if (this.currentSettings.scroll !== 'scroll-continuous') {
-                        iframe.style.height = '100%';
-                        if (this.activeFrameObserver) {
-                            this.activeFrameObserver.disconnect();
-                            this.activeFrameObserver = null;
-                        }
-                        return;
-                    }
-                    if (iframe.contentDocument) {
-                        const newHeight = iframe.contentDocument.documentElement.scrollHeight;
-                        iframe.style.height = `${newHeight}px`;
-                    }
-                };
-
-                // Disconnect old
-                if (this.activeFrameObserver) this.activeFrameObserver.disconnect();
-
-                this.activeFrameObserver = new ResizeObserver(updateHeight);
-                this.activeFrameObserver.observe(body);
-
-                // Initial sizing
-                setTimeout(updateHeight, 100);
-                // Also listen to images load?
-                iframe.contentWindow?.addEventListener('load', updateHeight);
-            }
-        } else {
-            // Paginated Mode: Ensure no observer is messing with height
-            if (this.activeFrameObserver) {
-                this.activeFrameObserver.disconnect();
-                this.activeFrameObserver = null;
-            }
-        }
+        // Setup Frame Height Logic (Extracted)
+        this.setupFrameHeightLogic(iframe, isSingleImage);
 
         // Handle case where we came from previous chapter and need to go to last page
         // Only for paginated mode
@@ -375,6 +328,11 @@ export class ReaderView {
         // 2. Apply to ALL active frames
         this.frames.forEach(f => {
             if (f.element.contentDocument) {
+                // FIX: Ensure height logic (ResizeObserver) is re-setup when switching modes
+                // IMPORTANT: Run this BEFORE applySettingsToDoc/updatePagination
+                // If switching Scroll -> Paginated, we must force height=100% FIRST so columns are calc'd safely.
+                this.setupFrameHeightLogic(f.element, this.isSingleImageMode);
+
                 this.applySettingsToDoc(f.element.contentDocument, f.element);
                 this.updatePagination(f.element);
             }
@@ -573,15 +531,9 @@ export class ReaderView {
         // Legacy Reflowable Logic mimic
         const isScroll = this.currentSettings.scroll === 'scroll-continuous';
 
-        // User Request: Conditional Layout Spacing
-        // "10px only when layout is horizontal (paginated), when switch back to vertical it should be removed (0px)"
-        if (isScroll) {
-            iframe.style.borderLeft = '0';
-            iframe.style.borderRight = '0';
-        } else {
-            iframe.style.borderLeft = '10px solid transparent';
-            iframe.style.borderRight = '10px solid transparent';
-        }
+        // User Request: Remove usage of 10px border spacing
+        iframe.style.borderLeft = '0';
+        iframe.style.borderRight = '0';
 
         if (isScroll) {
             // Vertical Scroll Mode
@@ -659,6 +611,61 @@ export class ReaderView {
 
             // Hide scrollbars on the IFRAME itself
             if (iframe) iframe.style.overflow = 'hidden';
+        }
+    }
+
+    private setupFrameHeightLogic(iframe: HTMLIFrameElement, isSingleImage: boolean) {
+        const doc = iframe.contentDocument;
+        if (!doc) return;
+        const body = doc.body;
+
+        // Scroll Mode: Resize iframe to fit content
+        if (this.currentSettings.scroll === 'scroll-continuous') {
+            if (isSingleImage) {
+                // FIXED HEIGHT MODE for Covers/Images
+                if (this.activeFrameObserver) {
+                    this.activeFrameObserver.disconnect();
+                    this.activeFrameObserver = null;
+                }
+
+                iframe.style.height = "100%";
+                iframe.scrolling = "no";
+            } else {
+                // NORMAL TEXT MODE
+                const updateHeight = () => {
+                    // Safety: Don't resize if we switched to paginated
+                    if (this.currentSettings.scroll !== 'scroll-continuous') {
+                        iframe.style.height = '100%';
+                        if (this.activeFrameObserver) {
+                            this.activeFrameObserver.disconnect();
+                            this.activeFrameObserver = null;
+                        }
+                        return;
+                    }
+                    if (iframe.contentDocument) {
+                        const newHeight = iframe.contentDocument.documentElement.scrollHeight;
+                        iframe.style.height = `${newHeight}px`;
+                    }
+                };
+
+                // Disconnect old
+                if (this.activeFrameObserver) this.activeFrameObserver.disconnect();
+
+                this.activeFrameObserver = new ResizeObserver(updateHeight);
+                this.activeFrameObserver.observe(body);
+
+                // Initial sizing
+                setTimeout(updateHeight, 100);
+                iframe.contentWindow?.addEventListener('load', updateHeight);
+            }
+        } else {
+            // Paginated Mode: Ensure no observer is messing with height
+            if (this.activeFrameObserver) {
+                this.activeFrameObserver.disconnect();
+                this.activeFrameObserver = null;
+            }
+            // Force 100% height for CSS columns
+            iframe.style.height = "100%";
         }
     }
 

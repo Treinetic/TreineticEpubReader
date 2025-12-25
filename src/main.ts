@@ -8,6 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // User Request: Always start fresh on refresh for this demo
     TreineticEpubReader.clearSettings();
 
+    // Book Selector Handler
+    document.getElementById('book-selector')?.addEventListener('change', (e) => {
+        const url = (e.target as HTMLSelectElement).value;
+        if (url) {
+            console.log("Switching book to:", url);
+            TreineticEpubReader.clearSettings(); // Optional: reset state for new book
+            TreineticEpubReader.open(url);
+        }
+    });
+
     // Theme Handlers
     document.querySelectorAll('.swatch').forEach(el => {
         el.addEventListener('click', (e) => {
