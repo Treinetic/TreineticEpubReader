@@ -36,3 +36,14 @@ declare const TreineticEpubReader: {
     clearSettings: () => void;
 };
 export default TreineticEpubReader;
+export declare const create: (selectorOrElement: string | HTMLElement) => ExternalControls | null;
+export declare const init: (selectorOrElement: string | HTMLElement) => ExternalControls | null;
+export declare const open: (epubUrlOrFolder: string) => void;
+export declare const setScrollOption: (type: "auto" | "scroll-continuous") => void;
+export declare const setTheme: (theme: string) => void;
+export declare const registerTheme: (theme: ReaderTheme) => void;
+export declare const clearSettings: () => void;
+export declare const setFontSize: (size: number) => void;
+export declare const goToPage: (href: string) => void;
+export declare const nextPage: () => void;
+export declare const prevPage: () => void;

@@ -1,4 +1,4 @@
-# Treinetic Epub Reader 2.0.0
+# Treinetic Epub Reader 2.0.3
 
 A modern, lightweight, and framework-agnostic EPUB reader for the web, built with TypeScript.
 This project is an initiative of Treinetic (Pvt) Ltd, Sri Lanka.
@@ -58,17 +58,23 @@ This will start a local server at `http://localhost:3001` with hot-reloading.
 
 ### Basic Usage
 
-First, import the necessary classes and CSS.
+First, import the necessary methods and CSS.
+
+> [!NOTE]
+> **v2.0.3 Update:** You can now use Named Exports for better compatibility with Vite and modern bundlers.
 
 ```typescript
-import TreineticEpubReader from '@treinetic/treinetic-epub-reader';
+import { create } from '@treinetic/treinetic-epub-reader';
 import '@treinetic/treinetic-epub-reader/dist/style.css'; 
 
 // Create the reader instance targeting your container
-const reader = TreineticEpubReader.create("#epub-reader-frame");
+const reader = create("#epub-reader-frame");
 
 // Load an EPUB file (url or base64)
-reader.open("path/to/book.epub");
+// Note: Must be a valid .epub file, not a PDF.
+// For correct path resolution in Vite, ensure files are in 'public/' or imported as assets.
+import { open } from '@treinetic/treinetic-epub-reader';
+open("path/to/book.epub");
 ```
 
 ### HTML Structure

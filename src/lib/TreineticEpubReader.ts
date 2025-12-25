@@ -191,3 +191,16 @@ const TreineticEpubReader = {
 };
 
 export default TreineticEpubReader;
+
+// Named Exports for ESM Interop
+export const create = TreineticEpubReader.create;
+export const init = TreineticEpubReader.init;
+export const open = TreineticEpubReader.open;
+export const setScrollOption = TreineticEpubReader.setScrollOption;
+export const setTheme = TreineticEpubReader.setTheme;
+export const registerTheme = TreineticEpubReader.registerTheme;
+export const clearSettings = TreineticEpubReader.clearSettings;
+export const setFontSize = TreineticEpubReader.setFontSize;
+export const goToPage = TreineticEpubReader.goToPage;
+export const nextPage = TreineticEpubReader.nextPage;
+export const prevPage = TreineticEpubReader.prevPage;

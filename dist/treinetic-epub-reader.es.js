@@ -415,9 +415,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         var z = 0;
         g && (z |= 8), P || !R && !r || (z |= 2048);
         var I = 0, J = 0;
-        et && (I |= 16), c === "UNIX" ? (J = 798, I |= function(q, at) {
+        et && (I |= 16), c === "UNIX" ? (J = 798, I |= function(q, ot) {
           var dt = q;
-          return q || (dt = at ? 16893 : 33204), (65535 & dt) << 16;
+          return q || (dt = ot ? 16893 : 33204), (65535 & dt) << 16;
         }(E.unixPermissions, et)) : (J = 20, I |= function(q) {
           return 63 & (q || 0);
         }(E.dosPermissions)), x = j.getUTCHours(), x <<= 6, x |= j.getUTCMinutes(), x <<= 5, x |= j.getUTCSeconds() / 2, C = j.getUTCFullYear() - 1980, C <<= 4, C |= j.getUTCMonth() + 1, C <<= 5, C |= j.getUTCDate(), R && (tt = s(1, 1) + s(b(U), 4) + T, B += "up" + s(tt.length, 2) + tt), r && (W = s(1, 1) + s(b(X), 4) + k, B += "uc" + s(W.length, 2) + W);
@@ -1671,23 +1671,23 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         t.pending_buf[t.pending++] = F >>> 8 & 255, t.pending_buf[t.pending++] = 255 & F;
       }
       function q(t, F) {
-        var O, m, d = t.max_chain_length, S = t.strstart, L = t.prev_length, N = t.nice_match, A = t.strstart > t.w_size - X ? t.strstart - (t.w_size - X) : 0, Z = t.window, K = t.w_mask, G = t.prev, Y = t.strstart + M, st = Z[S + L - 1], nt = Z[S + L];
+        var O, m, d = t.max_chain_length, S = t.strstart, L = t.prev_length, N = t.nice_match, A = t.strstart > t.w_size - X ? t.strstart - (t.w_size - X) : 0, Z = t.window, K = t.w_mask, G = t.prev, Y = t.strstart + M, at = Z[S + L - 1], nt = Z[S + L];
         t.prev_length >= t.good_match && (d >>= 2), N > t.lookahead && (N = t.lookahead);
         do
-          if (Z[(O = F) + L] === nt && Z[O + L - 1] === st && Z[O] === Z[S] && Z[++O] === Z[S + 1]) {
+          if (Z[(O = F) + L] === nt && Z[O + L - 1] === at && Z[O] === Z[S] && Z[++O] === Z[S + 1]) {
             S += 2, O++;
             do
               ;
             while (Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && S < Y);
             if (m = M - (Y - S), S = Y - M, L < m) {
               if (t.match_start = F, N <= (L = m)) break;
-              st = Z[S + L - 1], nt = Z[S + L];
+              at = Z[S + L - 1], nt = Z[S + L];
             }
           }
         while ((F = G[F & K]) > A && --d != 0);
         return L <= t.lookahead ? L : t.lookahead;
       }
-      function at(t) {
+      function ot(t) {
         var F, O, m, d, S, L, N, A, Z, K, G = t.w_size;
         do {
           if (d = t.window_size - t.lookahead - t.strstart, t.strstart >= G + (G - X)) {
@@ -1702,7 +1702,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       function dt(t, F) {
         for (var O, m; ; ) {
           if (t.lookahead < X) {
-            if (at(t), t.lookahead < X && F === _) return r;
+            if (ot(t), t.lookahead < X && F === _) return r;
             if (t.lookahead === 0) break;
           }
           if (O = 0, t.lookahead >= T && (t.ins_h = (t.ins_h << t.hash_shift ^ t.window[t.strstart + T - 1]) & t.hash_mask, O = t.prev[t.strstart & t.w_mask] = t.head[t.ins_h], t.head[t.ins_h] = t.strstart), O !== 0 && t.strstart - O <= t.w_size - X && (t.match_length = q(t, O)), t.match_length >= T) if (m = n._tr_tally(t, t.strstart - t.match_start, t.match_length - T), t.lookahead -= t.match_length, t.match_length <= t.max_lazy_match && t.lookahead >= T) {
@@ -1717,7 +1717,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       function rt(t, F) {
         for (var O, m, d; ; ) {
           if (t.lookahead < X) {
-            if (at(t), t.lookahead < X && F === _) return r;
+            if (ot(t), t.lookahead < X && F === _) return r;
             if (t.lookahead === 0) break;
           }
           if (O = 0, t.lookahead >= T && (t.ins_h = (t.ins_h << t.hash_shift ^ t.window[t.strstart + T - 1]) & t.hash_mask, O = t.prev[t.strstart & t.w_mask] = t.head[t.ins_h], t.head[t.ins_h] = t.strstart), t.prev_length = t.match_length, t.prev_match = t.match_start, t.match_length = T - 1, O !== 0 && t.prev_length < t.max_lazy_match && t.strstart - O <= t.w_size - X && (t.match_length = q(t, O), t.match_length <= 5 && (t.strategy === 1 || t.match_length === T && 4096 < t.strstart - t.match_start) && (t.match_length = T - 1)), t.prev_length >= T && t.match_length <= t.prev_length) {
@@ -1729,18 +1729,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         return t.match_available && (m = n._tr_tally(t, 0, t.window[t.strstart - 1]), t.match_available = 0), t.insert = t.strstart < T - 1 ? t.strstart : T - 1, F === v ? (I(t, !0), t.strm.avail_out === 0 ? tt : W) : t.last_lit && (I(t, !1), t.strm.avail_out === 0) ? r : B;
       }
-      function it(t, F, O, m, d) {
+      function st(t, F, O, m, d) {
         this.good_length = t, this.max_lazy = F, this.nice_length = O, this.max_chain = m, this.func = d;
       }
       function ut() {
         this.strm = null, this.status = 0, this.pending_buf = null, this.pending_buf_size = 0, this.pending_out = 0, this.pending = 0, this.wrap = 0, this.gzhead = null, this.gzindex = 0, this.method = y, this.last_flush = -1, this.w_size = 0, this.w_bits = 0, this.w_mask = 0, this.window = null, this.window_size = 0, this.prev = null, this.head = null, this.ins_h = 0, this.hash_size = 0, this.hash_bits = 0, this.hash_mask = 0, this.hash_shift = 0, this.block_start = 0, this.match_length = 0, this.prev_match = 0, this.match_available = 0, this.strstart = 0, this.match_start = 0, this.lookahead = 0, this.prev_length = 0, this.max_chain_length = 0, this.max_lazy_match = 0, this.level = 0, this.strategy = 0, this.good_match = 0, this.nice_match = 0, this.dyn_ltree = new o.Buf16(2 * P), this.dyn_dtree = new o.Buf16(2 * (2 * E + 1)), this.bl_tree = new o.Buf16(2 * (2 * D + 1)), Q(this.dyn_ltree), Q(this.dyn_dtree), Q(this.bl_tree), this.l_desc = null, this.d_desc = null, this.bl_desc = null, this.bl_count = new o.Buf16(U + 1), this.heap = new o.Buf16(2 * C + 1), Q(this.heap), this.heap_len = 0, this.heap_max = 0, this.depth = new o.Buf16(2 * C + 1), Q(this.depth), this.l_buf = 0, this.lit_bufsize = 0, this.last_lit = 0, this.d_buf = 0, this.opt_len = 0, this.static_len = 0, this.matches = 0, this.insert = 0, this.bi_buf = 0, this.bi_valid = 0;
       }
-      function ot(t) {
+      function lt(t) {
         var F;
         return t && t.state ? (t.total_in = t.total_out = 0, t.data_type = c, (F = t.state).pending = 0, F.pending_out = 0, F.wrap < 0 && (F.wrap = -F.wrap), F.status = F.wrap ? k : R, t.adler = F.wrap === 2 ? 0 : 1, F.last_flush = _, n._tr_init(F), a) : et(t, g);
       }
       function _t(t) {
-        var F = ot(t);
+        var F = lt(t);
         return F === a && function(O) {
           O.window_size = 2 * O.w_size, Q(O.head), O.max_lazy_match = s[O.level].max_lazy, O.good_match = s[O.level].good_length, O.nice_match = s[O.level].nice_length, O.max_chain_length = s[O.level].max_chain, O.strstart = 0, O.block_start = 0, O.lookahead = 0, O.insert = 0, O.match_length = O.prev_length = T - 1, O.match_available = 0, O.ins_h = 0;
         }(t.state), F;
@@ -1753,11 +1753,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         var N = new ut();
         return (t.state = N).strm = t, N.wrap = L, N.gzhead = null, N.w_bits = m, N.w_size = 1 << N.w_bits, N.w_mask = N.w_size - 1, N.hash_bits = d + 7, N.hash_size = 1 << N.hash_bits, N.hash_mask = N.hash_size - 1, N.hash_shift = ~~((N.hash_bits + T - 1) / T), N.window = new o.Buf8(2 * N.w_size), N.head = new o.Buf16(N.hash_size), N.prev = new o.Buf16(N.w_size), N.lit_bufsize = 1 << d + 6, N.pending_buf_size = 4 * N.lit_bufsize, N.pending_buf = new o.Buf8(N.pending_buf_size), N.d_buf = 1 * N.lit_bufsize, N.l_buf = 3 * N.lit_bufsize, N.level = F, N.strategy = S, N.method = O, _t(t);
       }
-      s = [new it(0, 0, 0, 0, function(t, F) {
+      s = [new st(0, 0, 0, 0, function(t, F) {
         var O = 65535;
         for (O > t.pending_buf_size - 5 && (O = t.pending_buf_size - 5); ; ) {
           if (t.lookahead <= 1) {
-            if (at(t), t.lookahead === 0 && F === _) return r;
+            if (ot(t), t.lookahead === 0 && F === _) return r;
             if (t.lookahead === 0) break;
           }
           t.strstart += t.lookahead, t.lookahead = 0;
@@ -1765,9 +1765,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           if ((t.strstart === 0 || t.strstart >= m) && (t.lookahead = t.strstart - m, t.strstart = m, I(t, !1), t.strm.avail_out === 0) || t.strstart - t.block_start >= t.w_size - X && (I(t, !1), t.strm.avail_out === 0)) return r;
         }
         return t.insert = 0, F === v ? (I(t, !0), t.strm.avail_out === 0 ? tt : W) : (t.strstart > t.block_start && (I(t, !1), t.strm.avail_out), r);
-      }), new it(4, 4, 8, 4, dt), new it(4, 5, 16, 8, dt), new it(4, 6, 32, 32, dt), new it(4, 4, 16, 16, rt), new it(8, 16, 32, 32, rt), new it(8, 16, 128, 128, rt), new it(8, 32, 128, 256, rt), new it(32, 128, 258, 1024, rt), new it(32, 258, 258, 4096, rt)], u.deflateInit = function(t, F) {
+      }), new st(4, 4, 8, 4, dt), new st(4, 5, 16, 8, dt), new st(4, 6, 32, 32, dt), new st(4, 4, 16, 16, rt), new st(8, 16, 32, 32, rt), new st(8, 16, 128, 128, rt), new st(8, 32, 128, 256, rt), new st(32, 128, 258, 1024, rt), new st(32, 258, 258, 4096, rt)], u.deflateInit = function(t, F) {
         return gt(t, F, y, 15, 8, 0);
-      }, u.deflateInit2 = gt, u.deflateReset = _t, u.deflateResetKeep = ot, u.deflateSetHeader = function(t, F) {
+      }, u.deflateInit2 = gt, u.deflateReset = _t, u.deflateResetKeep = lt, u.deflateSetHeader = function(t, F) {
         return t && t.state ? t.state.wrap !== 2 ? g : (t.state.gzhead = F, a) : g;
       }, u.deflate = function(t, F) {
         var O, m, d, S;
@@ -1811,7 +1811,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (t.avail_in !== 0 || m.lookahead !== 0 || F !== _ && m.status !== 666) {
           var N = m.strategy === 2 ? function(A, Z) {
             for (var K; ; ) {
-              if (A.lookahead === 0 && (at(A), A.lookahead === 0)) {
+              if (A.lookahead === 0 && (ot(A), A.lookahead === 0)) {
                 if (Z === _) return r;
                 break;
               }
@@ -1819,17 +1819,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             }
             return A.insert = 0, Z === v ? (I(A, !0), A.strm.avail_out === 0 ? tt : W) : A.last_lit && (I(A, !1), A.strm.avail_out === 0) ? r : B;
           }(m, F) : m.strategy === 3 ? function(A, Z) {
-            for (var K, G, Y, st, nt = A.window; ; ) {
+            for (var K, G, Y, at, nt = A.window; ; ) {
               if (A.lookahead <= M) {
-                if (at(A), A.lookahead <= M && Z === _) return r;
+                if (ot(A), A.lookahead <= M && Z === _) return r;
                 if (A.lookahead === 0) break;
               }
               if (A.match_length = 0, A.lookahead >= T && 0 < A.strstart && (G = nt[Y = A.strstart - 1]) === nt[++Y] && G === nt[++Y] && G === nt[++Y]) {
-                st = A.strstart + M;
+                at = A.strstart + M;
                 do
                   ;
-                while (G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && Y < st);
-                A.match_length = M - (st - Y), A.match_length > A.lookahead && (A.match_length = A.lookahead);
+                while (G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && Y < at);
+                A.match_length = M - (at - Y), A.match_length > A.lookahead && (A.match_length = A.lookahead);
               }
               if (A.match_length >= T ? (K = n._tr_tally(A, 1, A.match_length - T), A.lookahead -= A.match_length, A.strstart += A.match_length, A.match_length = 0) : (K = n._tr_tally(A, 0, A.window[A.strstart]), A.lookahead--, A.strstart++), K && (I(A, !1), A.strm.avail_out === 0)) return r;
             }
@@ -1845,9 +1845,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, u.deflateSetDictionary = function(t, F) {
         var O, m, d, S, L, N, A, Z, K = F.length;
         if (!t || !t.state || (S = (O = t.state).wrap) === 2 || S === 1 && O.status !== k || O.lookahead) return g;
-        for (S === 1 && (t.adler = h(t.adler, F, K, 0)), O.wrap = 0, K >= O.w_size && (S === 0 && (Q(O.head), O.strstart = 0, O.block_start = 0, O.insert = 0), Z = new o.Buf8(O.w_size), o.arraySet(Z, F, K - O.w_size, O.w_size, 0), F = Z, K = O.w_size), L = t.avail_in, N = t.next_in, A = t.input, t.avail_in = K, t.next_in = 0, t.input = F, at(O); O.lookahead >= T; ) {
+        for (S === 1 && (t.adler = h(t.adler, F, K, 0)), O.wrap = 0, K >= O.w_size && (S === 0 && (Q(O.head), O.strstart = 0, O.block_start = 0, O.insert = 0), Z = new o.Buf8(O.w_size), o.arraySet(Z, F, K - O.w_size, O.w_size, 0), F = Z, K = O.w_size), L = t.avail_in, N = t.next_in, A = t.input, t.avail_in = K, t.next_in = 0, t.input = F, ot(O); O.lookahead >= T; ) {
           for (m = O.strstart, d = O.lookahead - (T - 1); O.ins_h = (O.ins_h << O.hash_shift ^ O.window[m + T - 1]) & O.hash_mask, O.prev[m & O.w_mask] = O.head[O.ins_h], O.head[O.ins_h] = m, m++, --d; ) ;
-          O.strstart = m, O.lookahead = T - 1, at(O);
+          O.strstart = m, O.lookahead = T - 1, ot(O);
         }
         return O.strstart += O.lookahead, O.block_start = O.strstart, O.insert = O.lookahead, O.lookahead = 0, O.match_length = O.prev_length = T - 1, O.match_available = 0, t.next_in = N, t.input = A, t.avail_in = L, O.wrap = S, a;
       }, u.deflateInfo = "pako deflate (from Nodeca project)";
@@ -1970,7 +1970,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       u.inflateReset = C, u.inflateReset2 = E, u.inflateResetKeep = x, u.inflateInit = function(k) {
         return D(k, 15);
       }, u.inflateInit2 = D, u.inflate = function(k, R) {
-        var r, B, tt, W, et, j, Q, z, I, J, V, q, at, dt, rt, it, ut, ot, _t, gt, t, F, O, m, d = 0, S = new s.Buf8(4), L = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+        var r, B, tt, W, et, j, Q, z, I, J, V, q, ot, dt, rt, st, ut, lt, _t, gt, t, F, O, m, d = 0, S = new s.Buf8(4), L = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
         if (!k || !k.state || !k.output || !k.input && k.avail_in !== 0) return a;
         (r = k.state).mode === 12 && (r.mode = 13), et = k.next_out, tt = k.output, Q = k.avail_out, W = k.next_in, B = k.input, j = k.avail_in, z = r.hold, I = r.bits, J = j, V = Q, F = v;
         t: for (; ; ) switch (r.mode) {
@@ -2150,7 +2150,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             r.have = 0, r.mode = 19;
           case 19:
             for (; r.have < r.nlen + r.ndist; ) {
-              for (; it = (d = r.lencode[z & (1 << r.lenbits) - 1]) >>> 16 & 255, ut = 65535 & d, !((rt = d >>> 24) <= I); ) {
+              for (; st = (d = r.lencode[z & (1 << r.lenbits) - 1]) >>> 16 & 255, ut = 65535 & d, !((rt = d >>> 24) <= I); ) {
                 if (j === 0) break t;
                 j--, z += B[W++] << I, I += 8;
               }
@@ -2207,30 +2207,30 @@ https://github.com/nodeca/pako/blob/main/LICENSE
               k.next_out = et, k.avail_out = Q, k.next_in = W, k.avail_in = j, r.hold = z, r.bits = I, h(k, V), et = k.next_out, tt = k.output, Q = k.avail_out, W = k.next_in, B = k.input, j = k.avail_in, z = r.hold, I = r.bits, r.mode === 12 && (r.back = -1);
               break;
             }
-            for (r.back = 0; it = (d = r.lencode[z & (1 << r.lenbits) - 1]) >>> 16 & 255, ut = 65535 & d, !((rt = d >>> 24) <= I); ) {
+            for (r.back = 0; st = (d = r.lencode[z & (1 << r.lenbits) - 1]) >>> 16 & 255, ut = 65535 & d, !((rt = d >>> 24) <= I); ) {
               if (j === 0) break t;
               j--, z += B[W++] << I, I += 8;
             }
-            if (it && !(240 & it)) {
-              for (ot = rt, _t = it, gt = ut; it = (d = r.lencode[gt + ((z & (1 << ot + _t) - 1) >> ot)]) >>> 16 & 255, ut = 65535 & d, !(ot + (rt = d >>> 24) <= I); ) {
+            if (st && !(240 & st)) {
+              for (lt = rt, _t = st, gt = ut; st = (d = r.lencode[gt + ((z & (1 << lt + _t) - 1) >> lt)]) >>> 16 & 255, ut = 65535 & d, !(lt + (rt = d >>> 24) <= I); ) {
                 if (j === 0) break t;
                 j--, z += B[W++] << I, I += 8;
               }
-              z >>>= ot, I -= ot, r.back += ot;
+              z >>>= lt, I -= lt, r.back += lt;
             }
-            if (z >>>= rt, I -= rt, r.back += rt, r.length = ut, it === 0) {
+            if (z >>>= rt, I -= rt, r.back += rt, r.length = ut, st === 0) {
               r.mode = 26;
               break;
             }
-            if (32 & it) {
+            if (32 & st) {
               r.back = -1, r.mode = 12;
               break;
             }
-            if (64 & it) {
+            if (64 & st) {
               k.msg = "invalid literal/length code", r.mode = 30;
               break;
             }
-            r.extra = 15 & it, r.mode = 22;
+            r.extra = 15 & st, r.mode = 22;
           case 22:
             if (r.extra) {
               for (m = r.extra; I < m; ) {
@@ -2241,22 +2241,22 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             }
             r.was = r.length, r.mode = 23;
           case 23:
-            for (; it = (d = r.distcode[z & (1 << r.distbits) - 1]) >>> 16 & 255, ut = 65535 & d, !((rt = d >>> 24) <= I); ) {
+            for (; st = (d = r.distcode[z & (1 << r.distbits) - 1]) >>> 16 & 255, ut = 65535 & d, !((rt = d >>> 24) <= I); ) {
               if (j === 0) break t;
               j--, z += B[W++] << I, I += 8;
             }
-            if (!(240 & it)) {
-              for (ot = rt, _t = it, gt = ut; it = (d = r.distcode[gt + ((z & (1 << ot + _t) - 1) >> ot)]) >>> 16 & 255, ut = 65535 & d, !(ot + (rt = d >>> 24) <= I); ) {
+            if (!(240 & st)) {
+              for (lt = rt, _t = st, gt = ut; st = (d = r.distcode[gt + ((z & (1 << lt + _t) - 1) >> lt)]) >>> 16 & 255, ut = 65535 & d, !(lt + (rt = d >>> 24) <= I); ) {
                 if (j === 0) break t;
                 j--, z += B[W++] << I, I += 8;
               }
-              z >>>= ot, I -= ot, r.back += ot;
+              z >>>= lt, I -= lt, r.back += lt;
             }
-            if (z >>>= rt, I -= rt, r.back += rt, 64 & it) {
+            if (z >>>= rt, I -= rt, r.back += rt, 64 & st) {
               k.msg = "invalid distance code", r.mode = 30;
               break;
             }
-            r.offset = ut, r.extra = 15 & it, r.mode = 24;
+            r.offset = ut, r.extra = 15 & st, r.mode = 24;
           case 24:
             if (r.extra) {
               for (m = r.extra; I < m; ) {
@@ -2277,9 +2277,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                 k.msg = "invalid distance too far back", r.mode = 30;
                 break;
               }
-              at = q > r.wnext ? (q -= r.wnext, r.wsize - q) : r.wnext - q, q > r.length && (q = r.length), dt = r.window;
-            } else dt = tt, at = et - r.offset, q = r.length;
-            for (Q < q && (q = Q), Q -= q, r.length -= q; tt[et++] = dt[at++], --q; ) ;
+              ot = q > r.wnext ? (q -= r.wnext, r.wsize - q) : r.wnext - q, q > r.length && (q = r.length), dt = r.window;
+            } else dt = tt, ot = et - r.offset, q = r.length;
+            for (Q < q && (q = Q), Q -= q, r.length -= q; tt[et++] = dt[ot++], --q; ) ;
             r.length === 0 && (r.mode = 21);
             break;
           case 26:
@@ -2339,7 +2339,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     }, { "../utils/common": 41, "./adler32": 43, "./crc32": 45, "./inffast": 48, "./inftrees": 50 }], 50: [function(e, p, u) {
       var s = e("../utils/common"), o = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0], n = [16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78], h = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577, 0, 0], w = [16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 64, 64];
       p.exports = function(b, _, v, a, g, i, f, c) {
-        var y, x, C, E, D, P, U, T, M, X = c.bits, k = 0, R = 0, r = 0, B = 0, tt = 0, W = 0, et = 0, j = 0, Q = 0, z = 0, I = null, J = 0, V = new s.Buf16(16), q = new s.Buf16(16), at = null, dt = 0;
+        var y, x, C, E, D, P, U, T, M, X = c.bits, k = 0, R = 0, r = 0, B = 0, tt = 0, W = 0, et = 0, j = 0, Q = 0, z = 0, I = null, J = 0, V = new s.Buf16(16), q = new s.Buf16(16), ot = null, dt = 0;
         for (k = 0; k <= 15; k++) V[k] = 0;
         for (R = 0; R < a; R++) V[_[v + R]]++;
         for (tt = X, B = 15; 1 <= B && V[B] === 0; B--) ;
@@ -2349,9 +2349,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (0 < j && (b === 0 || B !== 1)) return -1;
         for (q[1] = 0, k = 1; k < 15; k++) q[k + 1] = q[k] + V[k];
         for (R = 0; R < a; R++) _[v + R] !== 0 && (f[q[_[v + R]]++] = R);
-        if (P = b === 0 ? (I = at = f, 19) : b === 1 ? (I = o, J -= 257, at = n, dt -= 257, 256) : (I = h, at = w, -1), k = r, D = i, et = R = z = 0, C = -1, E = (Q = 1 << (W = tt)) - 1, b === 1 && 852 < Q || b === 2 && 592 < Q) return 1;
+        if (P = b === 0 ? (I = ot = f, 19) : b === 1 ? (I = o, J -= 257, ot = n, dt -= 257, 256) : (I = h, ot = w, -1), k = r, D = i, et = R = z = 0, C = -1, E = (Q = 1 << (W = tt)) - 1, b === 1 && 852 < Q || b === 2 && 592 < Q) return 1;
         for (; ; ) {
-          for (U = k - et, M = f[R] < P ? (T = 0, f[R]) : f[R] > P ? (T = at[dt + f[R]], I[J + f[R]]) : (T = 96, 0), y = 1 << k - et, r = x = 1 << W; g[D + (z >> et) + (x -= y)] = U << 24 | T << 16 | M | 0, x !== 0; ) ;
+          for (U = k - et, M = f[R] < P ? (T = 0, f[R]) : f[R] > P ? (T = ot[dt + f[R]], I[J + f[R]]) : (T = 96, 0), y = 1 << k - et, r = x = 1 << W; g[D + (z >> et) + (x -= y)] = U << 24 | T << 16 | M | 0, x !== 0; ) ;
           for (y = 1 << k - 1; z & y; ) y >>= 1;
           if (y !== 0 ? (z &= y - 1, z += y) : z = 0, R++, --V[k] == 0) {
             if (k === B) break;
@@ -2401,7 +2401,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       function q(d, S, L) {
         V(d, L[2 * S], L[2 * S + 1]);
       }
-      function at(d, S) {
+      function ot(d, S) {
         for (var L = 0; L |= 1 & d, d >>>= 1, L <<= 1, 0 < --S; ) ;
         return L >>> 1;
       }
@@ -2410,7 +2410,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         for (N = 1; N <= f; N++) Z[N] = K = K + L[N - 1] << 1;
         for (A = 0; A <= S; A++) {
           var G = d[2 * A + 1];
-          G !== 0 && (d[2 * A] = at(Z[G]++, G));
+          G !== 0 && (d[2 * A] = ot(Z[G]++, G));
         }
       }
       function rt(d) {
@@ -2420,14 +2420,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         for (S = 0; S < g; S++) d.bl_tree[2 * S] = 0;
         d.dyn_ltree[2 * x] = 1, d.opt_len = d.static_len = 0, d.last_lit = d.matches = 0;
       }
-      function it(d) {
+      function st(d) {
         8 < d.bi_valid ? J(d, d.bi_buf) : 0 < d.bi_valid && (d.pending_buf[d.pending++] = d.bi_buf), d.bi_buf = 0, d.bi_valid = 0;
       }
       function ut(d, S, L, N) {
         var A = 2 * S, Z = 2 * L;
         return d[A] < d[Z] || d[A] === d[Z] && N[S] <= N[L];
       }
-      function ot(d, S, L) {
+      function lt(d, S, L) {
         for (var N = d.heap[L], A = L << 1; A <= d.heap_len && (A < d.heap_len && ut(S, d.heap[A + 1], d.heap[A], d.depth) && A++, !ut(S, N, d.heap[A], d.depth)); ) d.heap[L] = d.heap[A], L = A, A <<= 1;
         d.heap[L] = N;
       }
@@ -2437,41 +2437,41 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         q(d, x, S);
       }
       function gt(d, S) {
-        var L, N, A, Z = S.dyn_tree, K = S.stat_desc.static_tree, G = S.stat_desc.has_stree, Y = S.stat_desc.elems, st = -1;
-        for (d.heap_len = 0, d.heap_max = i, L = 0; L < Y; L++) Z[2 * L] !== 0 ? (d.heap[++d.heap_len] = st = L, d.depth[L] = 0) : Z[2 * L + 1] = 0;
-        for (; d.heap_len < 2; ) Z[2 * (A = d.heap[++d.heap_len] = st < 2 ? ++st : 0)] = 1, d.depth[A] = 0, d.opt_len--, G && (d.static_len -= K[2 * A + 1]);
-        for (S.max_code = st, L = d.heap_len >> 1; 1 <= L; L--) ot(d, Z, L);
-        for (A = Y; L = d.heap[1], d.heap[1] = d.heap[d.heap_len--], ot(d, Z, 1), N = d.heap[1], d.heap[--d.heap_max] = L, d.heap[--d.heap_max] = N, Z[2 * A] = Z[2 * L] + Z[2 * N], d.depth[A] = (d.depth[L] >= d.depth[N] ? d.depth[L] : d.depth[N]) + 1, Z[2 * L + 1] = Z[2 * N + 1] = A, d.heap[1] = A++, ot(d, Z, 1), 2 <= d.heap_len; ) ;
+        var L, N, A, Z = S.dyn_tree, K = S.stat_desc.static_tree, G = S.stat_desc.has_stree, Y = S.stat_desc.elems, at = -1;
+        for (d.heap_len = 0, d.heap_max = i, L = 0; L < Y; L++) Z[2 * L] !== 0 ? (d.heap[++d.heap_len] = at = L, d.depth[L] = 0) : Z[2 * L + 1] = 0;
+        for (; d.heap_len < 2; ) Z[2 * (A = d.heap[++d.heap_len] = at < 2 ? ++at : 0)] = 1, d.depth[A] = 0, d.opt_len--, G && (d.static_len -= K[2 * A + 1]);
+        for (S.max_code = at, L = d.heap_len >> 1; 1 <= L; L--) lt(d, Z, L);
+        for (A = Y; L = d.heap[1], d.heap[1] = d.heap[d.heap_len--], lt(d, Z, 1), N = d.heap[1], d.heap[--d.heap_max] = L, d.heap[--d.heap_max] = N, Z[2 * A] = Z[2 * L] + Z[2 * N], d.depth[A] = (d.depth[L] >= d.depth[N] ? d.depth[L] : d.depth[N]) + 1, Z[2 * L + 1] = Z[2 * N + 1] = A, d.heap[1] = A++, lt(d, Z, 1), 2 <= d.heap_len; ) ;
         d.heap[--d.heap_max] = d.heap[1], function(nt, mt) {
-          var xt, yt, St, lt, At, Dt, bt = mt.dyn_tree, Bt = mt.max_code, Ut = mt.stat_desc.static_tree, Wt = mt.stat_desc.has_stree, jt = mt.stat_desc.extra_bits, Lt = mt.stat_desc.extra_base, Et = mt.stat_desc.max_length, It = 0;
-          for (lt = 0; lt <= f; lt++) nt.bl_count[lt] = 0;
-          for (bt[2 * nt.heap[nt.heap_max] + 1] = 0, xt = nt.heap_max + 1; xt < i; xt++) Et < (lt = bt[2 * bt[2 * (yt = nt.heap[xt]) + 1] + 1] + 1) && (lt = Et, It++), bt[2 * yt + 1] = lt, Bt < yt || (nt.bl_count[lt]++, At = 0, Lt <= yt && (At = jt[yt - Lt]), Dt = bt[2 * yt], nt.opt_len += Dt * (lt + At), Wt && (nt.static_len += Dt * (Ut[2 * yt + 1] + At)));
+          var xt, yt, St, ht, At, Dt, bt = mt.dyn_tree, Bt = mt.max_code, Ut = mt.stat_desc.static_tree, Wt = mt.stat_desc.has_stree, jt = mt.stat_desc.extra_bits, Lt = mt.stat_desc.extra_base, Et = mt.stat_desc.max_length, It = 0;
+          for (ht = 0; ht <= f; ht++) nt.bl_count[ht] = 0;
+          for (bt[2 * nt.heap[nt.heap_max] + 1] = 0, xt = nt.heap_max + 1; xt < i; xt++) Et < (ht = bt[2 * bt[2 * (yt = nt.heap[xt]) + 1] + 1] + 1) && (ht = Et, It++), bt[2 * yt + 1] = ht, Bt < yt || (nt.bl_count[ht]++, At = 0, Lt <= yt && (At = jt[yt - Lt]), Dt = bt[2 * yt], nt.opt_len += Dt * (ht + At), Wt && (nt.static_len += Dt * (Ut[2 * yt + 1] + At)));
           if (It !== 0) {
             do {
-              for (lt = Et - 1; nt.bl_count[lt] === 0; ) lt--;
-              nt.bl_count[lt]--, nt.bl_count[lt + 1] += 2, nt.bl_count[Et]--, It -= 2;
+              for (ht = Et - 1; nt.bl_count[ht] === 0; ) ht--;
+              nt.bl_count[ht]--, nt.bl_count[ht + 1] += 2, nt.bl_count[Et]--, It -= 2;
             } while (0 < It);
-            for (lt = Et; lt !== 0; lt--) for (yt = nt.bl_count[lt]; yt !== 0; ) Bt < (St = nt.heap[--xt]) || (bt[2 * St + 1] !== lt && (nt.opt_len += (lt - bt[2 * St + 1]) * bt[2 * St], bt[2 * St + 1] = lt), yt--);
+            for (ht = Et; ht !== 0; ht--) for (yt = nt.bl_count[ht]; yt !== 0; ) Bt < (St = nt.heap[--xt]) || (bt[2 * St + 1] !== ht && (nt.opt_len += (ht - bt[2 * St + 1]) * bt[2 * St], bt[2 * St + 1] = ht), yt--);
           }
-        }(d, S), dt(Z, st, d.bl_count);
+        }(d, S), dt(Z, at, d.bl_count);
       }
       function t(d, S, L) {
-        var N, A, Z = -1, K = S[1], G = 0, Y = 7, st = 4;
-        for (K === 0 && (Y = 138, st = 3), S[2 * (L + 1) + 1] = 65535, N = 0; N <= L; N++) A = K, K = S[2 * (N + 1) + 1], ++G < Y && A === K || (G < st ? d.bl_tree[2 * A] += G : A !== 0 ? (A !== Z && d.bl_tree[2 * A]++, d.bl_tree[2 * C]++) : G <= 10 ? d.bl_tree[2 * E]++ : d.bl_tree[2 * D]++, Z = A, st = (G = 0) === K ? (Y = 138, 3) : A === K ? (Y = 6, 3) : (Y = 7, 4));
+        var N, A, Z = -1, K = S[1], G = 0, Y = 7, at = 4;
+        for (K === 0 && (Y = 138, at = 3), S[2 * (L + 1) + 1] = 65535, N = 0; N <= L; N++) A = K, K = S[2 * (N + 1) + 1], ++G < Y && A === K || (G < at ? d.bl_tree[2 * A] += G : A !== 0 ? (A !== Z && d.bl_tree[2 * A]++, d.bl_tree[2 * C]++) : G <= 10 ? d.bl_tree[2 * E]++ : d.bl_tree[2 * D]++, Z = A, at = (G = 0) === K ? (Y = 138, 3) : A === K ? (Y = 6, 3) : (Y = 7, 4));
       }
       function F(d, S, L) {
-        var N, A, Z = -1, K = S[1], G = 0, Y = 7, st = 4;
-        for (K === 0 && (Y = 138, st = 3), N = 0; N <= L; N++) if (A = K, K = S[2 * (N + 1) + 1], !(++G < Y && A === K)) {
-          if (G < st) for (; q(d, A, d.bl_tree), --G != 0; ) ;
+        var N, A, Z = -1, K = S[1], G = 0, Y = 7, at = 4;
+        for (K === 0 && (Y = 138, at = 3), N = 0; N <= L; N++) if (A = K, K = S[2 * (N + 1) + 1], !(++G < Y && A === K)) {
+          if (G < at) for (; q(d, A, d.bl_tree), --G != 0; ) ;
           else A !== 0 ? (A !== Z && (q(d, A, d.bl_tree), G--), q(d, C, d.bl_tree), V(d, G - 3, 2)) : G <= 10 ? (q(d, E, d.bl_tree), V(d, G - 3, 3)) : (q(d, D, d.bl_tree), V(d, G - 11, 7));
-          Z = A, st = (G = 0) === K ? (Y = 138, 3) : A === K ? (Y = 6, 3) : (Y = 7, 4);
+          Z = A, at = (G = 0) === K ? (Y = 138, 3) : A === K ? (Y = 6, 3) : (Y = 7, 4);
         }
       }
       h(j);
       var O = !1;
       function m(d, S, L, N) {
         V(d, (w << 1) + (N ? 1 : 0), 3), function(A, Z, K, G) {
-          it(A), J(A, K), J(A, ~K), s.arraySet(A.pending_buf, A.window, Z, K, A.pending), A.pending += K;
+          st(A), J(A, K), J(A, ~K), s.arraySet(A.pending_buf, A.window, Z, K, A.pending), A.pending += K;
         }(d, S, L);
       }
       u._tr_init = function(d) {
@@ -2485,14 +2485,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           for (; S <= 255; ) X[2 * S + 1] = 9, S++, K[9]++;
           for (; S <= 279; ) X[2 * S + 1] = 7, S++, K[7]++;
           for (; S <= 287; ) X[2 * S + 1] = 8, S++, K[8]++;
-          for (dt(X, v + 1, K), S = 0; S < a; S++) k[2 * S + 1] = 5, k[2 * S] = at(S, 5);
+          for (dt(X, v + 1, K), S = 0; S < a; S++) k[2 * S + 1] = 5, k[2 * S] = ot(S, 5);
           tt = new Q(X, P, _ + 1, v, f), W = new Q(k, U, 0, a, f), et = new Q(new Array(0), T, 0, g, y);
         }(), O = !0), d.l_desc = new z(d.dyn_ltree, tt), d.d_desc = new z(d.dyn_dtree, W), d.bl_desc = new z(d.bl_tree, et), d.bi_buf = 0, d.bi_valid = 0, rt(d);
       }, u._tr_stored_block = m, u._tr_flush_block = function(d, S, L, N) {
         var A, Z, K = 0;
         0 < d.level ? (d.strm.data_type === 2 && (d.strm.data_type = function(G) {
-          var Y, st = 4093624447;
-          for (Y = 0; Y <= 31; Y++, st >>>= 1) if (1 & st && G.dyn_ltree[2 * Y] !== 0) return o;
+          var Y, at = 4093624447;
+          for (Y = 0; Y <= 31; Y++, at >>>= 1) if (1 & at && G.dyn_ltree[2 * Y] !== 0) return o;
           if (G.dyn_ltree[18] !== 0 || G.dyn_ltree[20] !== 0 || G.dyn_ltree[26] !== 0) return n;
           for (Y = 32; Y < _; Y++) if (G.dyn_ltree[2 * Y] !== 0) return n;
           return o;
@@ -2500,11 +2500,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           var Y;
           for (t(G, G.dyn_ltree, G.l_desc.max_code), t(G, G.dyn_dtree, G.d_desc.max_code), gt(G, G.bl_desc), Y = g - 1; 3 <= Y && G.bl_tree[2 * M[Y] + 1] === 0; Y--) ;
           return G.opt_len += 3 * (Y + 1) + 5 + 5 + 4, Y;
-        }(d), A = d.opt_len + 3 + 7 >>> 3, (Z = d.static_len + 3 + 7 >>> 3) <= A && (A = Z)) : A = Z = L + 5, L + 4 <= A && S !== -1 ? m(d, S, L, N) : d.strategy === 4 || Z === A ? (V(d, 2 + (N ? 1 : 0), 3), _t(d, X, k)) : (V(d, 4 + (N ? 1 : 0), 3), function(G, Y, st, nt) {
+        }(d), A = d.opt_len + 3 + 7 >>> 3, (Z = d.static_len + 3 + 7 >>> 3) <= A && (A = Z)) : A = Z = L + 5, L + 4 <= A && S !== -1 ? m(d, S, L, N) : d.strategy === 4 || Z === A ? (V(d, 2 + (N ? 1 : 0), 3), _t(d, X, k)) : (V(d, 4 + (N ? 1 : 0), 3), function(G, Y, at, nt) {
           var mt;
-          for (V(G, Y - 257, 5), V(G, st - 1, 5), V(G, nt - 4, 4), mt = 0; mt < nt; mt++) V(G, G.bl_tree[2 * M[mt] + 1], 3);
-          F(G, G.dyn_ltree, Y - 1), F(G, G.dyn_dtree, st - 1);
-        }(d, d.l_desc.max_code + 1, d.d_desc.max_code + 1, K + 1), _t(d, d.dyn_ltree, d.dyn_dtree)), rt(d), N && it(d);
+          for (V(G, Y - 257, 5), V(G, at - 1, 5), V(G, nt - 4, 4), mt = 0; mt < nt; mt++) V(G, G.bl_tree[2 * M[mt] + 1], 3);
+          F(G, G.dyn_ltree, Y - 1), F(G, G.dyn_dtree, at - 1);
+        }(d, d.l_desc.max_code + 1, d.d_desc.max_code + 1, K + 1), _t(d, d.dyn_ltree, d.dyn_dtree)), rt(d), N && st(d);
       }, u._tr_tally = function(d, S, L) {
         return d.pending_buf[d.d_buf + 2 * d.last_lit] = S >>> 8 & 255, d.pending_buf[d.d_buf + 2 * d.last_lit + 1] = 255 & S, d.pending_buf[d.l_buf + d.last_lit] = 255 & L, d.last_lit++, S === 0 ? d.dyn_ltree[2 * L]++ : (d.matches++, S--, d.dyn_ltree[2 * (r[L] + _ + 1)]++, d.dyn_dtree[2 * I(S)]++), d.last_lit === d.lit_bufsize - 1;
       }, u._tr_align = function(d) {
@@ -2596,7 +2596,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   });
 })(Nt);
 var Gt = Nt.exports;
-const qt = /* @__PURE__ */ Ht(Gt), ht = class ht {
+const qt = /* @__PURE__ */ Ht(Gt), ct = class ct {
   constructor(l, e, p) {
     $(this, "idref");
     $(this, "href");
@@ -2615,7 +2615,7 @@ const qt = /* @__PURE__ */ Ht(Gt), ht = class ht {
     this.idref = l.idref, this.href = l.href, this.cfi = l.cfi, this.linear = l.linear ? l.linear.toLowerCase() : "yes", this.page_spread = l.page_spread, this.index = e, this.spine = p, this.rendition_viewport = l.rendition_viewport, this.rendition_spread = l.rendition_spread, this.rendition_layout = l.rendition_layout, this.rendition_flow = l.rendition_flow, this.media_type = l.media_type, this.media_overlay_id = l.media_overlay_id, this.validateSpread();
   }
   validateSpread() {
-    this.page_spread && this.page_spread !== ht.SPREAD_LEFT && this.page_spread !== ht.SPREAD_RIGHT && this.page_spread !== ht.SPREAD_CENTER && console.warn(`${this.page_spread} is not a recognized spread type`);
+    this.page_spread && this.page_spread !== ct.SPREAD_LEFT && this.page_spread !== ct.SPREAD_RIGHT && this.page_spread !== ct.SPREAD_CENTER && console.warn(`${this.page_spread} is not a recognized spread type`);
   }
   // Helpers
   isReflowable() {
@@ -2623,18 +2623,18 @@ const qt = /* @__PURE__ */ Ht(Gt), ht = class ht {
   }
   isFixedLayout() {
     const l = this.getRenditionLayout();
-    return l ? l === ht.RENDITION_LAYOUT_PREPAGINATED : this.spine.package.isFixedLayout();
+    return l ? l === ct.RENDITION_LAYOUT_PREPAGINATED : this.spine.package.isFixedLayout();
   }
   getRenditionLayout() {
     return this.rendition_layout || this.spine.package.rendition_layout;
   }
   // Additional methods based on legacy SpineItem.js...
   static alternateSpread(l) {
-    return l === ht.SPREAD_LEFT ? ht.SPREAD_RIGHT : l === ht.SPREAD_RIGHT ? ht.SPREAD_LEFT : l;
+    return l === ct.SPREAD_LEFT ? ct.SPREAD_RIGHT : l === ct.SPREAD_RIGHT ? ct.SPREAD_LEFT : l;
   }
 };
-$(ht, "readonlyRENDITION_LAYOUT_REFLOWABLE", "reflowable"), $(ht, "RENDITION_LAYOUT_PREPAGINATED", "pre-paginated"), $(ht, "SPREAD_LEFT", "page-spread-left"), $(ht, "SPREAD_RIGHT", "page-spread-right"), $(ht, "SPREAD_CENTER", "page-spread-center"), $(ht, "SPREAD_NONE", "none"), $(ht, "SPREAD_AUTO", "auto"), $(ht, "FLOW_PAGINATED", "paginated"), $(ht, "FLOW_SCROLLED_CONTINUOUS", "scrolled-continuous"), $(ht, "FLOW_SCROLLED_DOC", "scrolled-doc"), $(ht, "FLOW_AUTO", "auto");
-let Ft = ht;
+$(ct, "readonlyRENDITION_LAYOUT_REFLOWABLE", "reflowable"), $(ct, "RENDITION_LAYOUT_PREPAGINATED", "pre-paginated"), $(ct, "SPREAD_LEFT", "page-spread-left"), $(ct, "SPREAD_RIGHT", "page-spread-right"), $(ct, "SPREAD_CENTER", "page-spread-center"), $(ct, "SPREAD_NONE", "none"), $(ct, "SPREAD_AUTO", "auto"), $(ct, "FLOW_PAGINATED", "paginated"), $(ct, "FLOW_SCROLLED_CONTINUOUS", "scrolled-continuous"), $(ct, "FLOW_SCROLLED_DOC", "scrolled-doc"), $(ct, "FLOW_AUTO", "auto");
+let Ft = ct;
 class $t {
   // Default behavior
   constructor(l, e) {
@@ -3198,7 +3198,7 @@ class Yt {
     }
   }
 }
-const ct = {
+const it = {
   readium: null,
   readerView: null,
   // Added property
@@ -3208,47 +3208,47 @@ const ct = {
   init: (H) => {
     console.log("Initializing Modern TreineticEpubReader..."), ft.init();
     let l;
-    return typeof H == "string" ? l = document.querySelector(H) : l = H, l ? (ct.initReader(l), pt.getInstance()) : (console.error("TreineticEpubReader: Element not found", H), null);
+    return typeof H == "string" ? l = document.querySelector(H) : l = H, l ? (it.initReader(l), pt.getInstance()) : (console.error("TreineticEpubReader: Element not found", H), null);
   },
   /**
    * Alias for init() to align with standard library patterns.
    */
-  create: (H) => ct.init(H),
+  create: (H) => it.init(H),
   open: (H) => {
     console.log("Opening: ", H);
-    const l = ct.setReaderPreferences();
-    ct.ebookURL_filepath = H;
-    const e = ct.getOpenPageRequest(l, H);
+    const l = it.setReaderPreferences();
+    it.ebookURL_filepath = H;
+    const e = it.getOpenPageRequest(l, H);
     let p = { syntheticSpread: "auto", scroll: "auto" };
-    ct.embeded && l && l.reader && (p = l.reader), ct.loadEpub(p, H, e);
+    it.embeded && l && l.reader && (p = l.reader), it.loadEpub(p, H, e);
   },
   initReader: (H) => {
     H.classList.add("tr-epub-reader-element");
-    const l = ct.setReaderPreferences();
-    ct.readerView = new Yt(H), ft.init(), ft.on(ft.PageNext, "reader", () => ct.nextPage()), ft.on(ft.PagePrevious, "reader", () => ct.prevPage());
+    const l = it.setReaderPreferences();
+    it.readerView = new Yt(H), ft.init(), ft.on(ft.PageNext, "reader", () => it.nextPage()), ft.on(ft.PagePrevious, "reader", () => it.prevPage());
     let e = { syntheticSpread: "auto", scroll: "auto" };
-    ct.embeded && l && l.reader && (e = l.reader), wt.updateReader(ct.readerView, e);
+    it.embeded && l && l.reader && (e = l.reader), wt.updateReader(it.readerView, e);
   },
   handleReaderEvents: () => {
     var u, s, o;
-    if (!ct.readium) return;
-    const H = ct.readium.reader, l = ((u = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : u.CONTENT_DOCUMENT_LOAD_START) || "CONTENT_DOCUMENT_LOAD_START", e = ((s = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : s.CONTENT_DOCUMENT_LOADED) || "CONTENT_DOCUMENT_LOADED", p = ((o = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : o.PAGINATION_CHANGED) || "PAGINATION_CHANGED";
+    if (!it.readium) return;
+    const H = it.readium.reader, l = ((u = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : u.CONTENT_DOCUMENT_LOAD_START) || "CONTENT_DOCUMENT_LOAD_START", e = ((s = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : s.CONTENT_DOCUMENT_LOADED) || "CONTENT_DOCUMENT_LOADED", p = ((o = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : o.PAGINATION_CHANGED) || "PAGINATION_CHANGED";
     H.on(l, (n, h) => {
       console.log("Event: Load Start");
     }), H.on(e, (n, h) => {
       console.log("Event: Loaded");
     }), H.on(p, (n) => {
-      console.log("Event: Pagination Changed"), pt.getInstance().isAutoBookmark() && ct.savePlace();
+      console.log("Event: Pagination Changed"), pt.getInstance().isAutoBookmark() && it.savePlace();
     });
   },
   loadEpub: async (H, l, e) => {
     try {
       console.log("Loading epub via modern parser:", l);
       const p = await Rt.load(l);
-      ct.readerView && (ct.readerView.openBook(p), ct.currentPackageDocument = p, p.toc && pt.getInstance().onTOCLoad(p.toc), pt.getInstance().epubLoaded(
+      it.readerView && (it.readerView.openBook(p), it.currentPackageDocument = p, p.toc && pt.getInstance().onTOCLoad(p.toc), pt.getInstance().epubLoaded(
         p.metadata,
         p,
-        ct.readerView
+        it.readerView
       ));
     } catch (p) {
       console.error("Failed to load epub", p), pt.getInstance().epubFailed("Indeterminate error");
@@ -3280,7 +3280,18 @@ const ct = {
   clearSettings: () => {
     Ct.clear("reader"), console.log("Reader settings cleared.");
   }
-};
+}, Jt = it.create, Qt = it.init, te = it.open, ee = it.setScrollOption, re = it.setTheme, ne = it.registerTheme, ie = it.clearSettings, se = it.setFontSize, ae = it.goToPage, oe = it.nextPage, le = it.prevPage;
 export {
-  ct as default
+  ie as clearSettings,
+  Jt as create,
+  it as default,
+  ae as goToPage,
+  Qt as init,
+  oe as nextPage,
+  te as open,
+  le as prevPage,
+  ne as registerTheme,
+  se as setFontSize,
+  ee as setScrollOption,
+  re as setTheme
 };
