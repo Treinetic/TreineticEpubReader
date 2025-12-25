@@ -3,12 +3,65 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>ESM Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinetic v2.0.3 Verification</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            cursor: pointer;
+            background: #555;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #666;
+        }
+
+        #reader-container {
+            flex: 1;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="app"></div>
-    <script type="module" src="/main.js"></script>
+    <header>
+        <div>Treinetic Reader v2.0.3 Demo</div>
+        <div class="controls">
+            <button id="btn-prev">Previous</button>
+            <button id="btn-next">Next</button>
+        </div>
+    </header>
+
+    <div id="reader-container"></div>
+
+    <script type="module" src="./main.js"></script>
 </body>
 
 </html>

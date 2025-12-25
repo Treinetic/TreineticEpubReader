@@ -69,6 +69,13 @@ const TreineticEpubReader = {
     },
 
     initReader: (element: HTMLElement) => {
+        // CLEANUP: Remove existing wrapper if present (Fixes React Strict Mode double-mount)
+        const existingWrapper = element.querySelector('.tr-internal-wrapper');
+        if (existingWrapper) {
+            console.log("TreineticEpubReader: Cleaning up existing instance before re-init.");
+            existingWrapper.remove();
+        }
+
         element.classList.add('tr-epub-reader-element');
 
         const settings = TreineticEpubReader.setReaderPreferences();

@@ -1,6 +1,6 @@
 var Zt = Object.defineProperty;
-var Mt = (H, l, e) => l in H ? Zt(H, l, { enumerable: !0, configurable: !0, writable: !0, value: e }) : H[l] = e;
-var $ = (H, l, e) => Mt(H, typeof l != "symbol" ? l + "" : l, e);
+var Mt = (M, l, e) => l in M ? Zt(M, l, { enumerable: !0, configurable: !0, writable: !0, value: e }) : M[l] = e;
+var $ = (M, l, e) => Mt(M, typeof l != "symbol" ? l + "" : l, e);
 const zt = () => {
   try {
     return window.localStorage ? (localStorage.setItem("_isLocalStorageEnabled", "?"), localStorage.removeItem("_isLocalStorageEnabled"), !0) : !1;
@@ -8,34 +8,34 @@ const zt = () => {
     return !1;
   }
 }, Ct = {
-  put: (H, l, e) => {
+  put: (M, l, e) => {
     if (!zt()) {
       e && e();
       return;
     }
-    const p = JSON.stringify(l);
-    localStorage.setItem(H, p), e && e();
+    const f = JSON.stringify(l);
+    localStorage.setItem(M, f), e && e();
   },
-  clear: (H, l) => {
+  clear: (M, l) => {
     if (!zt()) {
       l && l();
       return;
     }
-    localStorage.removeItem(H), l && l();
+    localStorage.removeItem(M), l && l();
   },
-  get: (H, l) => {
+  get: (M, l) => {
     if (!zt())
       return l && l(null), null;
-    const e = localStorage.getItem(H), p = e ? JSON.parse(e) : null;
-    return l && l(p), p;
+    const e = localStorage.getItem(M), f = e ? JSON.parse(e) : null;
+    return l && l(f), f;
   },
-  getMultiple: (H, l) => {
+  getMultiple: (M, l) => {
     if (!zt())
       return l && l({}), {};
     const e = {};
-    for (const p of H) {
-      const u = localStorage.getItem(p);
-      u && (e[p] = u);
+    for (const f of M) {
+      const u = localStorage.getItem(f);
+      u && (e[f] = u);
     }
     return l && l(e), e;
   }
@@ -122,37 +122,37 @@ const zt = () => {
 $(kt, "instance");
 let Pt = kt;
 const wt = {
-  updateReader: (H, l) => {
-    if (H) {
-      if (H.updateSettings(l), l.theme) {
+  updateReader: (M, l) => {
+    if (M) {
+      if (M.updateSettings(l), l.theme) {
         document.documentElement.setAttribute("data-theme", l.theme);
         const e = wt.getBookStyles(l.theme);
-        H.setBookStyles(e);
-        const p = document.querySelector("#reader-wrapper");
-        p && e[0].declarations.backgroundColor && (p.style.backgroundColor = e[0].declarations.backgroundColor);
+        M.setBookStyles(e);
+        const f = document.querySelector("#reader-wrapper");
+        f && e[0].declarations.backgroundColor && (f.style.backgroundColor = e[0].declarations.backgroundColor);
       }
       Ct.put("reader", l);
     }
   },
-  getBookStyles: (H) => {
-    const l = H === "author-theme", e = wt.getPropertyFromThemeClass(H, "background-color"), p = wt.getPropertyFromThemeClass(H, "color"), u = wt.getPropertyFromThemeClass(H, "font-family");
+  getBookStyles: (M) => {
+    const l = M === "author-theme", e = wt.getPropertyFromThemeClass(M, "background-color"), f = wt.getPropertyFromThemeClass(M, "color"), u = wt.getPropertyFromThemeClass(M, "font-family");
     return [{
       selector: ":not(a):not(hypothesis-highlight)",
       declarations: {
         backgroundColor: l ? "" : e,
-        color: l ? "" : p,
+        color: l ? "" : f,
         fontFamily: l ? "" : u || ""
       }
     }, {
       selector: "a",
       declarations: {
         backgroundColor: l ? "" : e,
-        color: l ? "" : p
+        color: l ? "" : f
       }
     }];
   },
-  getPropertyFromThemeClass: (H, l) => {
-    const e = Pt.getInstance().getTheme(H);
+  getPropertyFromThemeClass: (M, l) => {
+    const e = Pt.getInstance().getTheme(M);
     return e ? e.properties[l] : null;
   }
 }, vt = class vt {
@@ -174,8 +174,8 @@ const wt = {
     vt.instance = new vt();
   }
   // Methods
-  epubLoaded(l, e, p) {
-    this.metadata = l, this.reader = p, this.currentPackageDocument = e, Ct.get("reader", (u) => {
+  epubLoaded(l, e, f) {
+    this.metadata = l, this.reader = f, this.currentPackageDocument = e, Ct.get("reader", (u) => {
       this.readerSettings = u || this.readerSettings;
     }), this.callbackFunctions.onEpubLoadSuccess && this.callbackFunctions.onEpubLoadSuccess();
   }
@@ -243,9 +243,9 @@ const wt = {
     this.readerSettings = this.cloneUpdate(this.readerSettings, "scroll", l), this.reader && wt.updateReader(this.reader, this.readerSettings);
   }
   // ... helpers
-  cloneUpdate(l, e, p) {
+  cloneUpdate(l, e, f) {
     const u = l ? JSON.parse(JSON.stringify(l)) : {};
-    return u[e] = p, u;
+    return u[e] = f, u;
   }
 };
 $(vt, "instance", null);
@@ -256,32 +256,32 @@ const ft = {
   init: () => {
     document.addEventListener("keydown", ft.handleKey);
   },
-  on: (H, l, e) => {
-    const p = `${l}:${H} `;
-    ft.handlers[p] || (ft.handlers[p] = []), ft.handlers[p].push(e);
+  on: (M, l, e) => {
+    const f = `${l}:${M} `;
+    ft.handlers[f] || (ft.handlers[f] = []), ft.handlers[f].push(e);
   },
-  handleKey: (H) => {
+  handleKey: (M) => {
     let l = "";
-    H.key === "ArrowRight" && (l = "PageNext"), H.key === "ArrowLeft" && (l = "PagePrevious"), l && ft.dispatch(l);
+    M.key === "ArrowRight" && (l = "PageNext"), M.key === "ArrowLeft" && (l = "PagePrevious"), l && ft.dispatch(l);
   },
-  dispatch: (H) => {
-    const l = `${ft.scope}:${H} `;
+  dispatch: (M) => {
+    const l = `${ft.scope}:${M} `;
     ft.handlers[l] && ft.handlers[l].forEach((e) => e());
   },
   // Constants matching legacy
   PagePrevious: "PagePrevious",
   PageNext: "PageNext",
   NightTheme: "NightTheme",
-  applySettings: (H) => {
+  applySettings: (M) => {
   }
 };
 ft.init();
 var Ot = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
-function Ht(H) {
-  return H && H.__esModule && Object.prototype.hasOwnProperty.call(H, "default") ? H.default : H;
+function Ht(M) {
+  return M && M.__esModule && Object.prototype.hasOwnProperty.call(M, "default") ? M.default : M;
 }
-function Tt(H) {
-  throw new Error('Could not dynamically require "' + H + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
+function Tt(M) {
+  throw new Error('Could not dynamically require "' + M + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 }
 var Nt = { exports: {} };
 /*!
@@ -295,14 +295,14 @@ Dual licenced under the MIT license or GPLv3. See https://raw.github.com/Stuk/js
 JSZip uses the library pako released under the MIT license :
 https://github.com/nodeca/pako/blob/main/LICENSE
 */
-(function(H, l) {
+(function(M, l) {
   (function(e) {
-    H.exports = e();
+    M.exports = e();
   })(function() {
-    return function e(p, u, s) {
+    return function e(f, u, s) {
       function o(w, b) {
         if (!u[w]) {
-          if (!p[w]) {
+          if (!f[w]) {
             var _ = typeof Tt == "function" && Tt;
             if (!b && _) return _(w, !0);
             if (n) return n(w, !0);
@@ -310,29 +310,29 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             throw v.code = "MODULE_NOT_FOUND", v;
           }
           var a = u[w] = { exports: {} };
-          p[w][0].call(a.exports, function(g) {
-            var i = p[w][1][g];
+          f[w][0].call(a.exports, function(g) {
+            var i = f[w][1][g];
             return o(i || g);
-          }, a, a.exports, e, p, u, s);
+          }, a, a.exports, e, f, u, s);
         }
         return u[w].exports;
       }
       for (var n = typeof Tt == "function" && Tt, h = 0; h < s.length; h++) o(s[h]);
       return o;
-    }({ 1: [function(e, p, u) {
+    }({ 1: [function(e, f, u) {
       var s = e("./utils"), o = e("./support"), n = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
       u.encode = function(h) {
-        for (var w, b, _, v, a, g, i, f = [], c = 0, y = h.length, x = y, C = s.getTypeOf(h) !== "string"; c < h.length; ) x = y - c, _ = C ? (w = h[c++], b = c < y ? h[c++] : 0, c < y ? h[c++] : 0) : (w = h.charCodeAt(c++), b = c < y ? h.charCodeAt(c++) : 0, c < y ? h.charCodeAt(c++) : 0), v = w >> 2, a = (3 & w) << 4 | b >> 4, g = 1 < x ? (15 & b) << 2 | _ >> 6 : 64, i = 2 < x ? 63 & _ : 64, f.push(n.charAt(v) + n.charAt(a) + n.charAt(g) + n.charAt(i));
-        return f.join("");
+        for (var w, b, _, v, a, g, i, p = [], c = 0, y = h.length, x = y, C = s.getTypeOf(h) !== "string"; c < h.length; ) x = y - c, _ = C ? (w = h[c++], b = c < y ? h[c++] : 0, c < y ? h[c++] : 0) : (w = h.charCodeAt(c++), b = c < y ? h.charCodeAt(c++) : 0, c < y ? h.charCodeAt(c++) : 0), v = w >> 2, a = (3 & w) << 4 | b >> 4, g = 1 < x ? (15 & b) << 2 | _ >> 6 : 64, i = 2 < x ? 63 & _ : 64, p.push(n.charAt(v) + n.charAt(a) + n.charAt(g) + n.charAt(i));
+        return p.join("");
       }, u.decode = function(h) {
-        var w, b, _, v, a, g, i = 0, f = 0, c = "data:";
+        var w, b, _, v, a, g, i = 0, p = 0, c = "data:";
         if (h.substr(0, c.length) === c) throw new Error("Invalid base64 input, it looks like a data url.");
         var y, x = 3 * (h = h.replace(/[^A-Za-z0-9+/=]/g, "")).length / 4;
         if (h.charAt(h.length - 1) === n.charAt(64) && x--, h.charAt(h.length - 2) === n.charAt(64) && x--, x % 1 != 0) throw new Error("Invalid base64 input, bad content length.");
-        for (y = o.uint8array ? new Uint8Array(0 | x) : new Array(0 | x); i < h.length; ) w = n.indexOf(h.charAt(i++)) << 2 | (v = n.indexOf(h.charAt(i++))) >> 4, b = (15 & v) << 4 | (a = n.indexOf(h.charAt(i++))) >> 2, _ = (3 & a) << 6 | (g = n.indexOf(h.charAt(i++))), y[f++] = w, a !== 64 && (y[f++] = b), g !== 64 && (y[f++] = _);
+        for (y = o.uint8array ? new Uint8Array(0 | x) : new Array(0 | x); i < h.length; ) w = n.indexOf(h.charAt(i++)) << 2 | (v = n.indexOf(h.charAt(i++))) >> 4, b = (15 & v) << 4 | (a = n.indexOf(h.charAt(i++))) >> 2, _ = (3 & a) << 6 | (g = n.indexOf(h.charAt(i++))), y[p++] = w, a !== 64 && (y[p++] = b), g !== 64 && (y[p++] = _);
         return y;
       };
-    }, { "./support": 30, "./utils": 32 }], 2: [function(e, p, u) {
+    }, { "./support": 30, "./utils": 32 }], 2: [function(e, f, u) {
       var s = e("./external"), o = e("./stream/DataWorker"), n = e("./stream/Crc32Probe"), h = e("./stream/DataLengthProbe");
       function w(b, _, v, a, g) {
         this.compressedSize = b, this.uncompressedSize = _, this.crc32 = v, this.compression = a, this.compressedContent = g;
@@ -346,15 +346,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         return new o(s.Promise.resolve(this.compressedContent)).withStreamInfo("compressedSize", this.compressedSize).withStreamInfo("uncompressedSize", this.uncompressedSize).withStreamInfo("crc32", this.crc32).withStreamInfo("compression", this.compression);
       } }, w.createWorkerFrom = function(b, _, v) {
         return b.pipe(new n()).pipe(new h("uncompressedSize")).pipe(_.compressWorker(v)).pipe(new h("compressedSize")).withStreamInfo("compression", _);
-      }, p.exports = w;
-    }, { "./external": 6, "./stream/Crc32Probe": 25, "./stream/DataLengthProbe": 26, "./stream/DataWorker": 27 }], 3: [function(e, p, u) {
+      }, f.exports = w;
+    }, { "./external": 6, "./stream/Crc32Probe": 25, "./stream/DataLengthProbe": 26, "./stream/DataWorker": 27 }], 3: [function(e, f, u) {
       var s = e("./stream/GenericWorker");
       u.STORE = { magic: "\0\0", compressWorker: function() {
         return new s("STORE compression");
       }, uncompressWorker: function() {
         return new s("STORE decompression");
       } }, u.DEFLATE = e("./flate");
-    }, { "./flate": 7, "./stream/GenericWorker": 28 }], 4: [function(e, p, u) {
+    }, { "./flate": 7, "./stream/GenericWorker": 28 }], 4: [function(e, f, u) {
       var s = e("./utils"), o = function() {
         for (var n, h = [], w = 0; w < 256; w++) {
           n = w;
@@ -363,7 +363,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         return h;
       }();
-      p.exports = function(n, h) {
+      f.exports = function(n, h) {
         return n !== void 0 && n.length ? s.getTypeOf(n) !== "string" ? function(w, b, _, v) {
           var a = o, g = v + _;
           w ^= -1;
@@ -376,12 +376,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           return -1 ^ w;
         }(0 | h, n, n.length, 0) : 0;
       };
-    }, { "./utils": 32 }], 5: [function(e, p, u) {
+    }, { "./utils": 32 }], 5: [function(e, f, u) {
       u.base64 = !1, u.binary = !1, u.dir = !1, u.createFolders = !0, u.date = null, u.compression = null, u.compressionOptions = null, u.comment = null, u.unixPermissions = null, u.dosPermissions = null;
-    }, {}], 6: [function(e, p, u) {
+    }, {}], 6: [function(e, f, u) {
       var s = null;
-      s = typeof Promise < "u" ? Promise : e("lie"), p.exports = { Promise: s };
-    }, { lie: 37 }], 7: [function(e, p, u) {
+      s = typeof Promise < "u" ? Promise : e("lie"), f.exports = { Promise: s };
+    }, { lie: 37 }], 7: [function(e, f, u) {
       var s = typeof Uint8Array < "u" && typeof Uint16Array < "u" && typeof Uint32Array < "u", o = e("pako"), n = e("./utils"), h = e("./stream/GenericWorker"), w = s ? "uint8array" : "array";
       function b(_, v) {
         h.call(this, "FlateWorker/" + _), this._pako = null, this._pakoAction = _, this._pakoOptions = v, this.meta = {};
@@ -403,14 +403,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, u.uncompressWorker = function() {
         return new b("Inflate", {});
       };
-    }, { "./stream/GenericWorker": 28, "./utils": 32, pako: 38 }], 8: [function(e, p, u) {
+    }, { "./stream/GenericWorker": 28, "./utils": 32, pako: 38 }], 8: [function(e, f, u) {
       function s(a, g) {
-        var i, f = "";
-        for (i = 0; i < g; i++) f += String.fromCharCode(255 & a), a >>>= 8;
-        return f;
+        var i, p = "";
+        for (i = 0; i < g; i++) p += String.fromCharCode(255 & a), a >>>= 8;
+        return p;
       }
-      function o(a, g, i, f, c, y) {
-        var x, C, E = a.file, D = a.compression, P = y !== w.utf8encode, U = n.transformTo("string", y(E.name)), T = n.transformTo("string", w.utf8encode(E.name)), M = E.comment, X = n.transformTo("string", y(M)), k = n.transformTo("string", w.utf8encode(M)), R = T.length !== E.name.length, r = k.length !== M.length, B = "", tt = "", W = "", et = E.dir, j = E.date, Q = { crc32: 0, compressedSize: 0, uncompressedSize: 0 };
+      function o(a, g, i, p, c, y) {
+        var x, C, E = a.file, D = a.compression, P = y !== w.utf8encode, U = n.transformTo("string", y(E.name)), T = n.transformTo("string", w.utf8encode(E.name)), H = E.comment, X = n.transformTo("string", y(H)), k = n.transformTo("string", w.utf8encode(H)), R = T.length !== E.name.length, r = k.length !== H.length, B = "", tt = "", W = "", et = E.dir, j = E.date, Q = { crc32: 0, compressedSize: 0, uncompressedSize: 0 };
         g && !i || (Q.crc32 = a.crc32, Q.compressedSize = a.compressedSize, Q.uncompressedSize = a.uncompressedSize);
         var z = 0;
         g && (z |= 8), P || !R && !r || (z |= 2048);
@@ -423,15 +423,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }(E.dosPermissions)), x = j.getUTCHours(), x <<= 6, x |= j.getUTCMinutes(), x <<= 5, x |= j.getUTCSeconds() / 2, C = j.getUTCFullYear() - 1980, C <<= 4, C |= j.getUTCMonth() + 1, C <<= 5, C |= j.getUTCDate(), R && (tt = s(1, 1) + s(b(U), 4) + T, B += "up" + s(tt.length, 2) + tt), r && (W = s(1, 1) + s(b(X), 4) + k, B += "uc" + s(W.length, 2) + W);
         var V = "";
         return V += `
-\0`, V += s(z, 2), V += D.magic, V += s(x, 2), V += s(C, 2), V += s(Q.crc32, 4), V += s(Q.compressedSize, 4), V += s(Q.uncompressedSize, 4), V += s(U.length, 2), V += s(B.length, 2), { fileRecord: _.LOCAL_FILE_HEADER + V + U + B, dirRecord: _.CENTRAL_FILE_HEADER + s(J, 2) + V + s(X.length, 2) + "\0\0\0\0" + s(I, 4) + s(f, 4) + U + B + X };
+\0`, V += s(z, 2), V += D.magic, V += s(x, 2), V += s(C, 2), V += s(Q.crc32, 4), V += s(Q.compressedSize, 4), V += s(Q.uncompressedSize, 4), V += s(U.length, 2), V += s(B.length, 2), { fileRecord: _.LOCAL_FILE_HEADER + V + U + B, dirRecord: _.CENTRAL_FILE_HEADER + s(J, 2) + V + s(X.length, 2) + "\0\0\0\0" + s(I, 4) + s(p, 4) + U + B + X };
       }
       var n = e("../utils"), h = e("../stream/GenericWorker"), w = e("../utf8"), b = e("../crc32"), _ = e("../signature");
-      function v(a, g, i, f) {
-        h.call(this, "ZipFileWorker"), this.bytesWritten = 0, this.zipComment = g, this.zipPlatform = i, this.encodeFileName = f, this.streamFiles = a, this.accumulate = !1, this.contentBuffer = [], this.dirRecords = [], this.currentSourceOffset = 0, this.entriesCount = 0, this.currentFile = null, this._sources = [];
+      function v(a, g, i, p) {
+        h.call(this, "ZipFileWorker"), this.bytesWritten = 0, this.zipComment = g, this.zipPlatform = i, this.encodeFileName = p, this.streamFiles = a, this.accumulate = !1, this.contentBuffer = [], this.dirRecords = [], this.currentSourceOffset = 0, this.entriesCount = 0, this.currentFile = null, this._sources = [];
       }
       n.inherits(v, h), v.prototype.push = function(a) {
-        var g = a.meta.percent || 0, i = this.entriesCount, f = this._sources.length;
-        this.accumulate ? this.contentBuffer.push(a) : (this.bytesWritten += a.data.length, h.prototype.push.call(this, { data: a.data, meta: { currentFile: this.currentFile, percent: i ? (g + 100 * (i - f - 1)) / i : 100 } }));
+        var g = a.meta.percent || 0, i = this.entriesCount, p = this._sources.length;
+        this.accumulate ? this.contentBuffer.push(a) : (this.bytesWritten += a.data.length, h.prototype.push.call(this, { data: a.data, meta: { currentFile: this.currentFile, percent: i ? (g + 100 * (i - p - 1)) / i : 100 } }));
       }, v.prototype.openedSource = function(a) {
         this.currentSourceOffset = this.bytesWritten, this.currentFile = a.file.name;
         var g = this.streamFiles && !a.file.dir;
@@ -442,18 +442,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, v.prototype.closedSource = function(a) {
         this.accumulate = !1;
         var g = this.streamFiles && !a.file.dir, i = o(a, g, !0, this.currentSourceOffset, this.zipPlatform, this.encodeFileName);
-        if (this.dirRecords.push(i.dirRecord), g) this.push({ data: function(f) {
-          return _.DATA_DESCRIPTOR + s(f.crc32, 4) + s(f.compressedSize, 4) + s(f.uncompressedSize, 4);
+        if (this.dirRecords.push(i.dirRecord), g) this.push({ data: function(p) {
+          return _.DATA_DESCRIPTOR + s(p.crc32, 4) + s(p.compressedSize, 4) + s(p.uncompressedSize, 4);
         }(a), meta: { percent: 100 } });
         else for (this.push({ data: i.fileRecord, meta: { percent: 0 } }); this.contentBuffer.length; ) this.push(this.contentBuffer.shift());
         this.currentFile = null;
       }, v.prototype.flush = function() {
         for (var a = this.bytesWritten, g = 0; g < this.dirRecords.length; g++) this.push({ data: this.dirRecords[g], meta: { percent: 100 } });
-        var i = this.bytesWritten - a, f = function(c, y, x, C, E) {
+        var i = this.bytesWritten - a, p = function(c, y, x, C, E) {
           var D = n.transformTo("string", E(C));
           return _.CENTRAL_DIRECTORY_END + "\0\0\0\0" + s(c, 2) + s(c, 2) + s(y, 4) + s(x, 4) + s(D.length, 2) + D;
         }(this.dirRecords.length, i, a, this.zipComment, this.encodeFileName);
-        this.push({ data: f, meta: { percent: 100 } });
+        this.push({ data: p, meta: { percent: 100 } });
       }, v.prototype.prepareNextSource = function() {
         this.previous = this._sources.shift(), this.openedSource(this.previous.streamInfo), this.isPaused ? this.previous.pause() : this.previous.resume();
       }, v.prototype.registerPrevious = function(a) {
@@ -479,8 +479,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, v.prototype.lock = function() {
         h.prototype.lock.call(this);
         for (var a = this._sources, g = 0; g < a.length; g++) a[g].lock();
-      }, p.exports = v;
-    }, { "../crc32": 4, "../signature": 23, "../stream/GenericWorker": 28, "../utf8": 31, "../utils": 32 }], 9: [function(e, p, u) {
+      }, f.exports = v;
+    }, { "../crc32": 4, "../signature": 23, "../stream/GenericWorker": 28, "../utf8": 31, "../utils": 32 }], 9: [function(e, f, u) {
       var s = e("../compressions"), o = e("./ZipFileWorker");
       u.generateWorker = function(n, h, w) {
         var b = new o(h.streamFiles, w, h.platform, h.encodeFileName), _ = 0;
@@ -491,15 +491,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
               var C = y || x, E = s[C];
               if (!E) throw new Error(C + " is not a valid compression method !");
               return E;
-            }(a.options.compression, h.compression), i = a.options.compressionOptions || h.compressionOptions || {}, f = a.dir, c = a.date;
-            a._compressWorker(g, i).withStreamInfo("file", { name: v, dir: f, date: c, comment: a.comment || "", unixPermissions: a.unixPermissions, dosPermissions: a.dosPermissions }).pipe(b);
+            }(a.options.compression, h.compression), i = a.options.compressionOptions || h.compressionOptions || {}, p = a.dir, c = a.date;
+            a._compressWorker(g, i).withStreamInfo("file", { name: v, dir: p, date: c, comment: a.comment || "", unixPermissions: a.unixPermissions, dosPermissions: a.dosPermissions }).pipe(b);
           }), b.entriesCount = _;
         } catch (v) {
           b.error(v);
         }
         return b;
       };
-    }, { "../compressions": 3, "./ZipFileWorker": 8 }], 10: [function(e, p, u) {
+    }, { "../compressions": 3, "./ZipFileWorker": 8 }], 10: [function(e, f, u) {
       function s() {
         if (!(this instanceof s)) return new s();
         if (arguments.length) throw new Error("The constructor with parameters has been removed in JSZip 3.0, please check the upgrade guide.");
@@ -511,37 +511,37 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
       (s.prototype = e("./object")).loadAsync = e("./load"), s.support = e("./support"), s.defaults = e("./defaults"), s.version = "3.10.1", s.loadAsync = function(o, n) {
         return new s().loadAsync(o, n);
-      }, s.external = e("./external"), p.exports = s;
-    }, { "./defaults": 5, "./external": 6, "./load": 11, "./object": 15, "./support": 30 }], 11: [function(e, p, u) {
+      }, s.external = e("./external"), f.exports = s;
+    }, { "./defaults": 5, "./external": 6, "./load": 11, "./object": 15, "./support": 30 }], 11: [function(e, f, u) {
       var s = e("./utils"), o = e("./external"), n = e("./utf8"), h = e("./zipEntries"), w = e("./stream/Crc32Probe"), b = e("./nodejsUtils");
       function _(v) {
         return new o.Promise(function(a, g) {
           var i = v.decompressed.getContentWorker().pipe(new w());
-          i.on("error", function(f) {
-            g(f);
+          i.on("error", function(p) {
+            g(p);
           }).on("end", function() {
             i.streamInfo.crc32 !== v.decompressed.crc32 ? g(new Error("Corrupted zip : CRC32 mismatch")) : a();
           }).resume();
         });
       }
-      p.exports = function(v, a) {
+      f.exports = function(v, a) {
         var g = this;
         return a = s.extend(a || {}, { base64: !1, checkCRC32: !1, optimizedBinaryString: !1, createFolders: !1, decodeFileName: n.utf8decode }), b.isNode && b.isStream(v) ? o.Promise.reject(new Error("JSZip can't accept a stream when loading a zip file.")) : s.prepareContent("the loaded zip file", v, !0, a.optimizedBinaryString, a.base64).then(function(i) {
-          var f = new h(a);
-          return f.load(i), f;
+          var p = new h(a);
+          return p.load(i), p;
         }).then(function(i) {
-          var f = [o.Promise.resolve(i)], c = i.files;
-          if (a.checkCRC32) for (var y = 0; y < c.length; y++) f.push(_(c[y]));
-          return o.Promise.all(f);
+          var p = [o.Promise.resolve(i)], c = i.files;
+          if (a.checkCRC32) for (var y = 0; y < c.length; y++) p.push(_(c[y]));
+          return o.Promise.all(p);
         }).then(function(i) {
-          for (var f = i.shift(), c = f.files, y = 0; y < c.length; y++) {
+          for (var p = i.shift(), c = p.files, y = 0; y < c.length; y++) {
             var x = c[y], C = x.fileNameStr, E = s.resolve(x.fileNameStr);
             g.file(E, x.decompressed, { binary: !0, optimizedBinaryString: !0, date: x.date, dir: x.dir, comment: x.fileCommentStr.length ? x.fileCommentStr : null, unixPermissions: x.unixPermissions, dosPermissions: x.dosPermissions, createFolders: a.createFolders }), x.dir || (g.file(E).unsafeOriginalName = C);
           }
-          return f.zipComment.length && (g.comment = f.zipComment), g;
+          return p.zipComment.length && (g.comment = p.zipComment), g;
         });
       };
-    }, { "./external": 6, "./nodejsUtils": 14, "./stream/Crc32Probe": 25, "./utf8": 31, "./utils": 32, "./zipEntries": 33 }], 12: [function(e, p, u) {
+    }, { "./external": 6, "./nodejsUtils": 14, "./stream/Crc32Probe": 25, "./utf8": 31, "./utils": 32, "./zipEntries": 33 }], 12: [function(e, f, u) {
       var s = e("../utils"), o = e("../stream/GenericWorker");
       function n(h, w) {
         o.call(this, "Nodejs stream input adapter for " + h), this._upstreamEnded = !1, this._bindStream(w);
@@ -559,8 +559,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         return !!o.prototype.pause.call(this) && (this._stream.pause(), !0);
       }, n.prototype.resume = function() {
         return !!o.prototype.resume.call(this) && (this._upstreamEnded ? this.end() : this._stream.resume(), !0);
-      }, p.exports = n;
-    }, { "../stream/GenericWorker": 28, "../utils": 32 }], 13: [function(e, p, u) {
+      }, f.exports = n;
+    }, { "../stream/GenericWorker": 28, "../utils": 32 }], 13: [function(e, f, u) {
       var s = e("readable-stream").Readable;
       function o(n, h, w) {
         s.call(this, h), this._helper = n;
@@ -575,9 +575,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
       e("../utils").inherits(o, s), o.prototype._read = function() {
         this._helper.resume();
-      }, p.exports = o;
-    }, { "../utils": 32, "readable-stream": 16 }], 14: [function(e, p, u) {
-      p.exports = { isNode: typeof Buffer < "u", newBufferFrom: function(s, o) {
+      }, f.exports = o;
+    }, { "../utils": 32, "readable-stream": 16 }], 14: [function(e, f, u) {
+      f.exports = { isNode: typeof Buffer < "u", newBufferFrom: function(s, o) {
         if (Buffer.from && Buffer.from !== Uint8Array.from) return Buffer.from(s, o);
         if (typeof s == "number") throw new Error('The "data" argument must not be a number');
         return new Buffer(s, o);
@@ -590,18 +590,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, isStream: function(s) {
         return s && typeof s.on == "function" && typeof s.pause == "function" && typeof s.resume == "function";
       } };
-    }, {}], 15: [function(e, p, u) {
+    }, {}], 15: [function(e, f, u) {
       function s(E, D, P) {
-        var U, T = n.getTypeOf(D), M = n.extend(P || {}, b);
-        M.date = M.date || /* @__PURE__ */ new Date(), M.compression !== null && (M.compression = M.compression.toUpperCase()), typeof M.unixPermissions == "string" && (M.unixPermissions = parseInt(M.unixPermissions, 8)), M.unixPermissions && 16384 & M.unixPermissions && (M.dir = !0), M.dosPermissions && 16 & M.dosPermissions && (M.dir = !0), M.dir && (E = c(E)), M.createFolders && (U = f(E)) && y.call(this, U, !0);
-        var X = T === "string" && M.binary === !1 && M.base64 === !1;
-        P && P.binary !== void 0 || (M.binary = !X), (D instanceof _ && D.uncompressedSize === 0 || M.dir || !D || D.length === 0) && (M.base64 = !1, M.binary = !0, D = "", M.compression = "STORE", T = "string");
+        var U, T = n.getTypeOf(D), H = n.extend(P || {}, b);
+        H.date = H.date || /* @__PURE__ */ new Date(), H.compression !== null && (H.compression = H.compression.toUpperCase()), typeof H.unixPermissions == "string" && (H.unixPermissions = parseInt(H.unixPermissions, 8)), H.unixPermissions && 16384 & H.unixPermissions && (H.dir = !0), H.dosPermissions && 16 & H.dosPermissions && (H.dir = !0), H.dir && (E = c(E)), H.createFolders && (U = p(E)) && y.call(this, U, !0);
+        var X = T === "string" && H.binary === !1 && H.base64 === !1;
+        P && P.binary !== void 0 || (H.binary = !X), (D instanceof _ && D.uncompressedSize === 0 || H.dir || !D || D.length === 0) && (H.base64 = !1, H.binary = !0, D = "", H.compression = "STORE", T = "string");
         var k = null;
-        k = D instanceof _ || D instanceof h ? D : g.isNode && g.isStream(D) ? new i(E, D) : n.prepareContent(E, D, M.binary, M.optimizedBinaryString, M.base64);
-        var R = new v(E, k, M);
+        k = D instanceof _ || D instanceof h ? D : g.isNode && g.isStream(D) ? new i(E, D) : n.prepareContent(E, D, H.binary, H.optimizedBinaryString, H.base64);
+        var R = new v(E, k, H);
         this.files[E] = R;
       }
-      var o = e("./utf8"), n = e("./utils"), h = e("./stream/GenericWorker"), w = e("./stream/StreamHelper"), b = e("./defaults"), _ = e("./compressedObject"), v = e("./zipObject"), a = e("./generate"), g = e("./nodejsUtils"), i = e("./nodejs/NodejsStreamInputAdapter"), f = function(E) {
+      var o = e("./utf8"), n = e("./utils"), h = e("./stream/GenericWorker"), w = e("./stream/StreamHelper"), b = e("./defaults"), _ = e("./compressedObject"), v = e("./zipObject"), a = e("./generate"), g = e("./nodejsUtils"), i = e("./nodejs/NodejsStreamInputAdapter"), p = function(E) {
         E.slice(-1) === "/" && (E = E.substring(0, E.length - 1));
         var D = E.lastIndexOf("/");
         return 0 < D ? E.substring(0, D) : "";
@@ -627,16 +627,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (arguments.length !== 1) return E = this.root + E, s.call(this, E, D, P), this;
         if (x(E)) {
           var U = E;
-          return this.filter(function(M, X) {
-            return !X.dir && U.test(M);
+          return this.filter(function(H, X) {
+            return !X.dir && U.test(H);
           });
         }
         var T = this.files[this.root + E];
         return T && !T.dir ? T : null;
       }, folder: function(E) {
         if (!E) return this;
-        if (x(E)) return this.filter(function(T, M) {
-          return M.dir && E.test(T);
+        if (x(E)) return this.filter(function(T, H) {
+          return H.dir && E.test(T);
         });
         var D = this.root + E, P = y.call(this, D), U = this.clone();
         return U.root = P.name, U;
@@ -644,8 +644,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         E = this.root + E;
         var D = this.files[E];
         if (D || (E.slice(-1) !== "/" && (E += "/"), D = this.files[E]), D && !D.dir) delete this.files[E];
-        else for (var P = this.filter(function(T, M) {
-          return M.name.slice(0, E.length) === E;
+        else for (var P = this.filter(function(T, H) {
+          return H.name.slice(0, E.length) === E;
         }), U = 0; U < P.length; U++) delete this.files[P[U].name];
         return this;
       }, generate: function() {
@@ -666,10 +666,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, generateNodeStream: function(E, D) {
         return (E = E || {}).type || (E.type = "nodebuffer"), this.generateInternalStream(E).toNodejsStream(D);
       } };
-      p.exports = C;
-    }, { "./compressedObject": 2, "./defaults": 5, "./generate": 9, "./nodejs/NodejsStreamInputAdapter": 12, "./nodejsUtils": 14, "./stream/GenericWorker": 28, "./stream/StreamHelper": 29, "./utf8": 31, "./utils": 32, "./zipObject": 35 }], 16: [function(e, p, u) {
-      p.exports = e("stream");
-    }, { stream: void 0 }], 17: [function(e, p, u) {
+      f.exports = C;
+    }, { "./compressedObject": 2, "./defaults": 5, "./generate": 9, "./nodejs/NodejsStreamInputAdapter": 12, "./nodejsUtils": 14, "./stream/GenericWorker": 28, "./stream/StreamHelper": 29, "./utf8": 31, "./utils": 32, "./zipObject": 35 }], 16: [function(e, f, u) {
+      f.exports = e("stream");
+    }, { stream: void 0 }], 17: [function(e, f, u) {
       var s = e("./DataReader");
       function o(n) {
         s.call(this, n);
@@ -687,8 +687,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (this.checkOffset(n), n === 0) return [];
         var h = this.data.slice(this.zero + this.index, this.zero + this.index + n);
         return this.index += n, h;
-      }, p.exports = o;
-    }, { "../utils": 32, "./DataReader": 18 }], 18: [function(e, p, u) {
+      }, f.exports = o;
+    }, { "../utils": 32, "./DataReader": 18 }], 18: [function(e, f, u) {
       var s = e("../utils");
       function o(n) {
         this.data = n, this.length = n.length, this.index = 0, this.zero = 0;
@@ -714,8 +714,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, readDate: function() {
         var n = this.readInt(4);
         return new Date(Date.UTC(1980 + (n >> 25 & 127), (n >> 21 & 15) - 1, n >> 16 & 31, n >> 11 & 31, n >> 5 & 63, (31 & n) << 1));
-      } }, p.exports = o;
-    }, { "../utils": 32 }], 19: [function(e, p, u) {
+      } }, f.exports = o;
+    }, { "../utils": 32 }], 19: [function(e, f, u) {
       var s = e("./Uint8ArrayReader");
       function o(n) {
         s.call(this, n);
@@ -724,8 +724,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         this.checkOffset(n);
         var h = this.data.slice(this.zero + this.index, this.zero + this.index + n);
         return this.index += n, h;
-      }, p.exports = o;
-    }, { "../utils": 32, "./Uint8ArrayReader": 21 }], 20: [function(e, p, u) {
+      }, f.exports = o;
+    }, { "../utils": 32, "./Uint8ArrayReader": 21 }], 20: [function(e, f, u) {
       var s = e("./DataReader");
       function o(n) {
         s.call(this, n);
@@ -740,8 +740,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         this.checkOffset(n);
         var h = this.data.slice(this.zero + this.index, this.zero + this.index + n);
         return this.index += n, h;
-      }, p.exports = o;
-    }, { "../utils": 32, "./DataReader": 18 }], 21: [function(e, p, u) {
+      }, f.exports = o;
+    }, { "../utils": 32, "./DataReader": 18 }], 21: [function(e, f, u) {
       var s = e("./ArrayReader");
       function o(n) {
         s.call(this, n);
@@ -750,32 +750,32 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (this.checkOffset(n), n === 0) return new Uint8Array(0);
         var h = this.data.subarray(this.zero + this.index, this.zero + this.index + n);
         return this.index += n, h;
-      }, p.exports = o;
-    }, { "../utils": 32, "./ArrayReader": 17 }], 22: [function(e, p, u) {
+      }, f.exports = o;
+    }, { "../utils": 32, "./ArrayReader": 17 }], 22: [function(e, f, u) {
       var s = e("../utils"), o = e("../support"), n = e("./ArrayReader"), h = e("./StringReader"), w = e("./NodeBufferReader"), b = e("./Uint8ArrayReader");
-      p.exports = function(_) {
+      f.exports = function(_) {
         var v = s.getTypeOf(_);
         return s.checkSupport(v), v !== "string" || o.uint8array ? v === "nodebuffer" ? new w(_) : o.uint8array ? new b(s.transformTo("uint8array", _)) : new n(s.transformTo("array", _)) : new h(_);
       };
-    }, { "../support": 30, "../utils": 32, "./ArrayReader": 17, "./NodeBufferReader": 19, "./StringReader": 20, "./Uint8ArrayReader": 21 }], 23: [function(e, p, u) {
+    }, { "../support": 30, "../utils": 32, "./ArrayReader": 17, "./NodeBufferReader": 19, "./StringReader": 20, "./Uint8ArrayReader": 21 }], 23: [function(e, f, u) {
       u.LOCAL_FILE_HEADER = "PK", u.CENTRAL_FILE_HEADER = "PK", u.CENTRAL_DIRECTORY_END = "PK", u.ZIP64_CENTRAL_DIRECTORY_LOCATOR = "PK\x07", u.ZIP64_CENTRAL_DIRECTORY_END = "PK", u.DATA_DESCRIPTOR = "PK\x07\b";
-    }, {}], 24: [function(e, p, u) {
+    }, {}], 24: [function(e, f, u) {
       var s = e("./GenericWorker"), o = e("../utils");
       function n(h) {
         s.call(this, "ConvertWorker to " + h), this.destType = h;
       }
       o.inherits(n, s), n.prototype.processChunk = function(h) {
         this.push({ data: o.transformTo(this.destType, h.data), meta: h.meta });
-      }, p.exports = n;
-    }, { "../utils": 32, "./GenericWorker": 28 }], 25: [function(e, p, u) {
+      }, f.exports = n;
+    }, { "../utils": 32, "./GenericWorker": 28 }], 25: [function(e, f, u) {
       var s = e("./GenericWorker"), o = e("../crc32");
       function n() {
         s.call(this, "Crc32Probe"), this.withStreamInfo("crc32", 0);
       }
       e("../utils").inherits(n, s), n.prototype.processChunk = function(h) {
         this.streamInfo.crc32 = o(h.data, this.streamInfo.crc32 || 0), this.push(h);
-      }, p.exports = n;
-    }, { "../crc32": 4, "../utils": 32, "./GenericWorker": 28 }], 26: [function(e, p, u) {
+      }, f.exports = n;
+    }, { "../crc32": 4, "../utils": 32, "./GenericWorker": 28 }], 26: [function(e, f, u) {
       var s = e("../utils"), o = e("./GenericWorker");
       function n(h) {
         o.call(this, "DataLengthProbe for " + h), this.propName = h, this.withStreamInfo(h, 0);
@@ -786,8 +786,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           this.streamInfo[this.propName] = w + h.data.length;
         }
         o.prototype.processChunk.call(this, h);
-      }, p.exports = n;
-    }, { "../utils": 32, "./GenericWorker": 28 }], 27: [function(e, p, u) {
+      }, f.exports = n;
+    }, { "../utils": 32, "./GenericWorker": 28 }], 27: [function(e, f, u) {
       var s = e("../utils"), o = e("./GenericWorker");
       function n(h) {
         o.call(this, "DataWorker");
@@ -820,8 +820,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             h = this.data.slice(this.index, w);
         }
         return this.index = w, this.push({ data: h, meta: { percent: this.max ? this.index / this.max * 100 : 0 } });
-      }, p.exports = n;
-    }, { "../utils": 32, "./GenericWorker": 28 }], 28: [function(e, p, u) {
+      }, f.exports = n;
+    }, { "../utils": 32, "./GenericWorker": 28 }], 28: [function(e, f, u) {
       function s(o) {
         this.name = o || "default", this.streamInfo = {}, this.generatedError = null, this.extraStreamInfo = {}, this.isPaused = !0, this.isFinished = !1, this.isLocked = !1, this._listeners = { data: [], end: [], error: [] }, this.previous = null;
       }
@@ -876,15 +876,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, toString: function() {
         var o = "Worker " + this.name;
         return this.previous ? this.previous + " -> " + o : o;
-      } }, p.exports = s;
-    }, {}], 29: [function(e, p, u) {
+      } }, f.exports = s;
+    }, {}], 29: [function(e, f, u) {
       var s = e("../utils"), o = e("./ConvertWorker"), n = e("./GenericWorker"), h = e("../base64"), w = e("../support"), b = e("../external"), _ = null;
       if (w.nodestream) try {
         _ = e("../nodejs/NodejsStreamOutputAdapter");
       } catch {
       }
       function v(g, i) {
-        return new b.Promise(function(f, c) {
+        return new b.Promise(function(p, c) {
           var y = [], x = g._internalType, C = g._outputType, E = g._mimeType;
           g.on("data", function(D, P) {
             y.push(D), i && i(P);
@@ -902,7 +902,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     return s.transformTo(P, U);
                 }
               }(C, function(P, U) {
-                var T, M = 0, X = null, k = 0;
+                var T, H = 0, X = null, k = 0;
                 for (T = 0; T < U.length; T++) k += U[T].length;
                 switch (P) {
                   case "string":
@@ -910,7 +910,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                   case "array":
                     return Array.prototype.concat.apply([], U);
                   case "uint8array":
-                    for (X = new Uint8Array(k), T = 0; T < U.length; T++) X.set(U[T], M), M += U[T].length;
+                    for (X = new Uint8Array(k), T = 0; T < U.length; T++) X.set(U[T], H), H += U[T].length;
                     return X;
                   case "nodebuffer":
                     return Buffer.concat(U);
@@ -918,7 +918,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     throw new Error("concat : unsupported type '" + P + "'");
                 }
               }(x, y), E);
-              f(D);
+              p(D);
             } catch (P) {
               c(P);
             }
@@ -926,7 +926,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           }).resume();
         });
       }
-      function a(g, i, f) {
+      function a(g, i, p) {
         var c = i;
         switch (i) {
           case "blob":
@@ -937,7 +937,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             c = "string";
         }
         try {
-          this._internalType = c, this._outputType = i, this._mimeType = f, s.checkSupport(c), this._worker = g.pipe(new o(c)), g.lock();
+          this._internalType = c, this._outputType = i, this._mimeType = p, s.checkSupport(c), this._worker = g.pipe(new o(c)), g.lock();
         } catch (y) {
           this._worker = new n("error"), this._worker.error(y);
         }
@@ -945,11 +945,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       a.prototype = { accumulate: function(g) {
         return v(this, g);
       }, on: function(g, i) {
-        var f = this;
+        var p = this;
         return g === "data" ? this._worker.on(g, function(c) {
-          i.call(f, c.data, c.meta);
+          i.call(p, c.data, c.meta);
         }) : this._worker.on(g, function() {
-          s.delay(i, arguments, f);
+          s.delay(i, arguments, p);
         }), this;
       }, resume: function() {
         return s.delay(this._worker.resume, [], this._worker), this;
@@ -958,8 +958,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, toNodejsStream: function(g) {
         if (s.checkSupport("nodestream"), this._outputType !== "nodebuffer") throw new Error(this._outputType + " is not supported by this method");
         return new _(this, { objectMode: this._outputType !== "nodebuffer" }, g);
-      } }, p.exports = a;
-    }, { "../base64": 1, "../external": 6, "../nodejs/NodejsStreamOutputAdapter": 13, "../support": 30, "../utils": 32, "./ConvertWorker": 24, "./GenericWorker": 28 }], 30: [function(e, p, u) {
+      } }, f.exports = a;
+    }, { "../base64": 1, "../external": 6, "../nodejs/NodejsStreamOutputAdapter": 13, "../support": 30, "../utils": 32, "./ConvertWorker": 24, "./GenericWorker": 28 }], 30: [function(e, f, u) {
       if (u.base64 = !0, u.array = !0, u.string = !0, u.arraybuffer = typeof ArrayBuffer < "u" && typeof Uint8Array < "u", u.nodebuffer = typeof Buffer < "u", u.uint8array = typeof Uint8Array < "u", typeof ArrayBuffer > "u") u.blob = !1;
       else {
         var s = new ArrayBuffer(0);
@@ -979,7 +979,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       } catch {
         u.nodestream = !1;
       }
-    }, { "readable-stream": 16 }], 31: [function(e, p, u) {
+    }, { "readable-stream": 16 }], 31: [function(e, f, u) {
       for (var s = e("./utils"), o = e("./support"), n = e("./nodejsUtils"), h = e("./stream/GenericWorker"), w = new Array(256), b = 0; b < 256; b++) w[b] = 252 <= b ? 6 : 248 <= b ? 5 : 240 <= b ? 4 : 224 <= b ? 3 : 192 <= b ? 2 : 1;
       w[254] = w[254] = 1;
       function _() {
@@ -990,21 +990,21 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
       u.utf8encode = function(a) {
         return o.nodebuffer ? n.newBufferFrom(a, "utf-8") : function(g) {
-          var i, f, c, y, x, C = g.length, E = 0;
-          for (y = 0; y < C; y++) (64512 & (f = g.charCodeAt(y))) == 55296 && y + 1 < C && (64512 & (c = g.charCodeAt(y + 1))) == 56320 && (f = 65536 + (f - 55296 << 10) + (c - 56320), y++), E += f < 128 ? 1 : f < 2048 ? 2 : f < 65536 ? 3 : 4;
-          for (i = o.uint8array ? new Uint8Array(E) : new Array(E), y = x = 0; x < E; y++) (64512 & (f = g.charCodeAt(y))) == 55296 && y + 1 < C && (64512 & (c = g.charCodeAt(y + 1))) == 56320 && (f = 65536 + (f - 55296 << 10) + (c - 56320), y++), f < 128 ? i[x++] = f : (f < 2048 ? i[x++] = 192 | f >>> 6 : (f < 65536 ? i[x++] = 224 | f >>> 12 : (i[x++] = 240 | f >>> 18, i[x++] = 128 | f >>> 12 & 63), i[x++] = 128 | f >>> 6 & 63), i[x++] = 128 | 63 & f);
+          var i, p, c, y, x, C = g.length, E = 0;
+          for (y = 0; y < C; y++) (64512 & (p = g.charCodeAt(y))) == 55296 && y + 1 < C && (64512 & (c = g.charCodeAt(y + 1))) == 56320 && (p = 65536 + (p - 55296 << 10) + (c - 56320), y++), E += p < 128 ? 1 : p < 2048 ? 2 : p < 65536 ? 3 : 4;
+          for (i = o.uint8array ? new Uint8Array(E) : new Array(E), y = x = 0; x < E; y++) (64512 & (p = g.charCodeAt(y))) == 55296 && y + 1 < C && (64512 & (c = g.charCodeAt(y + 1))) == 56320 && (p = 65536 + (p - 55296 << 10) + (c - 56320), y++), p < 128 ? i[x++] = p : (p < 2048 ? i[x++] = 192 | p >>> 6 : (p < 65536 ? i[x++] = 224 | p >>> 12 : (i[x++] = 240 | p >>> 18, i[x++] = 128 | p >>> 12 & 63), i[x++] = 128 | p >>> 6 & 63), i[x++] = 128 | 63 & p);
           return i;
         }(a);
       }, u.utf8decode = function(a) {
         return o.nodebuffer ? s.transformTo("nodebuffer", a).toString("utf-8") : function(g) {
-          var i, f, c, y, x = g.length, C = new Array(2 * x);
-          for (i = f = 0; i < x; ) if ((c = g[i++]) < 128) C[f++] = c;
-          else if (4 < (y = w[c])) C[f++] = 65533, i += y - 1;
+          var i, p, c, y, x = g.length, C = new Array(2 * x);
+          for (i = p = 0; i < x; ) if ((c = g[i++]) < 128) C[p++] = c;
+          else if (4 < (y = w[c])) C[p++] = 65533, i += y - 1;
           else {
             for (c &= y === 2 ? 31 : y === 3 ? 15 : 7; 1 < y && i < x; ) c = c << 6 | 63 & g[i++], y--;
-            1 < y ? C[f++] = 65533 : c < 65536 ? C[f++] = c : (c -= 65536, C[f++] = 55296 | c >> 10 & 1023, C[f++] = 56320 | 1023 & c);
+            1 < y ? C[p++] = 65533 : c < 65536 ? C[p++] = c : (c -= 65536, C[p++] = 55296 | c >> 10 & 1023, C[p++] = 56320 | 1023 & c);
           }
-          return C.length !== f && (C.subarray ? C = C.subarray(0, f) : C.length = f), s.applyFromCharCode(C);
+          return C.length !== p && (C.subarray ? C = C.subarray(0, p) : C.length = p), s.applyFromCharCode(C);
         }(a = s.transformTo(o.uint8array ? "uint8array" : "array", a));
       }, s.inherits(_, h), _.prototype.processChunk = function(a) {
         var g = s.transformTo(o.uint8array ? "uint8array" : "array", a.data);
@@ -1015,47 +1015,47 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           } else g = this.leftOver.concat(g);
           this.leftOver = null;
         }
-        var f = function(y, x) {
+        var p = function(y, x) {
           var C;
           for ((x = x || y.length) > y.length && (x = y.length), C = x - 1; 0 <= C && (192 & y[C]) == 128; ) C--;
           return C < 0 || C === 0 ? x : C + w[y[C]] > x ? C : x;
         }(g), c = g;
-        f !== g.length && (o.uint8array ? (c = g.subarray(0, f), this.leftOver = g.subarray(f, g.length)) : (c = g.slice(0, f), this.leftOver = g.slice(f, g.length))), this.push({ data: u.utf8decode(c), meta: a.meta });
+        p !== g.length && (o.uint8array ? (c = g.subarray(0, p), this.leftOver = g.subarray(p, g.length)) : (c = g.slice(0, p), this.leftOver = g.slice(p, g.length))), this.push({ data: u.utf8decode(c), meta: a.meta });
       }, _.prototype.flush = function() {
         this.leftOver && this.leftOver.length && (this.push({ data: u.utf8decode(this.leftOver), meta: {} }), this.leftOver = null);
       }, u.Utf8DecodeWorker = _, s.inherits(v, h), v.prototype.processChunk = function(a) {
         this.push({ data: u.utf8encode(a.data), meta: a.meta });
       }, u.Utf8EncodeWorker = v;
-    }, { "./nodejsUtils": 14, "./stream/GenericWorker": 28, "./support": 30, "./utils": 32 }], 32: [function(e, p, u) {
+    }, { "./nodejsUtils": 14, "./stream/GenericWorker": 28, "./support": 30, "./utils": 32 }], 32: [function(e, f, u) {
       var s = e("./support"), o = e("./base64"), n = e("./nodejsUtils"), h = e("./external");
       function w(i) {
         return i;
       }
-      function b(i, f) {
-        for (var c = 0; c < i.length; ++c) f[c] = 255 & i.charCodeAt(c);
-        return f;
+      function b(i, p) {
+        for (var c = 0; c < i.length; ++c) p[c] = 255 & i.charCodeAt(c);
+        return p;
       }
-      e("setimmediate"), u.newBlob = function(i, f) {
+      e("setimmediate"), u.newBlob = function(i, p) {
         u.checkSupport("blob");
         try {
-          return new Blob([i], { type: f });
+          return new Blob([i], { type: p });
         } catch {
           try {
             var c = new (self.BlobBuilder || self.WebKitBlobBuilder || self.MozBlobBuilder || self.MSBlobBuilder)();
-            return c.append(i), c.getBlob(f);
+            return c.append(i), c.getBlob(p);
           } catch {
             throw new Error("Bug : can't construct the Blob.");
           }
         }
       };
-      var _ = { stringifyByChunk: function(i, f, c) {
+      var _ = { stringifyByChunk: function(i, p, c) {
         var y = [], x = 0, C = i.length;
         if (C <= c) return String.fromCharCode.apply(null, i);
-        for (; x < C; ) f === "array" || f === "nodebuffer" ? y.push(String.fromCharCode.apply(null, i.slice(x, Math.min(x + c, C)))) : y.push(String.fromCharCode.apply(null, i.subarray(x, Math.min(x + c, C)))), x += c;
+        for (; x < C; ) p === "array" || p === "nodebuffer" ? y.push(String.fromCharCode.apply(null, i.slice(x, Math.min(x + c, C)))) : y.push(String.fromCharCode.apply(null, i.subarray(x, Math.min(x + c, C)))), x += c;
         return y.join("");
       }, stringifyByChar: function(i) {
-        for (var f = "", c = 0; c < i.length; c++) f += String.fromCharCode(i[c]);
-        return f;
+        for (var p = "", c = 0; c < i.length; c++) p += String.fromCharCode(i[c]);
+        return p;
       }, applyCanBeUsed: { uint8array: function() {
         try {
           return s.uint8array && String.fromCharCode.apply(null, new Uint8Array(1)).length === 1;
@@ -1070,17 +1070,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
       }() } };
       function v(i) {
-        var f = 65536, c = u.getTypeOf(i), y = !0;
-        if (c === "uint8array" ? y = _.applyCanBeUsed.uint8array : c === "nodebuffer" && (y = _.applyCanBeUsed.nodebuffer), y) for (; 1 < f; ) try {
-          return _.stringifyByChunk(i, c, f);
+        var p = 65536, c = u.getTypeOf(i), y = !0;
+        if (c === "uint8array" ? y = _.applyCanBeUsed.uint8array : c === "nodebuffer" && (y = _.applyCanBeUsed.nodebuffer), y) for (; 1 < p; ) try {
+          return _.stringifyByChunk(i, c, p);
         } catch {
-          f = Math.floor(f / 2);
+          p = Math.floor(p / 2);
         }
         return _.stringifyByChar(i);
       }
-      function a(i, f) {
-        for (var c = 0; c < i.length; c++) f[c] = i[c];
-        return f;
+      function a(i, p) {
+        for (var c = 0; c < i.length; c++) p[c] = i[c];
+        return p;
       }
       u.applyFromCharCode = v;
       var g = {};
@@ -1118,15 +1118,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         return g.nodebuffer.uint8array(i).buffer;
       }, uint8array: function(i) {
         return a(i, new Uint8Array(i.length));
-      }, nodebuffer: w }, u.transformTo = function(i, f) {
-        if (f = f || "", !i) return f;
+      }, nodebuffer: w }, u.transformTo = function(i, p) {
+        if (p = p || "", !i) return p;
         u.checkSupport(i);
-        var c = u.getTypeOf(f);
-        return g[c][i](f);
+        var c = u.getTypeOf(p);
+        return g[c][i](p);
       }, u.resolve = function(i) {
-        for (var f = i.split("/"), c = [], y = 0; y < f.length; y++) {
-          var x = f[y];
-          x === "." || x === "" && y !== 0 && y !== f.length - 1 || (x === ".." ? c.pop() : c.push(x));
+        for (var p = i.split("/"), c = [], y = 0; y < p.length; y++) {
+          var x = p[y];
+          x === "." || x === "" && y !== 0 && y !== p.length - 1 || (x === ".." ? c.pop() : c.push(x));
         }
         return c.join("/");
       }, u.getTypeOf = function(i) {
@@ -1134,23 +1134,23 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, u.checkSupport = function(i) {
         if (!s[i.toLowerCase()]) throw new Error(i + " is not supported by this platform");
       }, u.MAX_VALUE_16BITS = 65535, u.MAX_VALUE_32BITS = -1, u.pretty = function(i) {
-        var f, c, y = "";
-        for (c = 0; c < (i || "").length; c++) y += "\\x" + ((f = i.charCodeAt(c)) < 16 ? "0" : "") + f.toString(16).toUpperCase();
+        var p, c, y = "";
+        for (c = 0; c < (i || "").length; c++) y += "\\x" + ((p = i.charCodeAt(c)) < 16 ? "0" : "") + p.toString(16).toUpperCase();
         return y;
-      }, u.delay = function(i, f, c) {
+      }, u.delay = function(i, p, c) {
         setImmediate(function() {
-          i.apply(c || null, f || []);
+          i.apply(c || null, p || []);
         });
-      }, u.inherits = function(i, f) {
+      }, u.inherits = function(i, p) {
         function c() {
         }
-        c.prototype = f.prototype, i.prototype = new c();
+        c.prototype = p.prototype, i.prototype = new c();
       }, u.extend = function() {
-        var i, f, c = {};
-        for (i = 0; i < arguments.length; i++) for (f in arguments[i]) Object.prototype.hasOwnProperty.call(arguments[i], f) && c[f] === void 0 && (c[f] = arguments[i][f]);
+        var i, p, c = {};
+        for (i = 0; i < arguments.length; i++) for (p in arguments[i]) Object.prototype.hasOwnProperty.call(arguments[i], p) && c[p] === void 0 && (c[p] = arguments[i][p]);
         return c;
-      }, u.prepareContent = function(i, f, c, y, x) {
-        return h.Promise.resolve(f).then(function(C) {
+      }, u.prepareContent = function(i, p, c, y, x) {
+        return h.Promise.resolve(p).then(function(C) {
           return s.blob && (C instanceof Blob || ["[object File]", "[object Blob]"].indexOf(Object.prototype.toString.call(C)) !== -1) && typeof FileReader < "u" ? new h.Promise(function(E, D) {
             var P = new FileReader();
             P.onload = function(U) {
@@ -1166,7 +1166,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           }(C))), C) : h.Promise.reject(new Error("Can't read the data of '" + i + "'. Is it in a supported JavaScript type (String, Blob, ArrayBuffer, etc) ?"));
         });
       };
-    }, { "./base64": 1, "./external": 6, "./nodejsUtils": 14, "./support": 30, setimmediate: 54 }], 33: [function(e, p, u) {
+    }, { "./base64": 1, "./external": 6, "./nodejsUtils": 14, "./support": 30, setimmediate: 54 }], 33: [function(e, f, u) {
       var s = e("./reader/readerFor"), o = e("./utils"), n = e("./signature"), h = e("./zipEntry"), w = e("./support");
       function b(_) {
         this.files = [], this.loadOptions = _;
@@ -1217,8 +1217,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         this.reader = s(_);
       }, load: function(_) {
         this.prepareReader(_), this.readEndOfCentral(), this.readCentralDir(), this.readLocalFiles();
-      } }, p.exports = b;
-    }, { "./reader/readerFor": 22, "./signature": 23, "./support": 30, "./utils": 32, "./zipEntry": 34 }], 34: [function(e, p, u) {
+      } }, f.exports = b;
+    }, { "./reader/readerFor": 22, "./signature": 23, "./support": 30, "./utils": 32, "./zipEntry": 34 }], 34: [function(e, f, u) {
       var s = e("./reader/readerFor"), o = e("./utils"), n = e("./compressedObject"), h = e("./crc32"), w = e("./utf8"), b = e("./compressions"), _ = e("./support");
       function v(a, g) {
         this.options = a, this.loadOptions = g;
@@ -1230,8 +1230,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, readLocalPart: function(a) {
         var g, i;
         if (a.skip(22), this.fileNameLength = a.readInt(2), i = a.readInt(2), this.fileName = a.readData(this.fileNameLength), a.skip(i), this.compressedSize === -1 || this.uncompressedSize === -1) throw new Error("Bug or corrupted zip : didn't get enough information from the central directory (compressedSize === -1 || uncompressedSize === -1)");
-        if ((g = function(f) {
-          for (var c in b) if (Object.prototype.hasOwnProperty.call(b, c) && b[c].magic === f) return b[c];
+        if ((g = function(p) {
+          for (var c in b) if (Object.prototype.hasOwnProperty.call(b, c) && b[c].magic === p) return b[c];
           return null;
         }(this.compressionMethod)) === null) throw new Error("Corrupted zip : compression " + o.pretty(this.compressionMethod) + " unknown (inner file : " + o.transformTo("string", this.fileName) + ")");
         this.decompressed = new n(this.compressedSize, this.uncompressedSize, this.crc32, g, a.readData(this.compressedSize));
@@ -1250,8 +1250,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           this.uncompressedSize === o.MAX_VALUE_32BITS && (this.uncompressedSize = a.readInt(8)), this.compressedSize === o.MAX_VALUE_32BITS && (this.compressedSize = a.readInt(8)), this.localHeaderOffset === o.MAX_VALUE_32BITS && (this.localHeaderOffset = a.readInt(8)), this.diskNumberStart === o.MAX_VALUE_32BITS && (this.diskNumberStart = a.readInt(4));
         }
       }, readExtraFields: function(a) {
-        var g, i, f, c = a.index + this.extraFieldsLength;
-        for (this.extraFields || (this.extraFields = {}); a.index + 4 < c; ) g = a.readInt(2), i = a.readInt(2), f = a.readData(i), this.extraFields[g] = { id: g, length: i, value: f };
+        var g, i, p, c = a.index + this.extraFieldsLength;
+        for (this.extraFields || (this.extraFields = {}); a.index + 4 < c; ) g = a.readInt(2), i = a.readInt(2), p = a.readData(i), this.extraFields[g] = { id: g, length: i, value: p };
         a.setIndex(c);
       }, handleUTF8: function() {
         var a = _.uint8array ? "uint8array" : "array";
@@ -1263,8 +1263,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             var i = o.transformTo(a, this.fileName);
             this.fileNameStr = this.loadOptions.decodeFileName(i);
           }
-          var f = this.findExtraFieldUnicodeComment();
-          if (f !== null) this.fileCommentStr = f;
+          var p = this.findExtraFieldUnicodeComment();
+          if (p !== null) this.fileCommentStr = p;
           else {
             var c = o.transformTo(a, this.fileComment);
             this.fileCommentStr = this.loadOptions.decodeFileName(c);
@@ -1284,40 +1284,40 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           return g.readInt(1) !== 1 || h(this.fileComment) !== g.readInt(4) ? null : w.utf8decode(g.readData(a.length - 5));
         }
         return null;
-      } }, p.exports = v;
-    }, { "./compressedObject": 2, "./compressions": 3, "./crc32": 4, "./reader/readerFor": 22, "./support": 30, "./utf8": 31, "./utils": 32 }], 35: [function(e, p, u) {
-      function s(g, i, f) {
-        this.name = g, this.dir = f.dir, this.date = f.date, this.comment = f.comment, this.unixPermissions = f.unixPermissions, this.dosPermissions = f.dosPermissions, this._data = i, this._dataBinary = f.binary, this.options = { compression: f.compression, compressionOptions: f.compressionOptions };
+      } }, f.exports = v;
+    }, { "./compressedObject": 2, "./compressions": 3, "./crc32": 4, "./reader/readerFor": 22, "./support": 30, "./utf8": 31, "./utils": 32 }], 35: [function(e, f, u) {
+      function s(g, i, p) {
+        this.name = g, this.dir = p.dir, this.date = p.date, this.comment = p.comment, this.unixPermissions = p.unixPermissions, this.dosPermissions = p.dosPermissions, this._data = i, this._dataBinary = p.binary, this.options = { compression: p.compression, compressionOptions: p.compressionOptions };
       }
       var o = e("./stream/StreamHelper"), n = e("./stream/DataWorker"), h = e("./utf8"), w = e("./compressedObject"), b = e("./stream/GenericWorker");
       s.prototype = { internalStream: function(g) {
-        var i = null, f = "string";
+        var i = null, p = "string";
         try {
           if (!g) throw new Error("No output type specified.");
-          var c = (f = g.toLowerCase()) === "string" || f === "text";
-          f !== "binarystring" && f !== "text" || (f = "string"), i = this._decompressWorker();
+          var c = (p = g.toLowerCase()) === "string" || p === "text";
+          p !== "binarystring" && p !== "text" || (p = "string"), i = this._decompressWorker();
           var y = !this._dataBinary;
           y && !c && (i = i.pipe(new h.Utf8EncodeWorker())), !y && c && (i = i.pipe(new h.Utf8DecodeWorker()));
         } catch (x) {
           (i = new b("error")).error(x);
         }
-        return new o(i, f, "");
+        return new o(i, p, "");
       }, async: function(g, i) {
         return this.internalStream(g).accumulate(i);
       }, nodeStream: function(g, i) {
         return this.internalStream(g || "nodebuffer").toNodejsStream(i);
       }, _compressWorker: function(g, i) {
         if (this._data instanceof w && this._data.compression.magic === g.magic) return this._data.getCompressedWorker();
-        var f = this._decompressWorker();
-        return this._dataBinary || (f = f.pipe(new h.Utf8EncodeWorker())), w.createWorkerFrom(f, g, i);
+        var p = this._decompressWorker();
+        return this._dataBinary || (p = p.pipe(new h.Utf8EncodeWorker())), w.createWorkerFrom(p, g, i);
       }, _decompressWorker: function() {
         return this._data instanceof w ? this._data.getContentWorker() : this._data instanceof b ? this._data : new n(this._data);
       } };
       for (var _ = ["asText", "asBinary", "asNodeBuffer", "asUint8Array", "asArrayBuffer"], v = function() {
         throw new Error("This method has been removed in JSZip 3.0, please check the upgrade guide.");
       }, a = 0; a < _.length; a++) s.prototype[_[a]] = v;
-      p.exports = s;
-    }, { "./compressedObject": 2, "./stream/DataWorker": 27, "./stream/GenericWorker": 28, "./stream/StreamHelper": 29, "./utf8": 31 }], 36: [function(e, p, u) {
+      f.exports = s;
+    }, { "./compressedObject": 2, "./stream/DataWorker": 27, "./stream/GenericWorker": 28, "./stream/StreamHelper": 29, "./utf8": 31 }], 36: [function(e, f, u) {
       (function(s) {
         var o, n, h = s.MutationObserver || s.WebKitMutationObserver;
         if (h) {
@@ -1341,19 +1341,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         var a = [];
         function g() {
-          var i, f;
+          var i, p;
           n = !0;
           for (var c = a.length; c; ) {
-            for (f = a, a = [], i = -1; ++i < c; ) f[i]();
+            for (p = a, a = [], i = -1; ++i < c; ) p[i]();
             c = a.length;
           }
           n = !1;
         }
-        p.exports = function(i) {
+        f.exports = function(i) {
           a.push(i) !== 1 || n || o();
         };
       }).call(this, typeof Ot < "u" ? Ot : typeof self < "u" ? self : typeof window < "u" ? window : {});
-    }, {}], 37: [function(e, p, u) {
+    }, {}], 37: [function(e, f, u) {
       var s = e("immediate");
       function o() {
       }
@@ -1390,12 +1390,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         function E(P) {
           x || (x = !0, n.resolve(c, P));
         }
-        var D = f(function() {
+        var D = p(function() {
           y(E, C);
         });
         D.status === "error" && C(D.value);
       }
-      function f(c, y) {
+      function p(c, y) {
         var x = {};
         try {
           x.value = c(y), x.status = "success";
@@ -1404,7 +1404,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         return x;
       }
-      (p.exports = _).prototype.finally = function(c) {
+      (f.exports = _).prototype.finally = function(c) {
         if (typeof c != "function") return this;
         var y = this.constructor;
         return this.then(function(x) {
@@ -1431,7 +1431,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }, v.prototype.otherCallRejected = function(c) {
         a(this.promise, this.onRejected, c);
       }, n.resolve = function(c, y) {
-        var x = f(g, y);
+        var x = p(g, y);
         if (x.status === "error") return n.reject(c, x.value);
         var C = x.value;
         if (C) i(c, C);
@@ -1456,8 +1456,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (!x) return this.resolve([]);
         for (var E = new Array(x), D = 0, P = -1, U = new this(o); ++P < x; ) T(c[P], P);
         return U;
-        function T(M, X) {
-          y.resolve(M).then(function(k) {
+        function T(H, X) {
+          y.resolve(H).then(function(k) {
             E[X] = k, ++D !== x || C || (C = !0, n.resolve(U, E));
           }, function(k) {
             C || (C = !0, n.reject(U, k));
@@ -1476,10 +1476,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         var P;
         return D;
       };
-    }, { immediate: 36 }], 38: [function(e, p, u) {
+    }, { immediate: 36 }], 38: [function(e, f, u) {
       var s = {};
-      (0, e("./lib/utils/common").assign)(s, e("./lib/deflate"), e("./lib/inflate"), e("./lib/zlib/constants")), p.exports = s;
-    }, { "./lib/deflate": 39, "./lib/inflate": 40, "./lib/utils/common": 41, "./lib/zlib/constants": 44 }], 39: [function(e, p, u) {
+      (0, e("./lib/utils/common").assign)(s, e("./lib/deflate"), e("./lib/inflate"), e("./lib/zlib/constants")), f.exports = s;
+    }, { "./lib/deflate": 39, "./lib/inflate": 40, "./lib/utils/common": 41, "./lib/zlib/constants": 44 }], 39: [function(e, f, u) {
       var s = e("./zlib/deflate"), o = e("./utils/common"), n = e("./utils/strings"), h = e("./zlib/messages"), w = e("./zlib/zstream"), b = Object.prototype.toString, _ = 0, v = -1, a = 0, g = 8;
       function i(c) {
         if (!(this instanceof i)) return new i(c);
@@ -1494,7 +1494,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           this._dict_set = !0;
         }
       }
-      function f(c, y) {
+      function p(c, y) {
         var x = new i(y);
         if (x.push(c, !0), x.err) throw x.msg || h[x.err];
         return x.result;
@@ -1512,44 +1512,44 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         this.chunks.push(c);
       }, i.prototype.onEnd = function(c) {
         c === _ && (this.options.to === "string" ? this.result = this.chunks.join("") : this.result = o.flattenChunks(this.chunks)), this.chunks = [], this.err = c, this.msg = this.strm.msg;
-      }, u.Deflate = i, u.deflate = f, u.deflateRaw = function(c, y) {
-        return (y = y || {}).raw = !0, f(c, y);
+      }, u.Deflate = i, u.deflate = p, u.deflateRaw = function(c, y) {
+        return (y = y || {}).raw = !0, p(c, y);
       }, u.gzip = function(c, y) {
-        return (y = y || {}).gzip = !0, f(c, y);
+        return (y = y || {}).gzip = !0, p(c, y);
       };
-    }, { "./utils/common": 41, "./utils/strings": 42, "./zlib/deflate": 46, "./zlib/messages": 51, "./zlib/zstream": 53 }], 40: [function(e, p, u) {
+    }, { "./utils/common": 41, "./utils/strings": 42, "./zlib/deflate": 46, "./zlib/messages": 51, "./zlib/zstream": 53 }], 40: [function(e, f, u) {
       var s = e("./zlib/inflate"), o = e("./utils/common"), n = e("./utils/strings"), h = e("./zlib/constants"), w = e("./zlib/messages"), b = e("./zlib/zstream"), _ = e("./zlib/gzheader"), v = Object.prototype.toString;
       function a(i) {
         if (!(this instanceof a)) return new a(i);
         this.options = o.assign({ chunkSize: 16384, windowBits: 0, to: "" }, i || {});
-        var f = this.options;
-        f.raw && 0 <= f.windowBits && f.windowBits < 16 && (f.windowBits = -f.windowBits, f.windowBits === 0 && (f.windowBits = -15)), !(0 <= f.windowBits && f.windowBits < 16) || i && i.windowBits || (f.windowBits += 32), 15 < f.windowBits && f.windowBits < 48 && !(15 & f.windowBits) && (f.windowBits |= 15), this.err = 0, this.msg = "", this.ended = !1, this.chunks = [], this.strm = new b(), this.strm.avail_out = 0;
-        var c = s.inflateInit2(this.strm, f.windowBits);
+        var p = this.options;
+        p.raw && 0 <= p.windowBits && p.windowBits < 16 && (p.windowBits = -p.windowBits, p.windowBits === 0 && (p.windowBits = -15)), !(0 <= p.windowBits && p.windowBits < 16) || i && i.windowBits || (p.windowBits += 32), 15 < p.windowBits && p.windowBits < 48 && !(15 & p.windowBits) && (p.windowBits |= 15), this.err = 0, this.msg = "", this.ended = !1, this.chunks = [], this.strm = new b(), this.strm.avail_out = 0;
+        var c = s.inflateInit2(this.strm, p.windowBits);
         if (c !== h.Z_OK) throw new Error(w[c]);
         this.header = new _(), s.inflateGetHeader(this.strm, this.header);
       }
-      function g(i, f) {
-        var c = new a(f);
+      function g(i, p) {
+        var c = new a(p);
         if (c.push(i, !0), c.err) throw c.msg || w[c.err];
         return c.result;
       }
-      a.prototype.push = function(i, f) {
-        var c, y, x, C, E, D, P = this.strm, U = this.options.chunkSize, T = this.options.dictionary, M = !1;
+      a.prototype.push = function(i, p) {
+        var c, y, x, C, E, D, P = this.strm, U = this.options.chunkSize, T = this.options.dictionary, H = !1;
         if (this.ended) return !1;
-        y = f === ~~f ? f : f === !0 ? h.Z_FINISH : h.Z_NO_FLUSH, typeof i == "string" ? P.input = n.binstring2buf(i) : v.call(i) === "[object ArrayBuffer]" ? P.input = new Uint8Array(i) : P.input = i, P.next_in = 0, P.avail_in = P.input.length;
+        y = p === ~~p ? p : p === !0 ? h.Z_FINISH : h.Z_NO_FLUSH, typeof i == "string" ? P.input = n.binstring2buf(i) : v.call(i) === "[object ArrayBuffer]" ? P.input = new Uint8Array(i) : P.input = i, P.next_in = 0, P.avail_in = P.input.length;
         do {
-          if (P.avail_out === 0 && (P.output = new o.Buf8(U), P.next_out = 0, P.avail_out = U), (c = s.inflate(P, h.Z_NO_FLUSH)) === h.Z_NEED_DICT && T && (D = typeof T == "string" ? n.string2buf(T) : v.call(T) === "[object ArrayBuffer]" ? new Uint8Array(T) : T, c = s.inflateSetDictionary(this.strm, D)), c === h.Z_BUF_ERROR && M === !0 && (c = h.Z_OK, M = !1), c !== h.Z_STREAM_END && c !== h.Z_OK) return this.onEnd(c), !(this.ended = !0);
-          P.next_out && (P.avail_out !== 0 && c !== h.Z_STREAM_END && (P.avail_in !== 0 || y !== h.Z_FINISH && y !== h.Z_SYNC_FLUSH) || (this.options.to === "string" ? (x = n.utf8border(P.output, P.next_out), C = P.next_out - x, E = n.buf2string(P.output, x), P.next_out = C, P.avail_out = U - C, C && o.arraySet(P.output, P.output, x, C, 0), this.onData(E)) : this.onData(o.shrinkBuf(P.output, P.next_out)))), P.avail_in === 0 && P.avail_out === 0 && (M = !0);
+          if (P.avail_out === 0 && (P.output = new o.Buf8(U), P.next_out = 0, P.avail_out = U), (c = s.inflate(P, h.Z_NO_FLUSH)) === h.Z_NEED_DICT && T && (D = typeof T == "string" ? n.string2buf(T) : v.call(T) === "[object ArrayBuffer]" ? new Uint8Array(T) : T, c = s.inflateSetDictionary(this.strm, D)), c === h.Z_BUF_ERROR && H === !0 && (c = h.Z_OK, H = !1), c !== h.Z_STREAM_END && c !== h.Z_OK) return this.onEnd(c), !(this.ended = !0);
+          P.next_out && (P.avail_out !== 0 && c !== h.Z_STREAM_END && (P.avail_in !== 0 || y !== h.Z_FINISH && y !== h.Z_SYNC_FLUSH) || (this.options.to === "string" ? (x = n.utf8border(P.output, P.next_out), C = P.next_out - x, E = n.buf2string(P.output, x), P.next_out = C, P.avail_out = U - C, C && o.arraySet(P.output, P.output, x, C, 0), this.onData(E)) : this.onData(o.shrinkBuf(P.output, P.next_out)))), P.avail_in === 0 && P.avail_out === 0 && (H = !0);
         } while ((0 < P.avail_in || P.avail_out === 0) && c !== h.Z_STREAM_END);
         return c === h.Z_STREAM_END && (y = h.Z_FINISH), y === h.Z_FINISH ? (c = s.inflateEnd(this.strm), this.onEnd(c), this.ended = !0, c === h.Z_OK) : y !== h.Z_SYNC_FLUSH || (this.onEnd(h.Z_OK), !(P.avail_out = 0));
       }, a.prototype.onData = function(i) {
         this.chunks.push(i);
       }, a.prototype.onEnd = function(i) {
         i === h.Z_OK && (this.options.to === "string" ? this.result = this.chunks.join("") : this.result = o.flattenChunks(this.chunks)), this.chunks = [], this.err = i, this.msg = this.strm.msg;
-      }, u.Inflate = a, u.inflate = g, u.inflateRaw = function(i, f) {
-        return (f = f || {}).raw = !0, g(i, f);
+      }, u.Inflate = a, u.inflate = g, u.inflateRaw = function(i, p) {
+        return (p = p || {}).raw = !0, g(i, p);
       }, u.ungzip = g;
-    }, { "./utils/common": 41, "./utils/strings": 42, "./zlib/constants": 44, "./zlib/gzheader": 47, "./zlib/inflate": 49, "./zlib/messages": 51, "./zlib/zstream": 53 }], 41: [function(e, p, u) {
+    }, { "./utils/common": 41, "./utils/strings": 42, "./zlib/constants": 44, "./zlib/gzheader": 47, "./zlib/inflate": 49, "./zlib/messages": 51, "./zlib/zstream": 53 }], 41: [function(e, f, u) {
       var s = typeof Uint8Array < "u" && typeof Uint16Array < "u" && typeof Int32Array < "u";
       u.assign = function(h) {
         for (var w = Array.prototype.slice.call(arguments, 1); w.length; ) {
@@ -1579,7 +1579,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       u.setTyped = function(h) {
         h ? (u.Buf8 = Uint8Array, u.Buf16 = Uint16Array, u.Buf32 = Int32Array, u.assign(u, o)) : (u.Buf8 = Array, u.Buf16 = Array, u.Buf32 = Array, u.assign(u, n));
       }, u.setTyped(s);
-    }, {}], 42: [function(e, p, u) {
+    }, {}], 42: [function(e, f, u) {
       var s = e("./common"), o = !0, n = !0;
       try {
         String.fromCharCode.apply(null, [0]);
@@ -1598,9 +1598,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         return a;
       }
       h[254] = h[254] = 1, u.string2buf = function(_) {
-        var v, a, g, i, f, c = _.length, y = 0;
+        var v, a, g, i, p, c = _.length, y = 0;
         for (i = 0; i < c; i++) (64512 & (a = _.charCodeAt(i))) == 55296 && i + 1 < c && (64512 & (g = _.charCodeAt(i + 1))) == 56320 && (a = 65536 + (a - 55296 << 10) + (g - 56320), i++), y += a < 128 ? 1 : a < 2048 ? 2 : a < 65536 ? 3 : 4;
-        for (v = new s.Buf8(y), i = f = 0; f < y; i++) (64512 & (a = _.charCodeAt(i))) == 55296 && i + 1 < c && (64512 & (g = _.charCodeAt(i + 1))) == 56320 && (a = 65536 + (a - 55296 << 10) + (g - 56320), i++), a < 128 ? v[f++] = a : (a < 2048 ? v[f++] = 192 | a >>> 6 : (a < 65536 ? v[f++] = 224 | a >>> 12 : (v[f++] = 240 | a >>> 18, v[f++] = 128 | a >>> 12 & 63), v[f++] = 128 | a >>> 6 & 63), v[f++] = 128 | 63 & a);
+        for (v = new s.Buf8(y), i = p = 0; p < y; i++) (64512 & (a = _.charCodeAt(i))) == 55296 && i + 1 < c && (64512 & (g = _.charCodeAt(i + 1))) == 56320 && (a = 65536 + (a - 55296 << 10) + (g - 56320), i++), a < 128 ? v[p++] = a : (a < 2048 ? v[p++] = 192 | a >>> 6 : (a < 65536 ? v[p++] = 224 | a >>> 12 : (v[p++] = 240 | a >>> 18, v[p++] = 128 | a >>> 12 & 63), v[p++] = 128 | a >>> 6 & 63), v[p++] = 128 | 63 & a);
         return v;
       }, u.buf2binstring = function(_) {
         return b(_, _.length);
@@ -1608,12 +1608,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         for (var v = new s.Buf8(_.length), a = 0, g = v.length; a < g; a++) v[a] = _.charCodeAt(a);
         return v;
       }, u.buf2string = function(_, v) {
-        var a, g, i, f, c = v || _.length, y = new Array(2 * c);
+        var a, g, i, p, c = v || _.length, y = new Array(2 * c);
         for (a = g = 0; a < c; ) if ((i = _[a++]) < 128) y[g++] = i;
-        else if (4 < (f = h[i])) y[g++] = 65533, a += f - 1;
+        else if (4 < (p = h[i])) y[g++] = 65533, a += p - 1;
         else {
-          for (i &= f === 2 ? 31 : f === 3 ? 15 : 7; 1 < f && a < c; ) i = i << 6 | 63 & _[a++], f--;
-          1 < f ? y[g++] = 65533 : i < 65536 ? y[g++] = i : (i -= 65536, y[g++] = 55296 | i >> 10 & 1023, y[g++] = 56320 | 1023 & i);
+          for (i &= p === 2 ? 31 : p === 3 ? 15 : 7; 1 < p && a < c; ) i = i << 6 | 63 & _[a++], p--;
+          1 < p ? y[g++] = 65533 : i < 65536 ? y[g++] = i : (i -= 65536, y[g++] = 55296 | i >> 10 & 1023, y[g++] = 56320 | 1023 & i);
         }
         return b(y, g);
       }, u.utf8border = function(_, v) {
@@ -1621,17 +1621,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         for ((v = v || _.length) > _.length && (v = _.length), a = v - 1; 0 <= a && (192 & _[a]) == 128; ) a--;
         return a < 0 || a === 0 ? v : a + h[_[a]] > v ? a : v;
       };
-    }, { "./common": 41 }], 43: [function(e, p, u) {
-      p.exports = function(s, o, n, h) {
+    }, { "./common": 41 }], 43: [function(e, f, u) {
+      f.exports = function(s, o, n, h) {
         for (var w = 65535 & s | 0, b = s >>> 16 & 65535 | 0, _ = 0; n !== 0; ) {
           for (n -= _ = 2e3 < n ? 2e3 : n; b = b + (w = w + o[h++] | 0) | 0, --_; ) ;
           w %= 65521, b %= 65521;
         }
         return w | b << 16 | 0;
       };
-    }, {}], 44: [function(e, p, u) {
-      p.exports = { Z_NO_FLUSH: 0, Z_PARTIAL_FLUSH: 1, Z_SYNC_FLUSH: 2, Z_FULL_FLUSH: 3, Z_FINISH: 4, Z_BLOCK: 5, Z_TREES: 6, Z_OK: 0, Z_STREAM_END: 1, Z_NEED_DICT: 2, Z_ERRNO: -1, Z_STREAM_ERROR: -2, Z_DATA_ERROR: -3, Z_BUF_ERROR: -5, Z_NO_COMPRESSION: 0, Z_BEST_SPEED: 1, Z_BEST_COMPRESSION: 9, Z_DEFAULT_COMPRESSION: -1, Z_FILTERED: 1, Z_HUFFMAN_ONLY: 2, Z_RLE: 3, Z_FIXED: 4, Z_DEFAULT_STRATEGY: 0, Z_BINARY: 0, Z_TEXT: 1, Z_UNKNOWN: 2, Z_DEFLATED: 8 };
-    }, {}], 45: [function(e, p, u) {
+    }, {}], 44: [function(e, f, u) {
+      f.exports = { Z_NO_FLUSH: 0, Z_PARTIAL_FLUSH: 1, Z_SYNC_FLUSH: 2, Z_FULL_FLUSH: 3, Z_FINISH: 4, Z_BLOCK: 5, Z_TREES: 6, Z_OK: 0, Z_STREAM_END: 1, Z_NEED_DICT: 2, Z_ERRNO: -1, Z_STREAM_ERROR: -2, Z_DATA_ERROR: -3, Z_BUF_ERROR: -5, Z_NO_COMPRESSION: 0, Z_BEST_SPEED: 1, Z_BEST_COMPRESSION: 9, Z_DEFAULT_COMPRESSION: -1, Z_FILTERED: 1, Z_HUFFMAN_ONLY: 2, Z_RLE: 3, Z_FIXED: 4, Z_DEFAULT_STRATEGY: 0, Z_BINARY: 0, Z_TEXT: 1, Z_UNKNOWN: 2, Z_DEFLATED: 8 };
+    }, {}], 45: [function(e, f, u) {
       var s = function() {
         for (var o, n = [], h = 0; h < 256; h++) {
           o = h;
@@ -1640,14 +1640,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         return n;
       }();
-      p.exports = function(o, n, h, w) {
+      f.exports = function(o, n, h, w) {
         var b = s, _ = w + h;
         o ^= -1;
         for (var v = w; v < _; v++) o = o >>> 8 ^ b[255 & (o ^ n[v])];
         return -1 ^ o;
       };
-    }, {}], 46: [function(e, p, u) {
-      var s, o = e("../utils/common"), n = e("./trees"), h = e("./adler32"), w = e("./crc32"), b = e("./messages"), _ = 0, v = 4, a = 0, g = -2, i = -1, f = 4, c = 2, y = 8, x = 9, C = 286, E = 30, D = 19, P = 2 * C + 1, U = 15, T = 3, M = 258, X = M + T + 1, k = 42, R = 113, r = 1, B = 2, tt = 3, W = 4;
+    }, {}], 46: [function(e, f, u) {
+      var s, o = e("../utils/common"), n = e("./trees"), h = e("./adler32"), w = e("./crc32"), b = e("./messages"), _ = 0, v = 4, a = 0, g = -2, i = -1, p = 4, c = 2, y = 8, x = 9, C = 286, E = 30, D = 19, P = 2 * C + 1, U = 15, T = 3, H = 258, X = H + T + 1, k = 42, R = 113, r = 1, B = 2, tt = 3, W = 4;
       function et(t, F) {
         return t.msg = b[F], F;
       }
@@ -1671,7 +1671,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         t.pending_buf[t.pending++] = F >>> 8 & 255, t.pending_buf[t.pending++] = 255 & F;
       }
       function q(t, F) {
-        var O, m, d = t.max_chain_length, S = t.strstart, L = t.prev_length, N = t.nice_match, A = t.strstart > t.w_size - X ? t.strstart - (t.w_size - X) : 0, Z = t.window, K = t.w_mask, G = t.prev, Y = t.strstart + M, at = Z[S + L - 1], nt = Z[S + L];
+        var O, m, d = t.max_chain_length, S = t.strstart, L = t.prev_length, N = t.nice_match, A = t.strstart > t.w_size - X ? t.strstart - (t.w_size - X) : 0, Z = t.window, K = t.w_mask, G = t.prev, Y = t.strstart + H, at = Z[S + L - 1], nt = Z[S + L];
         t.prev_length >= t.good_match && (d >>= 2), N > t.lookahead && (N = t.lookahead);
         do
           if (Z[(O = F) + L] === nt && Z[O + L - 1] === at && Z[O] === Z[S] && Z[++O] === Z[S + 1]) {
@@ -1679,7 +1679,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             do
               ;
             while (Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && Z[++S] === Z[++O] && S < Y);
-            if (m = M - (Y - S), S = Y - M, L < m) {
+            if (m = H - (Y - S), S = Y - H, L < m) {
               if (t.match_start = F, N <= (L = m)) break;
               at = Z[S + L - 1], nt = Z[S + L];
             }
@@ -1748,7 +1748,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       function gt(t, F, O, m, d, S) {
         if (!t) return g;
         var L = 1;
-        if (F === i && (F = 6), m < 0 ? (L = 0, m = -m) : 15 < m && (L = 2, m -= 16), d < 1 || x < d || O !== y || m < 8 || 15 < m || F < 0 || 9 < F || S < 0 || f < S) return et(t, g);
+        if (F === i && (F = 6), m < 0 ? (L = 0, m = -m) : 15 < m && (L = 2, m -= 16), d < 1 || x < d || O !== y || m < 8 || 15 < m || F < 0 || 9 < F || S < 0 || p < S) return et(t, g);
         m === 8 && (m = 9);
         var N = new ut();
         return (t.state = N).strm = t, N.wrap = L, N.gzhead = null, N.w_bits = m, N.w_size = 1 << N.w_bits, N.w_mask = N.w_size - 1, N.hash_bits = d + 7, N.hash_size = 1 << N.hash_bits, N.hash_mask = N.hash_size - 1, N.hash_shift = ~~((N.hash_bits + T - 1) / T), N.window = new o.Buf8(2 * N.w_size), N.head = new o.Buf16(N.hash_size), N.prev = new o.Buf16(N.w_size), N.lit_bufsize = 1 << d + 6, N.pending_buf_size = 4 * N.lit_bufsize, N.pending_buf = new o.Buf8(N.pending_buf_size), N.d_buf = 1 * N.lit_bufsize, N.l_buf = 3 * N.lit_bufsize, N.level = F, N.strategy = S, N.method = O, _t(t);
@@ -1820,16 +1820,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             return A.insert = 0, Z === v ? (I(A, !0), A.strm.avail_out === 0 ? tt : W) : A.last_lit && (I(A, !1), A.strm.avail_out === 0) ? r : B;
           }(m, F) : m.strategy === 3 ? function(A, Z) {
             for (var K, G, Y, at, nt = A.window; ; ) {
-              if (A.lookahead <= M) {
-                if (ot(A), A.lookahead <= M && Z === _) return r;
+              if (A.lookahead <= H) {
+                if (ot(A), A.lookahead <= H && Z === _) return r;
                 if (A.lookahead === 0) break;
               }
               if (A.match_length = 0, A.lookahead >= T && 0 < A.strstart && (G = nt[Y = A.strstart - 1]) === nt[++Y] && G === nt[++Y] && G === nt[++Y]) {
-                at = A.strstart + M;
+                at = A.strstart + H;
                 do
                   ;
                 while (G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && G === nt[++Y] && Y < at);
-                A.match_length = M - (at - Y), A.match_length > A.lookahead && (A.match_length = A.lookahead);
+                A.match_length = H - (at - Y), A.match_length > A.lookahead && (A.match_length = A.lookahead);
               }
               if (A.match_length >= T ? (K = n._tr_tally(A, 1, A.match_length - T), A.lookahead -= A.match_length, A.strstart += A.match_length, A.match_length = 0) : (K = n._tr_tally(A, 0, A.window[A.strstart]), A.lookahead--, A.strstart++), K && (I(A, !1), A.strm.avail_out === 0)) return r;
             }
@@ -1851,14 +1851,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         return O.strstart += O.lookahead, O.block_start = O.strstart, O.insert = O.lookahead, O.lookahead = 0, O.match_length = O.prev_length = T - 1, O.match_available = 0, t.next_in = N, t.input = A, t.avail_in = L, O.wrap = S, a;
       }, u.deflateInfo = "pako deflate (from Nodeca project)";
-    }, { "../utils/common": 41, "./adler32": 43, "./crc32": 45, "./messages": 51, "./trees": 52 }], 47: [function(e, p, u) {
-      p.exports = function() {
+    }, { "../utils/common": 41, "./adler32": 43, "./crc32": 45, "./messages": 51, "./trees": 52 }], 47: [function(e, f, u) {
+      f.exports = function() {
         this.text = 0, this.time = 0, this.xflags = 0, this.os = 0, this.extra = null, this.extra_len = 0, this.name = "", this.comment = "", this.hcrc = 0, this.done = !1;
       };
-    }, {}], 48: [function(e, p, u) {
-      p.exports = function(s, o) {
-        var n, h, w, b, _, v, a, g, i, f, c, y, x, C, E, D, P, U, T, M, X, k, R, r, B;
-        n = s.state, h = s.next_in, r = s.input, w = h + (s.avail_in - 5), b = s.next_out, B = s.output, _ = b - (o - s.avail_out), v = b + (s.avail_out - 257), a = n.dmax, g = n.wsize, i = n.whave, f = n.wnext, c = n.window, y = n.hold, x = n.bits, C = n.lencode, E = n.distcode, D = (1 << n.lenbits) - 1, P = (1 << n.distbits) - 1;
+    }, {}], 48: [function(e, f, u) {
+      f.exports = function(s, o) {
+        var n, h, w, b, _, v, a, g, i, p, c, y, x, C, E, D, P, U, T, H, X, k, R, r, B;
+        n = s.state, h = s.next_in, r = s.input, w = h + (s.avail_in - 5), b = s.next_out, B = s.output, _ = b - (o - s.avail_out), v = b + (s.avail_out - 257), a = n.dmax, g = n.wsize, i = n.whave, p = n.wnext, c = n.window, y = n.hold, x = n.bits, C = n.lencode, E = n.distcode, D = (1 << n.lenbits) - 1, P = (1 << n.distbits) - 1;
         t: do {
           x < 15 && (y += r[h++] << x, x += 8, y += r[h++] << x, x += 8), U = C[y & D];
           e: for (; ; ) {
@@ -1876,7 +1876,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                 s.msg = "invalid literal/length code", n.mode = 30;
                 break t;
               }
-              M = 65535 & U, (T &= 15) && (x < T && (y += r[h++] << x, x += 8), M += y & (1 << T) - 1, y >>>= T, x -= T), x < 15 && (y += r[h++] << x, x += 8, y += r[h++] << x, x += 8), U = E[y & P];
+              H = 65535 & U, (T &= 15) && (x < T && (y += r[h++] << x, x += 8), H += y & (1 << T) - 1, y >>>= T, x -= T), x < 15 && (y += r[h++] << x, x += 8, y += r[h++] << x, x += 8), U = E[y & P];
               r: for (; ; ) {
                 if (y >>>= T = U >>> 24, x -= T, !(16 & (T = U >>> 16 & 255))) {
                   if (!(64 & T)) {
@@ -1895,28 +1895,28 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     s.msg = "invalid distance too far back", n.mode = 30;
                     break t;
                   }
-                  if (R = c, (k = 0) === f) {
-                    if (k += g - T, T < M) {
-                      for (M -= T; B[b++] = c[k++], --T; ) ;
+                  if (R = c, (k = 0) === p) {
+                    if (k += g - T, T < H) {
+                      for (H -= T; B[b++] = c[k++], --T; ) ;
                       k = b - X, R = B;
                     }
-                  } else if (f < T) {
-                    if (k += g + f - T, (T -= f) < M) {
-                      for (M -= T; B[b++] = c[k++], --T; ) ;
-                      if (k = 0, f < M) {
-                        for (M -= T = f; B[b++] = c[k++], --T; ) ;
+                  } else if (p < T) {
+                    if (k += g + p - T, (T -= p) < H) {
+                      for (H -= T; B[b++] = c[k++], --T; ) ;
+                      if (k = 0, p < H) {
+                        for (H -= T = p; B[b++] = c[k++], --T; ) ;
                         k = b - X, R = B;
                       }
                     }
-                  } else if (k += f - T, T < M) {
-                    for (M -= T; B[b++] = c[k++], --T; ) ;
+                  } else if (k += p - T, T < H) {
+                    for (H -= T; B[b++] = c[k++], --T; ) ;
                     k = b - X, R = B;
                   }
-                  for (; 2 < M; ) B[b++] = R[k++], B[b++] = R[k++], B[b++] = R[k++], M -= 3;
-                  M && (B[b++] = R[k++], 1 < M && (B[b++] = R[k++]));
+                  for (; 2 < H; ) B[b++] = R[k++], B[b++] = R[k++], B[b++] = R[k++], H -= 3;
+                  H && (B[b++] = R[k++], 1 < H && (B[b++] = R[k++]));
                 } else {
-                  for (k = b - X; B[b++] = B[k++], B[b++] = B[k++], B[b++] = B[k++], 2 < (M -= 3); ) ;
-                  M && (B[b++] = B[k++], 1 < M && (B[b++] = B[k++]));
+                  for (k = b - X; B[b++] = B[k++], B[b++] = B[k++], B[b++] = B[k++], 2 < (H -= 3); ) ;
+                  H && (B[b++] = B[k++], 1 < H && (B[b++] = B[k++]));
                 }
                 break;
               }
@@ -1924,10 +1924,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             break;
           }
         } while (h < w && b < v);
-        h -= M = x >> 3, y &= (1 << (x -= M << 3)) - 1, s.next_in = h, s.next_out = b, s.avail_in = h < w ? w - h + 5 : 5 - (h - w), s.avail_out = b < v ? v - b + 257 : 257 - (b - v), n.hold = y, n.bits = x;
+        h -= H = x >> 3, y &= (1 << (x -= H << 3)) - 1, s.next_in = h, s.next_out = b, s.avail_in = h < w ? w - h + 5 : 5 - (h - w), s.avail_out = b < v ? v - b + 257 : 257 - (b - v), n.hold = y, n.bits = x;
       };
-    }, {}], 49: [function(e, p, u) {
-      var s = e("../utils/common"), o = e("./adler32"), n = e("./crc32"), h = e("./inffast"), w = e("./inftrees"), b = 1, _ = 2, v = 0, a = -2, g = 1, i = 852, f = 592;
+    }, {}], 49: [function(e, f, u) {
+      var s = e("../utils/common"), o = e("./adler32"), n = e("./crc32"), h = e("./inffast"), w = e("./inftrees"), b = 1, _ = 2, v = 0, a = -2, g = 1, i = 852, p = 592;
       function c(k) {
         return (k >>> 24 & 255) + (k >>> 8 & 65280) + ((65280 & k) << 8) + ((255 & k) << 24);
       }
@@ -1936,7 +1936,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
       function x(k) {
         var R;
-        return k && k.state ? (R = k.state, k.total_in = k.total_out = R.total = 0, k.msg = "", R.wrap && (k.adler = 1 & R.wrap), R.mode = g, R.last = 0, R.havedict = 0, R.dmax = 32768, R.head = null, R.hold = 0, R.bits = 0, R.lencode = R.lendyn = new s.Buf32(i), R.distcode = R.distdyn = new s.Buf32(f), R.sane = 1, R.back = -1, v) : a;
+        return k && k.state ? (R = k.state, k.total_in = k.total_out = R.total = 0, k.msg = "", R.wrap && (k.adler = 1 & R.wrap), R.mode = g, R.last = 0, R.havedict = 0, R.dmax = 32768, R.head = null, R.hold = 0, R.bits = 0, R.lencode = R.lendyn = new s.Buf32(i), R.distcode = R.distdyn = new s.Buf32(p), R.sane = 1, R.back = -1, v) : a;
       }
       function C(k) {
         var R;
@@ -1951,7 +1951,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         return k ? (B = new y(), (k.state = B).window = null, (r = E(k, R)) !== v && (k.state = null), r) : a;
       }
       var P, U, T = !0;
-      function M(k) {
+      function H(k) {
         if (T) {
           var R;
           for (P = new s.Buf32(512), U = new s.Buf32(32), R = 0; R < 144; ) k.lens[R++] = 8;
@@ -2093,7 +2093,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                 r.mode = 14;
                 break;
               case 1:
-                if (M(r), r.mode = 20, R !== 6) break;
+                if (H(r), r.mode = 20, R !== 6) break;
                 z >>>= 2, I -= 2;
                 break t;
               case 2:
@@ -2336,10 +2336,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         var r, B = R.length;
         return k && k.state ? (r = k.state).wrap !== 0 && r.mode !== 11 ? a : r.mode === 11 && o(1, R, B, 0) !== r.check ? -3 : X(k, R, B, B) ? (r.mode = 31, -4) : (r.havedict = 1, v) : a;
       }, u.inflateInfo = "pako inflate (from Nodeca project)";
-    }, { "../utils/common": 41, "./adler32": 43, "./crc32": 45, "./inffast": 48, "./inftrees": 50 }], 50: [function(e, p, u) {
+    }, { "../utils/common": 41, "./adler32": 43, "./crc32": 45, "./inffast": 48, "./inftrees": 50 }], 50: [function(e, f, u) {
       var s = e("../utils/common"), o = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0], n = [16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78], h = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577, 0, 0], w = [16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 64, 64];
-      p.exports = function(b, _, v, a, g, i, f, c) {
-        var y, x, C, E, D, P, U, T, M, X = c.bits, k = 0, R = 0, r = 0, B = 0, tt = 0, W = 0, et = 0, j = 0, Q = 0, z = 0, I = null, J = 0, V = new s.Buf16(16), q = new s.Buf16(16), ot = null, dt = 0;
+      f.exports = function(b, _, v, a, g, i, p, c) {
+        var y, x, C, E, D, P, U, T, H, X = c.bits, k = 0, R = 0, r = 0, B = 0, tt = 0, W = 0, et = 0, j = 0, Q = 0, z = 0, I = null, J = 0, V = new s.Buf16(16), q = new s.Buf16(16), ot = null, dt = 0;
         for (k = 0; k <= 15; k++) V[k] = 0;
         for (R = 0; R < a; R++) V[_[v + R]]++;
         for (tt = X, B = 15; 1 <= B && V[B] === 0; B--) ;
@@ -2348,14 +2348,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         for (tt < r && (tt = r), k = j = 1; k <= 15; k++) if (j <<= 1, (j -= V[k]) < 0) return -1;
         if (0 < j && (b === 0 || B !== 1)) return -1;
         for (q[1] = 0, k = 1; k < 15; k++) q[k + 1] = q[k] + V[k];
-        for (R = 0; R < a; R++) _[v + R] !== 0 && (f[q[_[v + R]]++] = R);
-        if (P = b === 0 ? (I = ot = f, 19) : b === 1 ? (I = o, J -= 257, ot = n, dt -= 257, 256) : (I = h, ot = w, -1), k = r, D = i, et = R = z = 0, C = -1, E = (Q = 1 << (W = tt)) - 1, b === 1 && 852 < Q || b === 2 && 592 < Q) return 1;
+        for (R = 0; R < a; R++) _[v + R] !== 0 && (p[q[_[v + R]]++] = R);
+        if (P = b === 0 ? (I = ot = p, 19) : b === 1 ? (I = o, J -= 257, ot = n, dt -= 257, 256) : (I = h, ot = w, -1), k = r, D = i, et = R = z = 0, C = -1, E = (Q = 1 << (W = tt)) - 1, b === 1 && 852 < Q || b === 2 && 592 < Q) return 1;
         for (; ; ) {
-          for (U = k - et, M = f[R] < P ? (T = 0, f[R]) : f[R] > P ? (T = ot[dt + f[R]], I[J + f[R]]) : (T = 96, 0), y = 1 << k - et, r = x = 1 << W; g[D + (z >> et) + (x -= y)] = U << 24 | T << 16 | M | 0, x !== 0; ) ;
+          for (U = k - et, H = p[R] < P ? (T = 0, p[R]) : p[R] > P ? (T = ot[dt + p[R]], I[J + p[R]]) : (T = 96, 0), y = 1 << k - et, r = x = 1 << W; g[D + (z >> et) + (x -= y)] = U << 24 | T << 16 | H | 0, x !== 0; ) ;
           for (y = 1 << k - 1; z & y; ) y >>= 1;
           if (y !== 0 ? (z &= y - 1, z += y) : z = 0, R++, --V[k] == 0) {
             if (k === B) break;
-            k = _[v + f[R]];
+            k = _[v + p[R]];
           }
           if (tt < k && (z & E) !== C) {
             for (et === 0 && (et = tt), D += r, j = 1 << (W = k - et); W + et < B && !((j -= V[W + et]) <= 0); ) W++, j <<= 1;
@@ -2365,14 +2365,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         return z !== 0 && (g[D + z] = k - et << 24 | 64 << 16 | 0), c.bits = tt, 0;
       };
-    }, { "../utils/common": 41 }], 51: [function(e, p, u) {
-      p.exports = { 2: "need dictionary", 1: "stream end", 0: "", "-1": "file error", "-2": "stream error", "-3": "data error", "-4": "insufficient memory", "-5": "buffer error", "-6": "incompatible version" };
-    }, {}], 52: [function(e, p, u) {
+    }, { "../utils/common": 41 }], 51: [function(e, f, u) {
+      f.exports = { 2: "need dictionary", 1: "stream end", 0: "", "-1": "file error", "-2": "stream error", "-3": "data error", "-4": "insufficient memory", "-5": "buffer error", "-6": "incompatible version" };
+    }, {}], 52: [function(e, f, u) {
       var s = e("../utils/common"), o = 0, n = 1;
       function h(d) {
         for (var S = d.length; 0 <= --S; ) d[S] = 0;
       }
-      var w = 0, b = 29, _ = 256, v = _ + 1 + b, a = 30, g = 19, i = 2 * v + 1, f = 15, c = 16, y = 7, x = 256, C = 16, E = 17, D = 18, P = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0], U = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13], T = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 7], M = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15], X = new Array(2 * (v + 2));
+      var w = 0, b = 29, _ = 256, v = _ + 1 + b, a = 30, g = 19, i = 2 * v + 1, p = 15, c = 16, y = 7, x = 256, C = 16, E = 17, D = 18, P = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0], U = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13], T = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 7], H = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15], X = new Array(2 * (v + 2));
       h(X);
       var k = new Array(2 * a);
       h(k);
@@ -2406,8 +2406,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         return L >>> 1;
       }
       function dt(d, S, L) {
-        var N, A, Z = new Array(f + 1), K = 0;
-        for (N = 1; N <= f; N++) Z[N] = K = K + L[N - 1] << 1;
+        var N, A, Z = new Array(p + 1), K = 0;
+        for (N = 1; N <= p; N++) Z[N] = K = K + L[N - 1] << 1;
         for (A = 0; A <= S; A++) {
           var G = d[2 * A + 1];
           G !== 0 && (d[2 * A] = ot(Z[G]++, G));
@@ -2444,7 +2444,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         for (A = Y; L = d.heap[1], d.heap[1] = d.heap[d.heap_len--], lt(d, Z, 1), N = d.heap[1], d.heap[--d.heap_max] = L, d.heap[--d.heap_max] = N, Z[2 * A] = Z[2 * L] + Z[2 * N], d.depth[A] = (d.depth[L] >= d.depth[N] ? d.depth[L] : d.depth[N]) + 1, Z[2 * L + 1] = Z[2 * N + 1] = A, d.heap[1] = A++, lt(d, Z, 1), 2 <= d.heap_len; ) ;
         d.heap[--d.heap_max] = d.heap[1], function(nt, mt) {
           var xt, yt, St, ht, At, Dt, bt = mt.dyn_tree, Bt = mt.max_code, Ut = mt.stat_desc.static_tree, Wt = mt.stat_desc.has_stree, jt = mt.stat_desc.extra_bits, Lt = mt.stat_desc.extra_base, Et = mt.stat_desc.max_length, It = 0;
-          for (ht = 0; ht <= f; ht++) nt.bl_count[ht] = 0;
+          for (ht = 0; ht <= p; ht++) nt.bl_count[ht] = 0;
           for (bt[2 * nt.heap[nt.heap_max] + 1] = 0, xt = nt.heap_max + 1; xt < i; xt++) Et < (ht = bt[2 * bt[2 * (yt = nt.heap[xt]) + 1] + 1] + 1) && (ht = Et, It++), bt[2 * yt + 1] = ht, Bt < yt || (nt.bl_count[ht]++, At = 0, Lt <= yt && (At = jt[yt - Lt]), Dt = bt[2 * yt], nt.opt_len += Dt * (ht + At), Wt && (nt.static_len += Dt * (Ut[2 * yt + 1] + At)));
           if (It !== 0) {
             do {
@@ -2476,17 +2476,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
       u._tr_init = function(d) {
         O || (function() {
-          var S, L, N, A, Z, K = new Array(f + 1);
+          var S, L, N, A, Z, K = new Array(p + 1);
           for (A = N = 0; A < b - 1; A++) for (B[A] = N, S = 0; S < 1 << P[A]; S++) r[N++] = A;
           for (r[N - 1] = A, A = Z = 0; A < 16; A++) for (j[A] = Z, S = 0; S < 1 << U[A]; S++) R[Z++] = A;
           for (Z >>= 7; A < a; A++) for (j[A] = Z << 7, S = 0; S < 1 << U[A] - 7; S++) R[256 + Z++] = A;
-          for (L = 0; L <= f; L++) K[L] = 0;
+          for (L = 0; L <= p; L++) K[L] = 0;
           for (S = 0; S <= 143; ) X[2 * S + 1] = 8, S++, K[8]++;
           for (; S <= 255; ) X[2 * S + 1] = 9, S++, K[9]++;
           for (; S <= 279; ) X[2 * S + 1] = 7, S++, K[7]++;
           for (; S <= 287; ) X[2 * S + 1] = 8, S++, K[8]++;
           for (dt(X, v + 1, K), S = 0; S < a; S++) k[2 * S + 1] = 5, k[2 * S] = ot(S, 5);
-          tt = new Q(X, P, _ + 1, v, f), W = new Q(k, U, 0, a, f), et = new Q(new Array(0), T, 0, g, y);
+          tt = new Q(X, P, _ + 1, v, p), W = new Q(k, U, 0, a, p), et = new Q(new Array(0), T, 0, g, y);
         }(), O = !0), d.l_desc = new z(d.dyn_ltree, tt), d.d_desc = new z(d.dyn_dtree, W), d.bl_desc = new z(d.bl_tree, et), d.bi_buf = 0, d.bi_valid = 0, rt(d);
       }, u._tr_stored_block = m, u._tr_flush_block = function(d, S, L, N) {
         var A, Z, K = 0;
@@ -2498,11 +2498,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           return o;
         }(d)), gt(d, d.l_desc), gt(d, d.d_desc), K = function(G) {
           var Y;
-          for (t(G, G.dyn_ltree, G.l_desc.max_code), t(G, G.dyn_dtree, G.d_desc.max_code), gt(G, G.bl_desc), Y = g - 1; 3 <= Y && G.bl_tree[2 * M[Y] + 1] === 0; Y--) ;
+          for (t(G, G.dyn_ltree, G.l_desc.max_code), t(G, G.dyn_dtree, G.d_desc.max_code), gt(G, G.bl_desc), Y = g - 1; 3 <= Y && G.bl_tree[2 * H[Y] + 1] === 0; Y--) ;
           return G.opt_len += 3 * (Y + 1) + 5 + 5 + 4, Y;
         }(d), A = d.opt_len + 3 + 7 >>> 3, (Z = d.static_len + 3 + 7 >>> 3) <= A && (A = Z)) : A = Z = L + 5, L + 4 <= A && S !== -1 ? m(d, S, L, N) : d.strategy === 4 || Z === A ? (V(d, 2 + (N ? 1 : 0), 3), _t(d, X, k)) : (V(d, 4 + (N ? 1 : 0), 3), function(G, Y, at, nt) {
           var mt;
-          for (V(G, Y - 257, 5), V(G, at - 1, 5), V(G, nt - 4, 4), mt = 0; mt < nt; mt++) V(G, G.bl_tree[2 * M[mt] + 1], 3);
+          for (V(G, Y - 257, 5), V(G, at - 1, 5), V(G, nt - 4, 4), mt = 0; mt < nt; mt++) V(G, G.bl_tree[2 * H[mt] + 1], 3);
           F(G, G.dyn_ltree, Y - 1), F(G, G.dyn_dtree, at - 1);
         }(d, d.l_desc.max_code + 1, d.d_desc.max_code + 1, K + 1), _t(d, d.dyn_ltree, d.dyn_dtree)), rt(d), N && st(d);
       }, u._tr_tally = function(d, S, L) {
@@ -2512,16 +2512,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           S.bi_valid === 16 ? (J(S, S.bi_buf), S.bi_buf = 0, S.bi_valid = 0) : 8 <= S.bi_valid && (S.pending_buf[S.pending++] = 255 & S.bi_buf, S.bi_buf >>= 8, S.bi_valid -= 8);
         }(d);
       };
-    }, { "../utils/common": 41 }], 53: [function(e, p, u) {
-      p.exports = function() {
+    }, { "../utils/common": 41 }], 53: [function(e, f, u) {
+      f.exports = function() {
         this.input = null, this.next_in = 0, this.avail_in = 0, this.total_in = 0, this.output = null, this.next_out = 0, this.avail_out = 0, this.total_out = 0, this.msg = "", this.state = null, this.data_type = 2, this.adler = 0;
       };
-    }, {}], 54: [function(e, p, u) {
+    }, {}], 54: [function(e, f, u) {
       (function(s) {
         (function(o, n) {
           if (!o.setImmediate) {
-            var h, w, b, _, v = 1, a = {}, g = !1, i = o.document, f = Object.getPrototypeOf && Object.getPrototypeOf(o);
-            f = f && f.setTimeout ? f : o, h = {}.toString.call(o.process) === "[object process]" ? function(C) {
+            var h, w, b, _, v = 1, a = {}, g = !1, i = o.document, p = Object.getPrototypeOf && Object.getPrototypeOf(o);
+            p = p && p.setTimeout ? p : o, h = {}.toString.call(o.process) === "[object process]" ? function(C) {
               process.nextTick(function() {
                 y(C);
               });
@@ -2545,12 +2545,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
               }, w.appendChild(E);
             }) : function(C) {
               setTimeout(y, 0, C);
-            }, f.setImmediate = function(C) {
+            }, p.setImmediate = function(C) {
               typeof C != "function" && (C = new Function("" + C));
               for (var E = new Array(arguments.length - 1), D = 0; D < E.length; D++) E[D] = arguments[D + 1];
               var P = { callback: C, args: E };
               return a[v] = P, h(v), v++;
-            }, f.clearImmediate = c;
+            }, p.clearImmediate = c;
           }
           function c(C) {
             delete a[C];
@@ -2597,7 +2597,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 })(Nt);
 var Gt = Nt.exports;
 const qt = /* @__PURE__ */ Ht(Gt), ct = class ct {
-  constructor(l, e, p) {
+  constructor(l, e, f) {
     $(this, "idref");
     $(this, "href");
     $(this, "cfi");
@@ -2612,7 +2612,7 @@ const qt = /* @__PURE__ */ Ht(Gt), ct = class ct {
     $(this, "media_type");
     $(this, "index");
     $(this, "spine");
-    this.idref = l.idref, this.href = l.href, this.cfi = l.cfi, this.linear = l.linear ? l.linear.toLowerCase() : "yes", this.page_spread = l.page_spread, this.index = e, this.spine = p, this.rendition_viewport = l.rendition_viewport, this.rendition_spread = l.rendition_spread, this.rendition_layout = l.rendition_layout, this.rendition_flow = l.rendition_flow, this.media_type = l.media_type, this.media_overlay_id = l.media_overlay_id, this.validateSpread();
+    this.idref = l.idref, this.href = l.href, this.cfi = l.cfi, this.linear = l.linear ? l.linear.toLowerCase() : "yes", this.page_spread = l.page_spread, this.index = e, this.spine = f, this.rendition_viewport = l.rendition_viewport, this.rendition_spread = l.rendition_spread, this.rendition_layout = l.rendition_layout, this.rendition_flow = l.rendition_flow, this.media_type = l.media_type, this.media_overlay_id = l.media_overlay_id, this.validateSpread();
   }
   validateSpread() {
     this.page_spread && this.page_spread !== ct.SPREAD_LEFT && this.page_spread !== ct.SPREAD_RIGHT && this.page_spread !== ct.SPREAD_CENTER && console.warn(`${this.page_spread} is not a recognized spread type`);
@@ -2642,8 +2642,8 @@ class $t {
     $(this, "items", []);
     $(this, "direction", "ltr");
     $(this, "handleLinear", !0);
-    this.package = l, e && (this.direction = e.direction || "ltr", e.items && e.items.forEach((p, u) => {
-      this.items.push(new Ft(p, u, this));
+    this.package = l, e && (this.direction = e.direction || "ltr", e.items && e.items.forEach((f, u) => {
+      this.items.push(new Ft(f, u, this));
     }));
   }
   isValidLinearItem(l) {
@@ -2731,9 +2731,9 @@ class Kt {
     if (this.zip) {
       let e = this.zip.file(l);
       if (e) return await e.async("string");
-      const p = this.resolveRelativeUrl(l), u = p.indexOf(".epub");
+      const f = this.resolveRelativeUrl(l), u = f.indexOf(".epub");
       if (u !== -1) {
-        let s = p.substring(u + 5);
+        let s = f.substring(u + 5);
         if (s.startsWith("/") && (s = s.substring(1)), e = this.zip.file(s), e) return await e.async("string");
       }
       if (l.startsWith("/")) {
@@ -2742,60 +2742,60 @@ class Kt {
       }
       return console.warn("File not found in zip:", l), null;
     } else {
-      const e = this.resolveRelativeUrl(l), p = await fetch(e);
-      return p.ok ? await p.text() : null;
+      const e = this.resolveRelativeUrl(l), f = await fetch(e);
+      return f.ok ? await f.text() : null;
     }
   }
   async loadBlob(l) {
     if (this.zip) {
       let e = this.zip.file(l);
       if (!e) {
-        const p = this.resolveRelativeUrl(l), u = p.indexOf(".epub");
+        const f = this.resolveRelativeUrl(l), u = f.indexOf(".epub");
         if (u !== -1) {
-          let s = p.substring(u + 5);
+          let s = f.substring(u + 5);
           s.startsWith("/") && (s = s.substring(1)), e = this.zip.file(s);
         }
       }
       return !e && l.startsWith("/") && (e = this.zip.file(l.substring(1))), e ? await e.async("blob") : null;
     } else {
-      const e = this.resolveRelativeUrl(l), p = await fetch(e);
-      return p.ok ? await p.blob() : null;
+      const e = this.resolveRelativeUrl(l), f = await fetch(e);
+      return f.ok ? await f.blob() : null;
     }
   }
 }
 class Rt {
   static async load(l) {
-    let e = null, p = async (_) => {
+    let e = null, f = async (_) => {
       const v = await fetch(l + (l.endsWith("/") ? "" : "/") + _);
       return v.ok ? v.text() : null;
     };
     if (l.toLowerCase().endsWith(".epub"))
       try {
         const v = await (await fetch(l)).arrayBuffer();
-        e = await qt.loadAsync(v), p = async (g) => {
+        e = await qt.loadAsync(v), f = async (g) => {
           const i = e == null ? void 0 : e.file(g);
           return i ? await i.async("string") : null;
         };
       } catch (_) {
         console.warn("Retrying as unzipped folder...", _);
       }
-    const u = await p("META-INF/container.xml");
+    const u = await f("META-INF/container.xml");
     if (!u) throw new Error("Could not find META-INF/container.xml");
     const s = new DOMParser(), n = s.parseFromString(u, "application/xml").querySelector("rootfile");
     if (!n) throw new Error("No rootfile in container.xml");
     const h = n.getAttribute("full-path");
     if (!h) throw new Error("No full-path in rootfile");
-    const w = await p(h);
+    const w = await f(h);
     if (!w) throw new Error("Could not find OPF: " + h);
     const b = s.parseFromString(w, "application/xml");
-    return await Rt.parseOpf(b, l, h, p, e);
+    return await Rt.parseOpf(b, l, h, f, e);
   }
-  static async parseOpf(l, e, p, u, s) {
-    var f, c, y, x, C, E;
+  static async parseOpf(l, e, f, u, s) {
+    var p, c, y, x, C, E;
     const o = l.querySelector("metadata"), n = l.querySelector("manifest"), h = l.querySelector("spine");
     if (!o || !n || !h) throw new Error("Invalid OPF");
     const w = {
-      title: ((f = o.querySelector("title")) == null ? void 0 : f.textContent) || "Unknown Title",
+      title: ((p = o.querySelector("title")) == null ? void 0 : p.textContent) || "Unknown Title",
       creator: ((c = o.querySelector("creator")) == null ? void 0 : c.textContent) || "",
       language: ((y = o.querySelector("language")) == null ? void 0 : y.textContent) || "",
       identifier: ((x = o.querySelector("identifier")) == null ? void 0 : x.textContent) || "",
@@ -2805,7 +2805,7 @@ class Rt {
       const P = D.getAttribute("id"), U = D.getAttribute("href");
       P && U && (b[P] = U);
     });
-    const _ = [], v = p.substring(0, p.lastIndexOf("/") + 1), a = e + v;
+    const _ = [], v = f.substring(0, f.lastIndexOf("/") + 1), a = e + v;
     h.querySelectorAll("itemref").forEach((D) => {
       const P = D.getAttribute("idref");
       P && b[P] && _.push({
@@ -2818,7 +2818,7 @@ class Rt {
     let g = [];
     const i = h.getAttribute("toc");
     if (i && b[i]) {
-      const D = b[i], U = p.substring(0, p.lastIndexOf("/") + 1) + D;
+      const D = b[i], U = f.substring(0, f.lastIndexOf("/") + 1) + D;
       try {
         const T = await u(U);
         if (T) {
@@ -2844,17 +2844,17 @@ class Rt {
   static parseNcx(l) {
     const e = l.querySelector("navMap");
     if (!e) return [];
-    const p = (u) => {
+    const f = (u) => {
       const s = [];
       return Array.from(u.children).forEach((o) => {
         var n, h;
         if (o.tagName.toLowerCase() === "navpoint") {
-          const w = ((n = o.querySelector("navLabel > text")) == null ? void 0 : n.textContent) || "Untitled", b = ((h = o.querySelector("content")) == null ? void 0 : h.getAttribute("src")) || "", _ = p(o);
+          const w = ((n = o.querySelector("navLabel > text")) == null ? void 0 : n.textContent) || "Untitled", b = ((h = o.querySelector("content")) == null ? void 0 : h.getAttribute("src")) || "", _ = f(o);
           s.push({ name: w, Id_link: b, sub: _ });
         }
       }), s;
     };
-    return p(e);
+    return f(e);
   }
 }
 class Yt {
@@ -2886,12 +2886,12 @@ class Yt {
     let l = null;
     const e = this.currentSettings.scroll !== "scroll-continuous";
     if (e && this.iframe.contentDocument && (l = this.getVisibleElement()), this.updatePagination(this.iframe), l ? this.scrollToElement(l) : e && this.scrollToPage(this.currentPageIndex), this.currentSettings.scroll === "scroll-continuous" && this.isSingleImageMode) {
-      const p = this.container.clientHeight, u = this.container.clientWidth;
-      if (this.iframe.style.height = `${p}px`, this.iframe.contentDocument) {
+      const f = this.container.clientHeight, u = this.container.clientWidth;
+      if (this.iframe.style.height = `${f}px`, this.iframe.contentDocument) {
         const s = this.iframe.contentDocument.getElementsByTagName("svg");
         if (s.length > 0) {
           const n = s[0];
-          n.style.height = `${p}px`, n.style.width = `${u}px`, n.style.maxHeight = "100%", n.style.maxWidth = "100%";
+          n.style.height = `${f}px`, n.style.width = `${u}px`, n.style.maxHeight = "100%", n.style.maxWidth = "100%";
         }
         const o = this.iframe.contentDocument.getElementsByTagName("img");
         if (o.length > 0) {
@@ -2899,7 +2899,7 @@ class Yt {
           n.style.maxHeight = "100%", n.style.maxWidth = "100%";
         }
       }
-      console.log("Syncing Single Image Height:", p);
+      console.log("Syncing Single Image Height:", f);
     }
   }
   openBook(l) {
@@ -2929,8 +2929,8 @@ class Yt {
   }
   async openSpineItem(l, e = !1) {
     e || (this.internalWrapper.innerHTML = "", this.frames = [], this.iframe = void 0);
-    const p = document.createElement("iframe");
-    if (p.style.width = "100%", p.style.border = "none", this.currentSettings.scroll === "scroll-continuous" ? (p.style.height = "100vh", p.scrolling = "no", this.container.style.overflowY = "auto") : (p.style.height = "100%", this.container.style.overflowY = "hidden"), this.internalWrapper.appendChild(p), this.frames.push({ item: l, element: p }), e || (this.iframe = p), this.epubPackage) {
+    const f = document.createElement("iframe");
+    if (f.style.width = "100%", f.style.border = "none", this.currentSettings.scroll === "scroll-continuous" ? (f.style.height = "100vh", f.scrolling = "no", this.container.style.overflowY = "auto") : (f.style.height = "100%", this.container.style.overflowY = "hidden"), this.internalWrapper.appendChild(f), this.frames.push({ item: l, element: f }), e || (this.iframe = f), this.epubPackage) {
       let u = null;
       if (l.media_type && l.media_type.startsWith("image/")) {
         const s = await this.epubPackage.loadBlob(l.href);
@@ -2947,15 +2947,15 @@ class Yt {
                     </body></html>`);
       } else
         u = await this.epubPackage.loadFile(l.href), u && this.epubPackage.zip && (u = await this.injectResources(u, l.href));
-      u ? (p.srcdoc = u, p.onload = () => {
-        this.initFrameContent(p);
+      u ? (f.srcdoc = u, f.onload = () => {
+        this.initFrameContent(f);
       }, console.log(`Loading spine item: ${l.href}`), e || (this.currentItem = l)) : console.error("Failed to load content for", l.href);
     }
   }
   onContainerScroll() {
     if (this.currentSettings.scroll !== "scroll-continuous" || this.isLoadingNext) return;
-    const { scrollTop: l, scrollHeight: e, clientHeight: p } = this.container;
-    l + p > e - 500 && this.loadNextChapter();
+    const { scrollTop: l, scrollHeight: e, clientHeight: f } = this.container;
+    l + f > e - 500 && this.loadNextChapter();
   }
   async loadNextChapter() {
     if (!this.epubPackage || !this.frames.length) return;
@@ -2964,7 +2964,7 @@ class Yt {
   }
   initFrameContent(l) {
     if (!l || !l.contentDocument) return;
-    const e = l.contentDocument, p = e.documentElement, u = e.body;
+    const e = l.contentDocument, f = e.documentElement, u = e.body;
     u.addEventListener("click", (b) => {
       let _ = b.target;
       for (; _ && _ !== u && _.tagName !== "A"; )
@@ -2977,7 +2977,7 @@ class Yt {
     const s = u.getElementsByTagName("img"), o = u.getElementsByTagName("svg"), h = (u.textContent || "").replace(/\s/g, "").length < 50;
     let w = !1;
     if (s.length === 1 && o.length === 0 && h || o.length === 1 && s.length === 0 && h) {
-      if (w = !0, console.log("Detected Single Image / Cover Page. Applying 'Contain' styles."), p.style.height = "100%", u.style.height = "100%", u.style.margin = "0", u.style.display = "flex", u.style.flexDirection = "column", u.style.justifyContent = "center", u.style.alignItems = "center", u.style.overflow = "hidden", s.length > 0) {
+      if (w = !0, console.log("Detected Single Image / Cover Page. Applying 'Contain' styles."), f.style.height = "100%", u.style.height = "100%", u.style.margin = "0", u.style.display = "flex", u.style.flexDirection = "column", u.style.justifyContent = "center", u.style.alignItems = "center", u.style.overflow = "hidden", s.length > 0) {
         const b = s[0];
         b.style.maxWidth = "100%", b.style.maxHeight = "100%", b.style.objectFit = "contain", b.style.margin = "0 auto", b.style.display = "block";
       } else if (o.length > 0) {
@@ -2991,36 +2991,36 @@ class Yt {
   }
   updateSettings(l) {
     let e = null;
-    this.currentSettings.scroll !== "scroll-continuous" && this.iframe && (e = this.getVisibleElement()), this.currentSettings = { ...this.currentSettings, ...l }, this.frames.forEach((p) => {
-      p.element.contentDocument && (this.setupFrameHeightLogic(p.element, this.isSingleImageMode), this.applySettingsToDoc(p.element.contentDocument, p.element), this.updatePagination(p.element));
+    this.currentSettings.scroll !== "scroll-continuous" && this.iframe && (e = this.getVisibleElement()), this.currentSettings = { ...this.currentSettings, ...l }, this.frames.forEach((f) => {
+      f.element.contentDocument && (this.setupFrameHeightLogic(f.element, this.isSingleImageMode), this.applySettingsToDoc(f.element.contentDocument, f.element), this.updatePagination(f.element));
     }), e && this.iframe && (console.log("Restoring position to anchor element:", e), this.scrollToElement(e)), this.currentSettings.scroll === "scroll-continuous" ? this.container.style.overflowY = "auto" : (this.container.style.overflowY = "hidden", this.activeFrameObserver && (this.activeFrameObserver.disconnect(), this.activeFrameObserver = null));
   }
   getVisibleElement() {
     if (!this.iframe || !this.iframe.contentDocument) return null;
-    const e = this.iframe.contentDocument.body, p = this.iframe.clientWidth, u = Array.from(e.querySelectorAll("p, h1, h2, h3, h4, h5, h6, li, blockquote, div"));
+    const e = this.iframe.contentDocument.body, f = this.iframe.clientWidth, u = Array.from(e.querySelectorAll("p, h1, h2, h3, h4, h5, h6, li, blockquote, div"));
     for (const s of u) {
       const o = s.getBoundingClientRect();
-      if (o.left >= -50 && o.top >= 0 && o.left < p)
+      if (o.left >= -50 && o.top >= 0 && o.left < f)
         return s;
     }
     return null;
   }
   scrollToElement(l) {
     if (!this.iframe || !this.iframe.contentDocument) return;
-    const e = this.iframe.contentDocument.documentElement, p = Math.abs(parseFloat(e.style.left || "0")), s = l.getBoundingClientRect().left + p, n = this.iframe.clientWidth + this.columnGap, h = Math.floor(s / n);
+    const e = this.iframe.contentDocument.documentElement, f = Math.abs(parseFloat(e.style.left || "0")), s = l.getBoundingClientRect().left + f, n = this.iframe.clientWidth + this.columnGap, h = Math.floor(s / n);
     console.log(`Restoring Element: absoluteLeft=${s}, newPageIndex=${h}`), this.currentPageIndex = h, this.currentPageIndex >= this.pageCount && (this.currentPageIndex = this.pageCount - 1), this.currentPageIndex < 0 && (this.currentPageIndex = 0), this.scrollToPage(this.currentPageIndex);
   }
   setBookStyles(l) {
     this.currentBookStyles = l;
-    const e = document.querySelector(".tr-epub-reader-element"), p = l.find((u) => u.selector === "body" || u.selector === ":not(a):not(hypothesis-highlight)") || (l.length > 0 ? l[0] : null);
-    console.log("setBookStyles: Applying styles to container. Found element:", !!e, e), console.log("setBookStyles: Body style found:", p), e ? p && p.declarations && p.declarations.backgroundColor ? (console.log("setBookStyles: Setting background color to", p.declarations.backgroundColor), e.style.backgroundColor = p.declarations.backgroundColor) : (console.log("setBookStyles: Clearing background color"), e.style.backgroundColor = "") : console.warn("setBookStyles: .tr-epub-reader-element NOT FOUND in DOM"), this.frames.forEach((u) => {
+    const e = document.querySelector(".tr-epub-reader-element"), f = l.find((u) => u.selector === "body" || u.selector === ":not(a):not(hypothesis-highlight)") || (l.length > 0 ? l[0] : null);
+    console.log("setBookStyles: Applying styles to container. Found element:", !!e, e), console.log("setBookStyles: Body style found:", f), e ? f && f.declarations && f.declarations.backgroundColor ? (console.log("setBookStyles: Setting background color to", f.declarations.backgroundColor), e.style.backgroundColor = f.declarations.backgroundColor) : (console.log("setBookStyles: Clearing background color"), e.style.backgroundColor = "") : console.warn("setBookStyles: .tr-epub-reader-element NOT FOUND in DOM"), this.frames.forEach((u) => {
       this.applyStylesToFrame(u.element);
     });
   }
   applyStylesToFrame(l) {
     if (!l || !l.contentDocument) return;
-    const e = l.contentDocument, p = e.getElementById("readium-theme-style");
-    p && p.remove();
+    const e = l.contentDocument, f = e.getElementById("readium-theme-style");
+    f && f.remove();
     const u = e.createElement("style");
     u.id = "readium-theme-style";
     let s = "";
@@ -3050,34 +3050,34 @@ class Yt {
             `, u.textContent = s, e.head.appendChild(u);
   }
   applySettingsToDoc(l, e) {
-    const p = l.documentElement, u = l.body;
-    this.currentSettings.fontSize && (p.style.fontSize = `${this.currentSettings.fontSize}%`);
+    const f = l.documentElement, u = l.body;
+    this.currentSettings.fontSize && (f.style.fontSize = `${this.currentSettings.fontSize}%`);
     const s = this.iframe.clientWidth, o = this.iframe.clientHeight, n = this.currentSettings.scroll === "scroll-continuous";
     if (e.style.borderLeft = "0", e.style.borderRight = "0", n) {
       if (this.isSingleImageMode) {
-        p.style.height = "100%", p.style.width = "100%", p.style.overflow = "hidden", u.style.height = "100%", u.style.overflow = "hidden";
+        f.style.height = "100%", f.style.width = "100%", f.style.overflow = "hidden", u.style.height = "100%", u.style.overflow = "hidden";
         const h = u.querySelector("svg");
         h && (h.style.height = "100vh", h.style.maxHeight = "100vh");
       } else
-        p.style.height = "auto", p.style.width = "100vw", p.style.overflowY = "auto";
-      p.style.overflowX = "hidden", u.style.height = "auto", u.style.overflowY = "visible", p.style.columnWidth = "auto", p.style.columnGap = "0", p.style.position = "static", p.style.left = "0", e.style.overflow = "hidden";
+        f.style.height = "auto", f.style.width = "100vw", f.style.overflowY = "auto";
+      f.style.overflowX = "hidden", u.style.height = "auto", u.style.overflowY = "visible", f.style.columnWidth = "auto", f.style.columnGap = "0", f.style.position = "static", f.style.left = "0", e.style.overflow = "hidden";
     } else {
-      e.style.height = "100%", p.style.height = `${o}px`, p.style.width = "100%", p.style.position = "relative", p.style.margin = "0", p.style.padding = "0", p.style.top = "0", p.style.left = "0";
+      e.style.height = "100%", f.style.height = `${o}px`, f.style.width = "100%", f.style.position = "relative", f.style.margin = "0", f.style.padding = "0", f.style.top = "0", f.style.left = "0";
       const h = s > o, w = this.currentSettings.syntheticSpread;
       let b = w === "double";
       if ((!w || w === "auto") && (b = h && s > 800), b) {
         const _ = (s - this.columnGap) / 2;
-        p.style.columnWidth = `${_}px`;
+        f.style.columnWidth = `${_}px`;
       } else
-        p.style.columnWidth = `${s - this.columnGap}px`;
-      p.style.columnGap = `${this.columnGap}px`, p.style.columnFill = "auto", u.style.margin = "0", u.style.padding = "0", e && (e.style.overflow = "hidden");
+        f.style.columnWidth = `${s - this.columnGap}px`;
+      f.style.columnGap = `${this.columnGap}px`, f.style.columnFill = "auto", u.style.margin = "0", u.style.padding = "0", e && (e.style.overflow = "hidden");
     }
   }
   setupFrameHeightLogic(l, e) {
     var s;
-    const p = l.contentDocument;
-    if (!p) return;
-    const u = p.body;
+    const f = l.contentDocument;
+    if (!f) return;
+    const u = f.body;
     if (this.currentSettings.scroll === "scroll-continuous")
       if (e)
         this.activeFrameObserver && (this.activeFrameObserver.disconnect(), this.activeFrameObserver = null), l.style.height = "100%", l.scrolling = "no";
@@ -3114,38 +3114,38 @@ class Yt {
   updatePagination(l) {
     if (!l || !l.contentDocument || this.currentSettings.scroll === "scroll-continuous") return;
     console.log("updatePagination executing..."), l.style.height = "100%", l.style.width = "100%";
-    const e = l.contentDocument.documentElement, p = l.clientWidth, u = e.scrollWidth;
-    this.pageCount = Math.ceil(u / (p + this.columnGap)), this.pageCount === 0 && (this.pageCount = 1), console.log(`Pagination: ${u} / ${p} = ${this.pageCount} pages`), this.currentPageIndex >= this.pageCount && (this.currentPageIndex = this.pageCount - 1), this.currentPageIndex < 0 && (this.currentPageIndex = 0), this.scrollToPage(this.currentPageIndex);
+    const e = l.contentDocument.documentElement, f = l.clientWidth, u = e.scrollWidth;
+    this.pageCount = Math.ceil(u / (f + this.columnGap)), this.pageCount === 0 && (this.pageCount = 1), console.log(`Pagination: ${u} / ${f} = ${this.pageCount} pages`), this.currentPageIndex >= this.pageCount && (this.currentPageIndex = this.pageCount - 1), this.currentPageIndex < 0 && (this.currentPageIndex = 0), this.scrollToPage(this.currentPageIndex);
   }
   scrollToPage(l) {
     if (!this.iframe || !this.iframe.contentDocument) return;
-    const e = this.iframe.contentDocument.documentElement, p = this.iframe.clientWidth, u = l * (p + this.columnGap);
+    const e = this.iframe.contentDocument.documentElement, f = this.iframe.clientWidth, u = l * (f + this.columnGap);
     console.log(`scrollToPage: index=${l}, offset=${u}`), e.style.left = `-${u}px`;
   }
   async openContentUrl(l) {
     if (!this.epubPackage) return;
     console.log("ReaderView.openContentUrl called with:", l);
-    const [e, p] = l.split("#");
+    const [e, f] = l.split("#");
     console.log("Looking for spine item with path:", e);
     const u = this.epubPackage.spine.getItemByHref(e);
     if (u) {
       if (console.log("Found item:", u), this.currentItem && this.currentItem.href === u.href) {
-        p && this.scrollToAnchor(p);
+        f && this.scrollToAnchor(f);
         return;
       }
-      this.currentPageIndex = 0, await this.openSpineItem(u), p && setTimeout(() => {
-        this.scrollToAnchor(p);
+      this.currentPageIndex = 0, await this.openSpineItem(u), f && setTimeout(() => {
+        this.scrollToAnchor(f);
       }, 100);
     } else
       console.warn("Item not found for href", l), console.log("Available spine items:", this.epubPackage.spine.items.map((s) => s.href));
   }
   scrollToAnchor(l) {
     if (!this.iframe || !this.iframe.contentDocument) return;
-    const e = this.iframe.contentDocument, p = e.getElementById(l);
-    if (p) {
-      const u = e.documentElement, s = Math.abs(parseFloat(u.style.left || "0")), n = p.getBoundingClientRect().left + s, w = this.iframe.clientWidth + this.columnGap;
+    const e = this.iframe.contentDocument, f = e.getElementById(l);
+    if (f) {
+      const u = e.documentElement, s = Math.abs(parseFloat(u.style.left || "0")), n = f.getBoundingClientRect().left + s, w = this.iframe.clientWidth + this.columnGap;
       if (this.currentSettings.scroll === "scroll-continuous") {
-        p.scrollIntoView();
+        f.scrollIntoView();
         return;
       }
       let b = Math.floor(n / w);
@@ -3187,12 +3187,12 @@ class Yt {
   resolvePath(l, e) {
     try {
       if (e.startsWith("/")) return e.substring(1);
-      const p = l.split("/");
-      p.pop();
+      const f = l.split("/");
+      f.pop();
       const u = e.split("/");
       for (const s of u)
-        s !== "." && (s === ".." ? p.pop() : p.push(s));
-      return p.join("/");
+        s !== "." && (s === ".." ? f.pop() : f.push(s));
+      return f.join("/");
     } catch {
       return console.error("Path resolution error", l, e), e;
     }
@@ -3205,77 +3205,78 @@ const it = {
   currentPackageDocument: null,
   ebookURL_filepath: null,
   embeded: !0,
-  init: (H) => {
+  init: (M) => {
     console.log("Initializing Modern TreineticEpubReader..."), ft.init();
     let l;
-    return typeof H == "string" ? l = document.querySelector(H) : l = H, l ? (it.initReader(l), pt.getInstance()) : (console.error("TreineticEpubReader: Element not found", H), null);
+    return typeof M == "string" ? l = document.querySelector(M) : l = M, l ? (it.initReader(l), pt.getInstance()) : (console.error("TreineticEpubReader: Element not found", M), null);
   },
   /**
    * Alias for init() to align with standard library patterns.
    */
-  create: (H) => it.init(H),
-  open: (H) => {
-    console.log("Opening: ", H);
+  create: (M) => it.init(M),
+  open: (M) => {
+    console.log("Opening: ", M);
     const l = it.setReaderPreferences();
-    it.ebookURL_filepath = H;
-    const e = it.getOpenPageRequest(l, H);
-    let p = { syntheticSpread: "auto", scroll: "auto" };
-    it.embeded && l && l.reader && (p = l.reader), it.loadEpub(p, H, e);
+    it.ebookURL_filepath = M;
+    const e = it.getOpenPageRequest(l, M);
+    let f = { syntheticSpread: "auto", scroll: "auto" };
+    it.embeded && l && l.reader && (f = l.reader), it.loadEpub(f, M, e);
   },
-  initReader: (H) => {
-    H.classList.add("tr-epub-reader-element");
-    const l = it.setReaderPreferences();
-    it.readerView = new Yt(H), ft.init(), ft.on(ft.PageNext, "reader", () => it.nextPage()), ft.on(ft.PagePrevious, "reader", () => it.prevPage());
-    let e = { syntheticSpread: "auto", scroll: "auto" };
-    it.embeded && l && l.reader && (e = l.reader), wt.updateReader(it.readerView, e);
+  initReader: (M) => {
+    const l = M.querySelector(".tr-internal-wrapper");
+    l && (console.log("TreineticEpubReader: Cleaning up existing instance before re-init."), l.remove()), M.classList.add("tr-epub-reader-element");
+    const e = it.setReaderPreferences();
+    it.readerView = new Yt(M), ft.init(), ft.on(ft.PageNext, "reader", () => it.nextPage()), ft.on(ft.PagePrevious, "reader", () => it.prevPage());
+    let f = { syntheticSpread: "auto", scroll: "auto" };
+    it.embeded && e && e.reader && (f = e.reader), wt.updateReader(it.readerView, f);
   },
   handleReaderEvents: () => {
     var u, s, o;
     if (!it.readium) return;
-    const H = it.readium.reader, l = ((u = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : u.CONTENT_DOCUMENT_LOAD_START) || "CONTENT_DOCUMENT_LOAD_START", e = ((s = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : s.CONTENT_DOCUMENT_LOADED) || "CONTENT_DOCUMENT_LOADED", p = ((o = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : o.PAGINATION_CHANGED) || "PAGINATION_CHANGED";
-    H.on(l, (n, h) => {
+    const M = it.readium.reader, l = ((u = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : u.CONTENT_DOCUMENT_LOAD_START) || "CONTENT_DOCUMENT_LOAD_START", e = ((s = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : s.CONTENT_DOCUMENT_LOADED) || "CONTENT_DOCUMENT_LOADED", f = ((o = ReadiumSDK == null ? void 0 : ReadiumSDK.Events) == null ? void 0 : o.PAGINATION_CHANGED) || "PAGINATION_CHANGED";
+    M.on(l, (n, h) => {
       console.log("Event: Load Start");
-    }), H.on(e, (n, h) => {
+    }), M.on(e, (n, h) => {
       console.log("Event: Loaded");
-    }), H.on(p, (n) => {
+    }), M.on(f, (n) => {
       console.log("Event: Pagination Changed"), pt.getInstance().isAutoBookmark() && it.savePlace();
     });
   },
-  loadEpub: async (H, l, e) => {
+  loadEpub: async (M, l, e) => {
     try {
       console.log("Loading epub via modern parser:", l);
-      const p = await Rt.load(l);
-      it.readerView && (it.readerView.openBook(p), it.currentPackageDocument = p, p.toc && pt.getInstance().onTOCLoad(p.toc), pt.getInstance().epubLoaded(
-        p.metadata,
-        p,
+      const f = await Rt.load(l);
+      it.readerView && (it.readerView.openBook(f), it.currentPackageDocument = f, f.toc && pt.getInstance().onTOCLoad(f.toc), pt.getInstance().epubLoaded(
+        f.metadata,
+        f,
         it.readerView
       ));
-    } catch (p) {
-      console.error("Failed to load epub", p), pt.getInstance().epubFailed("Indeterminate error");
+    } catch (f) {
+      console.error("Failed to load epub", f), pt.getInstance().epubFailed("Indeterminate error");
     }
   },
   setReaderPreferences: () => {
-    let H = Ct.get("reader") || { fontSize: 100, theme: "default-theme", scroll: "auto" };
-    return H.scroll === "scroll-continuous" && (H.scroll = "auto"), Ct.put("reader", H), { reader: H };
+    let M = Ct.get("reader") || { fontSize: 100, theme: "default-theme", scroll: "auto" };
+    return M.scroll === "scroll-continuous" && (M.scroll = "auto"), Ct.put("reader", M), { reader: M };
   },
-  getOpenPageRequest: (H, l) => null,
+  getOpenPageRequest: (M, l) => null,
   savePlace: () => {
   },
   // Public API Methods (proxied to handler/helpers)
   nextPage: () => pt.getInstance().nextPage(),
   prevPage: () => pt.getInstance().prevPage(),
-  goToPage: (H) => pt.getInstance().goToPage(H),
-  setTheme: (H) => {
-    pt.getInstance().setTheme(H);
+  goToPage: (M) => pt.getInstance().goToPage(M),
+  setTheme: (M) => {
+    pt.getInstance().setTheme(M);
   },
-  registerTheme: (H) => {
-    Pt.getInstance().registerTheme(H);
+  registerTheme: (M) => {
+    Pt.getInstance().registerTheme(M);
   },
-  setFontSize: (H) => {
-    pt.getInstance().changeFontSize(H);
+  setFontSize: (M) => {
+    pt.getInstance().changeFontSize(M);
   },
-  setScrollOption: (H) => {
-    pt.getInstance().setScrollOption(H);
+  setScrollOption: (M) => {
+    pt.getInstance().setScrollOption(M);
   },
   clearSettings: () => {
     Ct.clear("reader"), console.log("Reader settings cleared.");

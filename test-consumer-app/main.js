@@ -1,18 +1,31 @@
-import Treinetic, { create, init } from './../dist/treinetic-epub-reader.es.js';
+// This mimics the developer's implementation using v2.0.3 Named Exports
+import { create, open, nextPage, prevPage } from '@treinetic/treinetic-epub-reader';
+import '@treinetic/treinetic-epub-reader/dist/style.css';
 
-console.log('--- NAMED EXPORT DEBUG ---');
-console.log('Named create type:', typeof create);
-console.log('Named init type:', typeof init);
-console.log('Default Export:', Treinetic);
+console.log('Initializing Reader...');
 
-if (typeof create === 'function') {
-    console.log('SUCCESS: Named export "create" is working!');
-} else {
-    console.log('FAILURE: Named export "create" is missing.');
-}
+// 1. Initialize the Reader
+// V2.0.4 VERIFICATION: Calling create twice to simulate React Strict Mode
+console.log('Call 1: Creating Reader...');
+const reader1 = create('#reader-container');
 
-if (Treinetic && typeof Treinetic.init === 'function') {
-    console.log('SUCCESS: Default export property "init" works (legacy).');
-} else if (Treinetic && Treinetic.default && typeof Treinetic.default.init === 'function') { 
-    console.log('INFO: Default export is nested (requires .default).');
-}
+console.log('Call 2: Creating Reader (Simulation of Strict Mode)...');
+const reader = create('#reader-container'); 
+console.log('Reader Instance Created:', reader);
+
+// 2. Open the Book
+// Using a valid .epub file (not a PDF)
+open('/epubs/alice.epub');
+
+// 3. Bind Controls
+document.getElementById('btn-next').addEventListener('click', () => {
+    console.log('Next Page');
+    nextPage();
+});
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+    console.log('Prev Page');
+    prevPage();
+});
+
+console.log('Setup Complete.');
