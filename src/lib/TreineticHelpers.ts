@@ -11,8 +11,8 @@ export const TreineticHelpers = {
             const bookStyles = TreineticHelpers.getBookStyles(readerSettings.theme);
             reader.setBookStyles(bookStyles);
 
-            // Apply background color to frame
-            const frame = document.querySelector('.desktop-reader-frame') as HTMLElement;
+            // Apply background color to frame wrapper to prevent white borders
+            const frame = document.querySelector('#reader-wrapper') as HTMLElement;
             if (frame && bookStyles[0].declarations.backgroundColor) {
                 frame.style.backgroundColor = bookStyles[0].declarations.backgroundColor;
             }
@@ -24,12 +24,14 @@ export const TreineticHelpers = {
         const isAuthorTheme = (theme === "author-theme");
         const bgColor = TreineticHelpers.getPropertyFromThemeClass(theme, "background-color");
         const color = TreineticHelpers.getPropertyFromThemeClass(theme, "color");
+        const fontFamily = TreineticHelpers.getPropertyFromThemeClass(theme, "font-family");
 
         return [{
             selector: ':not(a):not(hypothesis-highlight)',
             declarations: {
                 backgroundColor: isAuthorTheme ? "" : bgColor,
-                color: isAuthorTheme ? "" : color
+                color: isAuthorTheme ? "" : color,
+                fontFamily: isAuthorTheme ? "" : (fontFamily || "")
             }
         }, {
             selector: 'a',
@@ -54,13 +56,17 @@ export const TreineticHelpers = {
             }, "parchment-theme": {
                 "background-color": "#f7f1cf",
                 "color": "#774c27"
+            }, "kindle-paper-theme": { // Kindle Paper (Refined Authentic)
+                "background-color": "#f6efdf", // Authentic Paperwhite Cream
+                "color": "#2e2e2e", // Soft Charcoal Black
+                "font-family": "'Bookerly', 'Georgia', serif"
             }, "ballard-theme": {
                 "background-color": "#576b96",
                 "color": "#DDD"
             }, "vancouver-theme": {
                 "background-color": "#DDD",
                 "color": "#576b96"
-            }, "navy-theme": { // Added navy/blue mapping if missing
+            }, "navy-theme": {
                 "background-color": "#1c2938",
                 "color": "#DDD"
             }
@@ -70,6 +76,7 @@ export const TreineticHelpers = {
         if (classOrId === 'day') classOrId = 'default-theme';
         if (classOrId === 'night') classOrId = 'night-theme';
         if (classOrId === 'sepia') classOrId = 'parchment-theme';
+        if (classOrId === 'kindle') classOrId = 'kindle-paper-theme';
 
         return themes[classOrId] ? themes[classOrId][property] : null;
     }
