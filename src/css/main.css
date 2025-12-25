@@ -348,8 +348,6 @@ body {
     position: relative;
     width: 100%;
     /* overflow: auto;  Managed by ReaderView logic now */
-    border-left: 40px solid transparent;
-    border-right: 40px solid transparent;
     box-sizing: border-box;
     /* Important so width 100% includes border? No, default is content-box. */
 }
@@ -369,6 +367,19 @@ body {
     border: none;
     box-sizing: border-box;
     /* Safer choice for modern layout */
+}
+
+/* User Request: Hide ALL scrollbars (Vertical & Horizontal) on the main container */
+.tr-epub-reader-element {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.tr-epub-reader-element::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
 }
 
 /* Overlay Buttons (Legacy - can hide or keep as option, assume hiding for now) */

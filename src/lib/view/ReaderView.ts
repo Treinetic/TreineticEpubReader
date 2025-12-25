@@ -285,6 +285,13 @@ export class ReaderView {
 
                 // User Request: Make sure SVG is transparent (for dark mode support)
                 svg.style.backgroundColor = "transparent";
+
+                // FIX: If we are in scroll mode, constrain SVG height to viewport
+                // The user specifically requested "apply this to the svg not the image height: 100vh"
+                if (this.currentSettings.scroll === 'scroll-continuous') {
+                    svg.style.height = "100vh";
+                    svg.style.maxHeight = "100vh";
+                }
             }
         }
 
@@ -306,6 +313,8 @@ export class ReaderView {
                     this.activeFrameObserver.disconnect();
                     this.activeFrameObserver = null;
                 }
+                // FIX: Force to viewport height so object-fit: contain works against the screen size
+                // REVERTED: User asked to apply this to the SVG instead.
                 iframe.style.height = "100%";
                 // Also ensure scrolling='no' is enforced (it is in createIframe but double check)
                 iframe.scrolling = "no";
@@ -533,6 +542,15 @@ export class ReaderView {
                 
                 /* User Request: Force specific EPUB cover class to be transparent */
                 .x-ebookmaker-cover { background-color: transparent !important; background: transparent !important; }
+
+                /* User Request: Hide Scrollbars inside iframe (Horizontal & Vertical) */
+                html, body {
+                    scrollbar-width: none; /* Firefox */
+                    -ms-overflow-style: none; /* IE/Edge */
+                }
+                html::-webkit-scrollbar, body::-webkit-scrollbar {
+                    display: none; /* Chrome/Safari */
+                }
             `;
 
         styleEl.textContent = css;
@@ -555,6 +573,16 @@ export class ReaderView {
         // Legacy Reflowable Logic mimic
         const isScroll = this.currentSettings.scroll === 'scroll-continuous';
 
+        // User Request: Conditional Layout Spacing
+        // "10px only when layout is horizontal (paginated), when switch back to vertical it should be removed (0px)"
+        if (isScroll) {
+            iframe.style.borderLeft = '0';
+            iframe.style.borderRight = '0';
+        } else {
+            iframe.style.borderLeft = '10px solid transparent';
+            iframe.style.borderRight = '10px solid transparent';
+        }
+
         if (isScroll) {
             // Vertical Scroll Mode
             if (this.isSingleImageMode) {
@@ -564,6 +592,13 @@ export class ReaderView {
                 html.style.overflow = 'hidden'; // Contain it
                 body.style.height = '100%';
                 body.style.overflow = 'hidden';
+
+                // Re-apply SVG/Image constraints dynamically (in case we switched modes)
+                const svg = body.querySelector('svg');
+                if (svg) {
+                    svg.style.height = '100vh';
+                    svg.style.maxHeight = '100vh';
+                }
             } else {
                 html.style.height = 'auto'; // let it grow
                 html.style.width = '100vw'; // full width usually
