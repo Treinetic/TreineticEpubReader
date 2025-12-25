@@ -24,10 +24,29 @@ export class ReaderView {
     private onContainerResize() {
         if (!this.iframe) return;
 
+        // FIX: Capture reading position before layout changes (Resize Stability)
+        let anchorElement: HTMLElement | null = null;
+        const isPaginated = this.currentSettings.scroll !== 'scroll-continuous';
+
+        if (isPaginated && this.iframe.contentDocument) {
+            anchorElement = this.getVisibleElement();
+        }
+
         // 1. Pagination Update
         this.updatePagination(this.iframe);
 
-        // 2. Single Image Height Sync (Scroll Mode)
+        // 2. Restore Position
+        if (anchorElement) {
+            // Use a small timeout to let layout settle if needed, though usually synchronous re-flow works
+            this.scrollToElement(anchorElement);
+        } else if (isPaginated) {
+            // Fallback: stay on same page index relative to percentage? 
+            // Or just re-render current page index (which might be wrong content now)
+            // Ideally scrollToElement handles it.
+            this.scrollToPage(this.currentPageIndex);
+        }
+
+        // 3. Single Image Height Sync (Scroll Mode)
         if (this.currentSettings.scroll === 'scroll-continuous' && this.isSingleImageMode) {
             // Explicitly sync iframe height to container height to ensure fit
             const h = this.container.clientHeight;
@@ -531,7 +550,7 @@ export class ReaderView {
         // Legacy Reflowable Logic mimic
         const isScroll = this.currentSettings.scroll === 'scroll-continuous';
 
-        // User Request: Remove usage of 10px border spacing
+        // User Request: Reverted border spacing (moved to container padding)
         iframe.style.borderLeft = '0';
         iframe.style.borderRight = '0';
 
