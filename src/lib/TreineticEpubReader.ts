@@ -7,6 +7,7 @@ import { TreineticHelpers } from './TreineticHelpers';
 import { Keyboard } from './Keyboard';
 import { EpubParser } from './parser/EpubParser';
 import { ReaderView } from './view/ReaderView';
+import { ThemeManager, ReaderTheme } from './ThemeManager';
 
 // Declare globals that might be available from the legacy bundle
 declare const Readium: any;
@@ -64,6 +65,8 @@ export const TreineticEpubReader = {
 
         // Setup Keyboard
         Keyboard.init();
+        Keyboard.on(Keyboard.PageNext, 'reader', () => TreineticEpubReader.nextPage());
+        Keyboard.on(Keyboard.PagePrevious, 'reader', () => TreineticEpubReader.prevPage());
 
         // TreineticEpubReader.handleLegacyEvents(); // Placeholder if we need to port event handling logic from legacy which was huge
 
@@ -157,6 +160,9 @@ export const TreineticEpubReader = {
     setTheme: (theme: string) => {
         // Update settings
         ExternalControls.getInstance().setTheme(theme);
+    },
+    registerTheme: (theme: ReaderTheme) => {
+        ThemeManager.getInstance().registerTheme(theme);
     },
     setFontSize: (size: number) => {
         ExternalControls.getInstance().changeFontSize(size);

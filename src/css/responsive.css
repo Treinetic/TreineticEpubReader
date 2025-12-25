@@ -1,0 +1,24 @@
+/* Responsive / Mobile Styles */
+
+/* 
+   We use Container Queries because the reader 
+   might be inside a split-view or a smaller widget.
+   This ensures it adapts to its *immediate parent* width,
+   not just the screen width.
+*/
+
+/* Tablet / Narrow Desktop */
+@container reader-area (max-width: 800px) {
+    #reader-wrapper {
+        width: 100% !important;
+        padding: 14px !important;
+    }
+}
+
+/* Mobile / Phone */
+@container reader-area (max-width: 500px) {
+    #reader-wrapper {
+        width: 100% !important;
+        padding: 5px !important;
+    }
+}

@@ -9,47 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="./src/css/main.css">
     <style>
-        /* Specific overrides for desktop layout */
-        body {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: #333;
-        }
-
-        .desktop-reader-wrapper {
-            margin-top: var(--toolbar-height);
-        }
-
-        /* Responsive Reader Container */
-        /* Responsive Reader Container */
-        /* Responsive Reader Container */
-        #reader-wrapper {
-            width: 80%;
-            height: 100%;
-            background: #fff;
-            position: relative;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-            /* User Request: Small Drop Shadow */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Container Query: Tablet size (< 768px container width) */
-        @container readerSection (max-width: 768px) {
-            #reader-wrapper {
-                padding: 14px;
-            }
-        }
-
-        /* Container Query: Mobile size (< 480px container width) */
-        @container readerSection (max-width: 480px) {
-            #reader-wrapper {
-                padding: 5px;
-            }
-        }
+        /* Styles moved to main.css */
     </style>
 </head>
 
@@ -57,46 +17,69 @@
     <div id="split-container" style="display:flex; height:100vh; width:100vw; overflow:hidden;">
 
         <!-- SECTION A: CONTROLS -->
-        <div id="section-a"
-            style="width:250px; min-width:200px; background:#f5f5f5; border-right:1px solid #ccc; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; overflow-y:auto;">
-            <h3 style="margin-top:0;">Debug Controls</h3>
+        <div id="section-a" class="sidebar-panel"
+            style="width:250px; min-width:200px; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; overflow-y:auto;">
+            <h3 class="sidebar-title">Treinetic Reader <span style="font-size:10px; opacity:0.6;">v2.0</span></h3>
 
-            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
-                <strong>Select Book</strong><br>
-                <select id="book-selector" style="width:100%; padding:5px; margin-top:5px;">
-                    <option value="/epubs/alice.epub">Alice in Wonderland</option>
-                    <option value="/public/epubs/sherlock.epub">Sherlock Holmes</option>
-                    <option value="/public/epubs/moby-dick.epub">Moby Dick</option>
-                    <option value="/public/epubs/frankenstein.epub">Frankenstein</option>
-                </select>
-            </div>
+            <!-- Group 1: Library -->
+            <details open>
+                <summary>Library</summary>
+                <div class="control-group">
+                    <select id="book-selector" class="ui-select">
+                        <option value="/epubs/alice.epub">Alice in Wonderland</option>
+                        <option value="/public/epubs/sherlock.epub">Sherlock Holmes</option>
+                        <option value="/public/epubs/moby-dick.epub">Moby Dick</option>
+                        <option value="/public/epubs/frankenstein.epub">Frankenstein</option>
+                    </select>
+                </div>
+            </details>
 
-            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
-                <strong>Navigation</strong><br>
-                <button id="btn-prev" style="padding:5px 10px;">Prev</button>
-                <button id="btn-next" style="padding:5px 10px;">Next</button>
-            </div>
+            <!-- Group 2: Navigation -->
+            <details open>
+                <summary>Navigation</summary>
+                <div class="control-group row">
+                    <button id="btn-prev" class="btn-ui flex-1">
+                        <i class="fas fa-chevron-left"></i> Prev
+                    </button>
+                    <button id="btn-next" class="btn-ui flex-1">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </details>
 
-            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
-                <strong>Font Size</strong><br>
-                <button id="btn-font-dec">-</button>
-                <span id="font-val" style="margin:0 10px;">100%</span>
-                <button id="btn-font-inc">+</button>
-            </div>
+            <!-- Group 3: Appearance -->
+            <details open>
+                <summary>Appearance</summary>
 
-            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
-                <strong>Themes</strong><br>
-                <button class="swatch" data-theme="default-theme" title="Day">D</button>
-                <button class="swatch" data-theme="night-theme" title="Night">N</button>
-                <button class="swatch" data-theme="parchment-theme" title="Sepia">S</button>
-                <button class="swatch swatch-kindle-paper" data-theme="kindle-paper-theme"
-                    title="Kindle Paper">P</button>
-            </div>
+                <!-- Font Size -->
+                <div class="control-group row">
+                    <button id="btn-font-dec" class="btn-icon"><i class="fas fa-minus"></i></button>
+                    <span id="font-val" class="font-display">100%</span>
+                    <button id="btn-font-inc" class="btn-icon"><i class="fas fa-plus"></i></button>
+                </div>
 
-            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
-                <strong>Layout</strong><br>
-                <button id="btn-toggle-scroll">Toggle Scroll Mode</button>
-            </div>
+                <!-- Themes -->
+                <div class="control-label">Reading Theme</div>
+                <div class="control-group row wrap">
+                    <button class="swatch" data-theme="default-theme" title="Day">D</button>
+                    <button class="swatch" data-theme="night-theme" title="Night">N</button>
+                    <button class="swatch" data-theme="parchment-theme" title="Sepia">S</button>
+                    <button class="swatch swatch-kindle-paper" data-theme="kindle-paper-theme"
+                        title="Kindle Paper">K</button>
+                    <button class="swatch" data-theme="custom-pink-theme" style="background: hotpink;"
+                        title="Custom">?</button>
+                </div>
+            </details>
+
+            <!-- Group 4: Settings -->
+            <details>
+                <summary>Layout & Debug</summary>
+                <div class="control-group">
+                    <button id="btn-toggle-scroll" class="btn-ui full-width">
+                        <i class="fas fa-arrows-alt-v"></i> Toggle Scroll Mode
+                    </button>
+                </div>
+            </details>
 
             <div style="flex:1;">
                 <strong>Table of Contents</strong>
@@ -113,7 +96,7 @@
 
         <!-- SECTION B: READER -->
         <div id="section-b"
-            style="flex:1; position:relative; overflow:hidden; background:purple; padding:100px 0; box-sizing:border-box; display:flex; flex-direction:column; container-type: inline-size; container-name: readerSection;">
+            style="flex:1; position:relative; overflow:hidden; background:#eee; padding:20px 0; box-sizing:border-box; display:flex; flex-direction:column;">
 
             <!-- DEMO: Screen Width Indicator -->
             <div id="width-indicator" style="

@@ -2,60 +2,40 @@
 
 This roadmap outlines the strategic vision to establish **TreineticEpubReader** as the de facto open-source EPUB solution for the web.
 
-## 🚀 Phase 1: The Modern Foundation (Current Status)
-**Goal:** Deliver a stable, high-performance, and lightweight reader with zero legacy dependencies.
-- [x] **TypeScript Rewrite**: Fully typed codebase, removing jQuery/Underscore.
-- [x] **Modern Architecture**: Clean separation of Parser, Model, and View layers.
-- [x] **Stacked Scrolling**: Seamless vertical scrolling (Infinite Scroll) architecture.
-- [x] **Advanced Pagination**: Robust CSS multi-column support.
-- [x] **Rich Theming**: Built-in support for Day, Night, Sepia, and Custom themes.
-- [x] **Mobile Responsiveness**: Adaptive layout for phone and tablet viewports.
+## ✅ Phase 1: Foundation & Core Experience (Current)
+*Focus: Rendering, Performance, and Visual Polish.*
+- [x] **Core Engine**: Wrapper around `epub.js` with improved error handling.
+- [x] **Responsive Layout**: "Split-View" desktop and native-feeling mobile/tablet layouts.
+- [x] **Visual Customization**:
+    - [x] Theming Engine (Day, Night, Authentic Kindle/Paper modes).
+    - [x] API for custom reader themes (`registerTheme`).
 
----
+## 📲 Phase 1.5: Mobile & UI Polish (Deferred Priority)
+*Focus: Completing the "App-Like" feel.*
+- [ ] **Mobile Interactions**:
+    - Swipe-to-Turn gestures (TouchManager).
+    - Hide/Show controls on tap.
+    - Prevent viewport bouncing (overscroll-behavior).
+- [ ] **UI Theme Engine**:
+    - API to skin the *Application UI* (Sidebar, Toolbar) not just the book.
+    - Presets: "Kindle Gray", "Apple Translucency".
 
-## ⚡ Phase 2: Interaction & Accessibility (Next Sprint)
-**Goal:** Transform the reader from a passive viewer into an interactive tool.
-- [ ] **Advanced Annotation System**
-    - Highlighting text (multiple colors).
-    - Adding sticky notes/comments to highlights.
-    - Export annotations to JSON/Markdown for personal knowledge management (Obsidian/Notion).
-- [ ] **Full-Text Search**
-    - Client-side indexing (e.g., FlexSearch) for instant search results across the entire book.
-    - Context-aware result snippets.
-- [ ] **Accessibility First (A11y)**
-    - **Text-to-Speech (TTS)**: Integrated Web Speech API support with word-by-word highlighting (Read Aloud).
-    - **Dyslexic Fonts**: Built-in support for OpenDyslexic.
-    - **Screen Reader Optimization**: ARIA roles and semantic HTML structure.
+## 🚀 Phase 2: Interaction & "Smart" Features (Next)
+*Focus: Closing the gap with native readers (Apple Books, Moon+).*
+- [ ] **Full-Text Search**: Index book content for instant results.
+- [ ] **Selection & Annotations**:
+    - Native-feeling text selection.
+    - Highlighting (Colors) & Sticky Notes.
+    - Persistence (Save/Load to JSON).
+- [ ] **Lookup & Translation** (De-facto Feature):
+    - Dictionary integration (Select word -> Definition).
+    - Google/DeepL Translate integration for foreign books.
 
----
-
-## 🛠 Phase 3: Performance & Offline Capabilities
-**Goal:** Ensure the reader works instantly, anywhere, even on slow networks.
-- [ ] **Offline-First (PWA)**
-    - Service Worker integration for caching app assets.
-    - **IndexedDB Storage**: Save entire EPUB files locally for offline reading.
-- [ ] **WebAssembly Parsing**
-    - Move heavy XML/OPF parsing to a Rust-based WebAssembly module for near-instant load times on large libraries.
-- [ ] **Hybrid Rendering**
-    - Virtualized DOM for massive chapters to maintain 60fps scrolling performance.
-
----
-
-## 🌐 Phase 4: Ecosystem & Expansion
-**Goal:** Make the library universally compatible and easy to integrate.
-- [ ] **Framework Wrappers**
-    - Official `@treinetic/react-reader` component.
-    - Official `@treinetic/vue-reader` component.
-- [ ] **Cross-Device Sync**
-    - "Cloud Hooks" API to allow developers to plug in their backend for syncing reading progress (CFI) and annotations.
-- [ ] **Format Expansion**
-    - PDF Support (via PDF.js integration) for a unified "Hybrid Reader".
-    - CBR/CBZ Support for Comics/Manga.
-
----
-
-## 🔮 Future Vision: "AI-Enhanced Reading"
-- **Smart Summaries**: On-demand AI summarization of chapters.
+## 🎧 Phase 3: Accessibility & Performance
+*Focus: Speed and Universality.*
+- [ ] **Text-to-Speech (TTS)**: "Read Aloud" with word highlighting.
+- [ ] **Virtualization**: Handle 1000+ page books without DOM lag (Render optimization).
+- [ ] **Focus Mode**: Distraction-free interaction. summarization of chapters.
 - **Contextual Dictionary**: AI-powered definitions and translations for selected text.
 - **Natural Language Query**: "Ask the book" questions (e.g., "What is the relationship between character A and B?").
 
