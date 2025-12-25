@@ -6,12 +6,20 @@ export class ReaderView {
     container: HTMLElement;
     epubPackage?: Package;
     iframe?: HTMLIFrameElement;
+    internalWrapper: HTMLElement; // Wrapper for responsive padding
 
     private resizeObserver: ResizeObserver;
     private isSingleImageMode = false;
 
     constructor(container: HTMLElement) {
         this.container = container;
+
+        // Create Internal Wrapper
+        this.internalWrapper = document.createElement('div');
+        this.internalWrapper.classList.add('tr-internal-wrapper');
+        this.container.appendChild(this.internalWrapper);
+        console.log("ReaderView: Internal wrapper created and appended", this.internalWrapper);
+
         this.container.addEventListener('scroll', this.onContainerScroll.bind(this));
 
         // Robust Resize Observer for layout changes (Split View resizing)
@@ -22,7 +30,11 @@ export class ReaderView {
     }
 
     private onContainerResize() {
+        // CSS Container Queries now handle logic via .tr-internal-wrapper
+        // No manual JS class toggling needed.
+
         if (!this.iframe) return;
+
 
         // FIX: Capture reading position before layout changes (Resize Stability)
         let anchorElement: HTMLElement | null = null;
@@ -57,7 +69,7 @@ export class ReaderView {
             if (this.iframe.contentDocument) {
                 const svgs = this.iframe.contentDocument.getElementsByTagName('svg');
                 if (svgs.length > 0) {
-                    const svg = svgs[0] as HTMLElement;
+                    const svg = svgs[0] as unknown as HTMLElement;
                     svg.style.height = `${h}px`;
                     svg.style.width = `${w}px`;
                     svg.style.maxHeight = '100%';
@@ -121,7 +133,7 @@ export class ReaderView {
         // 1. Manage Frames
         if (!append) {
             // Clear existing frames
-            this.container.innerHTML = '';
+            this.internalWrapper.innerHTML = '';
             this.frames = [];
             this.iframe = undefined;
         }
@@ -141,7 +153,7 @@ export class ReaderView {
             this.container.style.overflowY = "hidden";
         }
 
-        this.container.appendChild(iframe);
+        this.internalWrapper.appendChild(iframe);
         this.frames.push({ item, element: iframe });
 
         // Keep reference to "main" iframe for paginated logic
@@ -292,7 +304,7 @@ export class ReaderView {
                 img.style.margin = "0 auto";
                 img.style.display = "block";
             } else if (svgs.length > 0) {
-                const svg = svgs[0] as HTMLElement;
+                const svg = svgs[0] as unknown as HTMLElement;
                 // SVGs need explicit width/height to fill the flex container strictly
                 // CSS overrides attributes like width="800"
                 svg.style.width = "100%";
@@ -384,9 +396,9 @@ export class ReaderView {
 
         const viewWidth = this.iframe.clientWidth;
         // Current scroll offset (paginated uses 'left' shift)
-        const html = doc.documentElement;
+        // const html = doc.documentElement;
         // absolute value of left shift
-        const currentScrollX = Math.abs(parseFloat(html.style.left || "0"));
+        // const currentScrollX = Math.abs(parseFloat(html.style.left || "0"));
 
         // Helper to check visibility
         // We want an element that starts AFTER the current scrollX

@@ -4,16 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desktop Reader - Modern</title>
-    <!-- Font Awesome -->
+    <title>Treinetic Epub Reader - Modern Demo</title>
+    <!-- Demo UI CSS -->
+    <link rel="stylesheet" href="demo.css">
+    <!-- Library CSS (Built) -->
+    <link rel="stylesheet" href="../dist/style.css">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="./src/css/main.css">
-    <style>
-        /* Styles moved to main.css */
-    </style>
 </head>
 
 <body>
+    <!-- 
+      DEMO Structure
+      Loads the built library and the demo logic.
+    -->
+    <script src="../dist/treinetic-epub-reader.umd.js"></script>
+    <script src="demo.js"></script>
     <div id="split-container" style="display:flex; height:100vh; width:100vw; overflow:hidden;">
 
         <!-- SECTION A: CONTROLS -->
@@ -26,10 +32,10 @@
                 <summary>Library</summary>
                 <div class="control-group">
                     <select id="book-selector" class="ui-select">
-                        <option value="/epubs/alice.epub">Alice in Wonderland</option>
-                        <option value="/public/epubs/sherlock.epub">Sherlock Holmes</option>
-                        <option value="/public/epubs/moby-dick.epub">Moby Dick</option>
-                        <option value="/public/epubs/frankenstein.epub">Frankenstein</option>
+                        <option value="/demo/public/epubs/alice.epub">Alice in Wonderland</option>
+                        <option value="/demo/public/epubs/sherlock.epub">Sherlock Holmes</option>
+                        <option value="/demo/public/epubs/moby-dick.epub">Moby Dick</option>
+                        <option value="/demo/public/epubs/frankenstein.epub">Frankenstein</option>
                     </select>
                 </div>
             </details>
@@ -69,14 +75,10 @@
                     <button class="swatch" data-theme="custom-pink-theme" style="background: hotpink;"
                         title="Custom">?</button>
                 </div>
-            </details>
-
-            <!-- Group 4: Settings -->
-            <details>
-                <summary>Layout & Debug</summary>
-                <div class="control-group">
+                <!-- Scroll Mode -->
+                <div class="control-group" style="margin-top: 10px;">
                     <button id="btn-toggle-scroll" class="btn-ui full-width">
-                        <i class="fas fa-arrows-alt-v"></i> Toggle Scroll Mode
+                        <i class="fas fa-scroll"></i> &nbsp; Toggle Scroll Mode
                     </button>
                 </div>
             </details>
@@ -96,7 +98,7 @@
 
         <!-- SECTION B: READER -->
         <div id="section-b"
-            style="flex:1; position:relative; overflow:hidden; background:#eee; padding:20px 0; box-sizing:border-box; display:flex; flex-direction:column;">
+            style="flex:1; position:relative; overflow:hidden; background:#eee; padding:20px 0; box-sizing:border-box; display:flex; flex-direction:column; justify-content: center;">
 
             <!-- DEMO: Screen Width Indicator -->
             <div id="width-indicator" style="
@@ -117,7 +119,7 @@
             <!-- Inner Wrapper for Reader Area -->
             <!-- User Request: Add Padding for Content Spacing (20px all sides) -->
             <!-- User Request: Add Padding for Content Spacing (Responsive) -->
-            <div id="reader-wrapper" class="reader-container">
+            <div id="demo-wrapper">
                 <!-- The Reader Frame -->
                 <div id="epub-reader-frame" style="width:100%; height:100%;"></div>
             </div>
@@ -129,16 +131,27 @@
         // Width Indicator Logic (Tracks Container Width & Computed Padding)
         const indicator = document.getElementById('width-indicator');
         const sectionB = document.getElementById('section-b');
-        const wrapper = document.querySelector('#reader-wrapper'); // Select by ID for computed style
+        // FIX: Measure the actual library element which now has the padding
+        const readerElement = document.getElementById('epub-reader-frame');
 
-        if (indicator && sectionB && wrapper) {
+        if (indicator && sectionB && readerElement) {
             const observer = new ResizeObserver(entries => {
                 for (let entry of entries) {
                     const width = Math.round(entry.contentRect.width);
 
                     // Display Computed Padding
-                    const computedStyle = window.getComputedStyle(wrapper);
-                    const padding = computedStyle.paddingTop; // Assumes uniform
+                    // FIX: Measure the internal wrapper which now holds the padding
+                    const internalWrapper = readerElement.querySelector('.tr-internal-wrapper');
+                    let padding = '0px';
+
+                    if (internalWrapper) {
+                        const computedStyle = window.getComputedStyle(internalWrapper);
+                        padding = computedStyle.paddingTop; // Assumes uniform
+                    } else {
+                        // Fallback purely for debug if wrapper not ready yet
+                        const computedStyle = window.getComputedStyle(readerElement);
+                        padding = computedStyle.paddingTop;
+                    }
 
                     indicator.textContent = `Width: ${width}px | Padding: ${padding}`;
                 }
@@ -175,8 +188,8 @@
     </script>
 
     <!-- Legacy Dependencies -->
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="module" src="./src/main.ts"></script>
+
+
 </body>
 
 </html>

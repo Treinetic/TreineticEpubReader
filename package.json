@@ -1,15 +1,52 @@
 {
-    "name": "treinetic-epub-reader-modern",
+    "name": "@treinetic/treinetic-epub-reader",
     "version": "2.0.0",
     "type": "module",
+    "description": "A modern, lightweight, and framework-agnostic EPUB reader for the web, built with TypeScript.",
+    "keywords": [
+        "treinetic",
+        "epub",
+        "epub3"
+    ],
+    "author": {
+        "name": "imal hasaranga perera",
+        "email": "imal.hasaranga@gmail.com",
+        "url": "https://github.com/Treinetic/TreineticEpubReader"
+    },
+    "license": "BSD-3-Clause",
+    "homepage": "https://github.com/Treinetic/TreineticEpubReader",
+    "bugs": {
+        "url": "https://github.com/Treinetic/TreineticEpubReader/issues",
+        "email": "daniel.weck@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:Treinetic/TreineticEpubReader.git"
+    },
+    "main": "./dist/treinetic-epub-reader.umd.js",
+    "module": "./dist/treinetic-epub-reader.es.js",
+    "types": "./dist/TreineticEpubReader.d.ts",
+    "files": [
+        "dist/",
+        "README.md"
+    ],
     "scripts": {
         "dev": "vite",
+        "demo": "npm run watch",
+        "test": "vitest",
         "build": "tsc && vite build",
-        "preview": "vite preview"
+        "watch": "concurrently \"vite build --watch\" \"vite\"",
+        "preview": "vite preview",
+        "tr_build": "npm run build"
     },
     "devDependencies": {
+        "@vitest/coverage-v8": "^4.0.16",
+        "concurrently": "^9.2.1",
+        "happy-dom": "^20.0.11",
+        "jsdom": "^27.3.0",
         "typescript": "^5.2.2",
-        "vite": "^5.0.0"
+        "vite": "^5.0.0",
+        "vitest": "^4.0.16"
     },
     "dependencies": {
         "@types/jszip": "^3.4.0",

@@ -18,7 +18,7 @@ export class SpineItem {
     spine: Spine;
 
     static readonlyRENDITION_LAYOUT_REFLOWABLE = "reflowable";
-    static readonlyRENDITION_LAYOUT_PREPAGINATED = "pre-paginated";
+    static readonly RENDITION_LAYOUT_PREPAGINATED = "pre-paginated";
 
     static readonly SPREAD_LEFT = "page-spread-left";
     static readonly SPREAD_RIGHT = "page-spread-right";

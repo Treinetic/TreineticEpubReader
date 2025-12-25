@@ -1,6 +1,5 @@
-// Keyboard.ts
-import { Settings } from './Settings';
-import { TreineticHelpers } from './TreineticHelpers';
+
+
 
 export const Keyboard = {
     scope: 'reader',
@@ -11,7 +10,7 @@ export const Keyboard = {
     },
 
     on: (keyName: string, scope: string, callback: Function) => {
-        const id = `${scope}:${keyName}`;
+        const id = `${scope}:${keyName} `;
         if (!Keyboard.handlers[id]) Keyboard.handlers[id] = [];
         Keyboard.handlers[id].push(callback);
     },
@@ -30,7 +29,7 @@ export const Keyboard = {
     },
 
     dispatch: (action: string) => {
-        const id = `${Keyboard.scope}:${action}`;
+        const id = `${Keyboard.scope}:${action} `;
         if (Keyboard.handlers[id]) {
             Keyboard.handlers[id].forEach(fn => fn());
         }
@@ -41,7 +40,7 @@ export const Keyboard = {
     PageNext: 'PageNext',
     NightTheme: 'NightTheme',
 
-    applySettings: (json: any) => {
+    applySettings: (_json: any) => {
         // No-op for now in simplified version
     }
 };

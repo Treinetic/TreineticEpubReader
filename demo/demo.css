@@ -1,0 +1,313 @@
+/* CSS for Treinetic Epub Reader DEMO */
+
+:root {
+    --primary-gradient: linear-gradient(90deg, #b8860b, #4caf50, #009688);
+    --bg-app: #333333;
+    --sidebar-width: 300px;
+    --toolbar-height: 60px;
+    --mobile-bezel-color: #111;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-app);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* --- Layout Structure --- */
+.view-section {
+    display: none;
+    flex: 1;
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 50px);
+}
+
+.view-section.active {
+    display: flex;
+}
+
+/* --- Sidebar Polish (New Dark Theme) --- */
+.sidebar-panel {
+    background: linear-gradient(180deg, #1a1a1a 0%, #252525 100%) !important;
+    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border-right: 1px solid #333 !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin: 15px 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Accordion */
+details {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+}
+
+summary {
+    padding: 10px 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+    user-select: none;
+    transition: all 0.2s;
+    list-style: none;
+    border-radius: 4px;
+}
+
+summary:hover,
+details[open] summary {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+details[open] summary~* {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Controls */
+.control-group {
+    padding: 8px 5px;
+}
+
+.control-group.row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.control-group.wrap {
+    flex-wrap: wrap;
+}
+
+.control-label {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* UI Elements */
+.ui-select {
+    width: 100%;
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+}
+
+.ui-select:focus {
+    border-color: #666;
+}
+
+.btn-ui {
+    background: linear-gradient(145deg, #333, #2a2a2a);
+    color: #eee;
+    border: 1px solid #3a3a3a;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-ui:hover {
+    background: linear-gradient(145deg, #444, #333);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+    border-color: #555;
+}
+
+.btn-ui.full-width {
+    width: 100%;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.btn-icon {
+    background: #2a2a2a;
+    border: 1px solid #333;
+    color: #aaa;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background: #333;
+    color: #fff;
+    border-color: #555;
+}
+
+.font-display {
+    font-size: 13px;
+    font-weight: bold;
+    color: #ddd;
+    min-width: 45px;
+    text-align: center;
+    font-family: monospace;
+}
+
+/* Swatches */
+.swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #555;
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.swatch:hover {
+    transform: scale(1.15);
+    border-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* TOC Styles */
+.custom-toc .toc-root,
+.custom-toc .toc-sub {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-toc .toc-sub {
+    padding-left: 15px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    margin-left: 10px;
+}
+
+.custom-toc .toc-item {
+    margin-bottom: 2px;
+}
+
+.custom-toc .toc-link {
+    display: block;
+    padding: 8px 10px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+}
+
+.custom-toc .toc-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding-left: 14px;
+}
+
+.custom-toc .toc-link.active {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    font-weight: bold;
+}
+
+/* Resizer */
+#resizer:hover {
+    background: #4caf50 !important;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.loading-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#demo-wrapper {
+    width: 80%;
+    height: 90%;
+    margin: 0 auto;
+    background: white;
+    box-sizing: border-box;
+    /* padding: 20px;  <-- HANDLED BY LIBRARY NOW */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    /* Library now handles responsiveness via JS */
+}

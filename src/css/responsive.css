@@ -8,17 +8,15 @@
 */
 
 /* Tablet / Narrow Desktop */
-@container reader-area (max-width: 800px) {
-    #reader-wrapper {
-        width: 100% !important;
+@container (max-width: 800px) {
+    .tr-internal-wrapper {
         padding: 14px !important;
     }
 }
 
 /* Mobile / Phone */
-@container reader-area (max-width: 500px) {
-    #reader-wrapper {
-        width: 100% !important;
+@container (max-width: 500px) {
+    .tr-internal-wrapper {
         padding: 5px !important;
     }
 }

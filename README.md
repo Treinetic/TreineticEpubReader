@@ -1,108 +1,162 @@
-# Treinetic Modern EPUB Reader
+# Treinetic Epub Reader 2.0.0
 
-A pure TypeScript, dependency-free, and high-performance EPUB reader for the web. This modernized version of the Treinetic Reader is designed to be lightweight, mobile-responsive, and easily extensible.
+A modern, lightweight, and framework-agnostic EPUB reader for the web, built with TypeScript.
+This project is an initiative of Treinetic (Pvt) Ltd, Sri Lanka.
 
-![Demo Preview](./modern/public/demo_preview.png)
+![Issues](https://img.shields.io/github/issues/Treinetic/TreineticEpubReader.svg?style=flat-square)
+[![Software License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+![Forks](https://img.shields.io/github/forks/Treinetic/TreineticEpubReader.svg?style=flat-square)
+![Stars](https://img.shields.io/github/stars/Treinetic/TreineticEpubReader.svg?style=flat-square)
+![Twitter](https://img.shields.io/twitter/url/https/github.com/Treinetic/TreineticEpubReader.svg?style=social)
 
-## 🚀 Key Features
+This library allows you to easily embed an EPUB reader into any web application. It handles parsing, rendering, pagination, and navigation, while leaving the UI (buttons, sidebars, menus) completely up to you.
 
-- **Zero Legacy Dependencies**: rewritten in TypeScript, removing jQuery and other legacy bloat.
-- **Stacked View Scrolling**: seamless continuous vertical scrolling across chapters with dynamic loading (Infinite Scroll).
-- **Advanced Pagination**: robust CSS multi-column pagination with support for single and widespread views.
-- **Rich Theming**: built-in theme management (Day, Night, Sepia, Custom) with real-time injection.
-- **Responsive Design**: fully responsive layout that adapts to mobile, tablet, and desktop viewports.
-- **Overlay Navigation**: clean, non-intrusive navigation controls with keyboard support (Arrow keys).
-- **Smart TOC**: automated Table of Contents generation that handles complex hierarchies and flattens unnecessary nesting.
-- **Image & Cover Support**: correct rendering of full-page images, SVG wrappers, and cover pages.
+---
 
-## 🛠 Installation & Setup
+## Features
 
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
+| Feature | Description |
+| :--- | :--- |
+| **Framework Agnostic** | Works seamlessly with React, Vue, Angular, or Vanilla JS. |
+| **Lightweight** | Zero heavy dependencies. Uses native Iframe isolation for security and style encapsulation. |
+| **Fully Responsive** | **New:** Automatically adapts padding and font sizes using internal container logic (Internal Wrapper Pattern). |
+| **Themable** | Inject custom CSS, change fonts, and toggle dark mode easily. |
+| **TypeScript** | Fully typed for a great developer experience. |
+| **Modern Build** | ESM and UMD support via Vite for modern bundlers. |
+| **Continuous Scroll** | Support for both Paginated (Kindle-style) and Vertical Scrolling modes. |
 
-### Quick Start
+## Requirements
 
-1.  **Install Dependencies**
-    ```bash
-    npm install
-    ```
+-   NodeJS 16+ (for development)
+-   Modern Browser (ES6 Support)
 
-2.  **Start the Development Server**
-    ```bash
-    npm run dev
-    ```
-    This will launch the modern demo at `http://localhost:3000/modern/desktop.html`.
+## Installation
 
-### Building for Production
-To build the library and demo assets:
+### 1. NPM
+Install the package via npm:
+
 ```bash
-npm run build
-```
-The output will be generated in the `dist/` directory (or `modern/dist` depending on configuration).
-
-## 📖 Usage Guide
-
-### Basic Embedding
-The modern reader is designed to be embedded in any HTML container.
-
-```html
-<!-- Container -->
-<div id="reader-container" style="width: 100%; height: 600px;"></div>
-
-<!-- Implementation -->
-<script type="module">
-    import { TreineticEpubReader } from './path/to/TreineticEpubReader.js';
-
-    // Initialize
-    const reader = new TreineticEpubReader('#reader-container');
-
-    // Open Book
-    reader.open('path/to/book.epub');
-</script>
+npm install @treinetic/treinetic-epub-reader
 ```
 
-### Configuration Options
-You can pass a configuration object to customize the reader's behavior (Implementation dependent on final API cleanup):
+### 2. Manual
+Alternatively, you can include the `dist/treinetic-epub-reader.umd.js` and `dist/style.css` manually in your project.
+
+## Running the Demo
+
+To see the reader in action with a sample UI:
+
+```bash
+git clone https://github.com/Treinetic/TreineticEpubReader.git
+cd TreineticEpubReader
+npm install
+npm run demo
+```
+This will start a local server at `http://localhost:3001` with hot-reloading.
+
+## Usage
+
+### Basic Usage
+
+First, import the necessary classes and CSS.
 
 ```typescript
-const config = {
-    scroll: 'paginated', // or 'scroll-continuous'
-    theme: 'day',        // 'day', 'night', 'sepia'
-    fontSize: 100,       // percentage
-    fontFamily: 'sans-serif'
-};
+import TreineticEpubReader from '@treinetic/treinetic-epub-reader';
+import '@treinetic/treinetic-epub-reader/dist/style.css'; 
+
+// Create the reader instance targeting your container
+const reader = TreineticEpubReader.create("#epub-reader-frame");
+
+// Load an EPUB file (url or base64)
+reader.open("path/to/book.epub");
 ```
 
-### API Methods
-The `TreineticEpubReader` instance exposes a clean API for controlling the reader:
+### HTML Structure
+Create a container for the reader. The library will inject an internal wrapper and iframe into this div.
 
-- `reader.nextPage()`: Go to the next page or scroll point.
-- `reader.prevPage()`: Go to the previous page.
-- `reader.goToChapter(href)`: Navigate to a specific chapter.
-- `reader.setTheme(themeName)`: Apply a predefined theme.
-- `reader.setScrollMode(mode)`: Toggle between 'paginated' and 'scroll-continuous'.
+```html
+<div id="epub-reader-frame" style="width: 100%; height: 600px;"></div>
+```
+> [!TIP]
+> You can resize this container at will. The reader monitors its own size and adjusts layouts (padding, columns) automatically.
 
-## 🏗 Architecture
+### Controlling the Reader
 
-The project is structured around a modular clean architecture:
+```typescript
+// Navigation
+document.getElementById('next-btn').onclick = () => reader.nextPage();
+document.getElementById('prev-btn').onclick = () => reader.prevPage();
 
-- **`model/`**: Handles EPUB parsing, metadata extraction, spine management, and XML parsing.
-    - `Package`: Represents the OPF package.
-    - `Spine`: Manages the reading order.
-    - `TOC`: Handles NCX/Nav parsing.
-- **`view/`**: Manages the DOM, iframes, and rendering logic.
-    - `ReaderView`: The core renderer. Manages iframe stacks for continuous scrolling or single frames for pagination.
-- **`css/`**: Contains the core styles (`main.css`) for the UI and reader frame.
+// Settings
+reader.setTheme('night'); // 'day', 'night', 'sepia'
+reader.setFontSize(120);  // Percentage
+```
 
-### Continuous Scroll Logic
-The modern reader uses a **Stacked Iframe Architecture** for vertical scrolling:
-1.  **Container Level Scroll**: The main container handles the scroll bar, not the iframe body.
-2.  **Multi-Frame Stack**: As the user scrolls, new chapters are loaded into independent iframes appended to the stack.
-3.  **Lazy Loading**: Simple heuristic detects when the viewport is near the bottom to fetch the next spine item.
+### API Reference
 
-## 📱 Mobile Support
-The reader includes specific logic for touch interactions and responsive layouts. The demo includes a "Mobile Simulation" mode to test responsiveness on different device viewports (iPhone, Pixel).
+| Method | Signature | Description |
+| :--- | :--- | :--- |
+| `open` | `(url: string) => void` | Loads and renders an EPUB file. |
+| `nextPage` | `() => void` | Navigates to the next page or chapter. |
+| `prevPage` | `() => void` | Navigates to the previous page or chapter. |
+| `goToPage` | `(href: string) => void` | Navigates to a specific spine item (chapter). |
+| `getTOC` | `() => TOCItem[]` | Returns the Table of Contents as a JSON tree. |
+| `setTheme` | `(id: string) => void` | Switches themes (e.g. 'night', 'sepia', 'day'). |
+| `registerTheme` | `(theme: ReaderTheme) => void` | Registers a new custom theme. |
+| `setFontSize` | `(size: number) => void` | Sets font size (percentage, e.g. 120). |
+| `setScrollOption`| `(mode: 'auto' \| 'scroll-continuous')` | Toggle between Paginated and Vertical Scroll. |
+| `clearSettings` | `() => void` | Resets all user preferences (font, theme, location). |
 
-## 📄 License
-BSD-3-Clause
+### Keyboard Shortcuts
+| Key | Action |
+| :--- | :--- |
+| `ArrowRight` | Next Page |
+| `ArrowLeft` | Prev Page |
+
+## 🎨 Advanced Customization
+
+### Creating Custom Themes
+You are not limited to the default themes. You can register your own:
+
+```typescript
+reader.registerTheme({
+    id: 'matrix-theme',
+    name: 'Matrix Mode',
+    style: {
+        'body': {
+            'background-color': '#000000',
+            'color': '#00FF00'
+        },
+        'p': {
+            'font-family': 'monospace'
+        }
+    }
+});
+
+reader.setTheme('matrix-theme');
+```
+
+## 🗺️ Project Roadmap
+We have an ambitious vision to make this the de facto standard for open-source EPUB rendering.
+Please see our detailed [ROADMAP](roadmap.md) for upcoming features like Full-Text Search, Offline support, and Mobile gestures.
+
+## Project Structure
+
+This project has been modernized (v2.0.0) to separate the **Core Library** from the **Demo Application**.
+
+*   `src/lib/`: **The Library**. Contains the core logic (`TreineticEpubReader.ts`, `ReaderView.ts`).
+*   `src/css/`: **Library CSS**. `main.css` (layout) and `responsive.css` (adaptive padding).
+*   `demo/`: **The Demo App**. Contains the UI (`index.html`, `demo.css`, `demo.js`).
+*   `dist/`: **Build Output**. The compiled files published to NPM.
+
+## Contributing
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Credits
+-   [Imal Hasaranga Perera](https://github.com/imalhasaranga)
+-   [Nuril Ahemad](https://github.com/nurilahemad)
+-   [All Contributors](../../contributors)
+
+## License
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
+(Portions based on the original ReadiumJS viewer, BSD-3-Clause).

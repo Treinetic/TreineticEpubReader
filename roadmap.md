@@ -1,44 +1,39 @@
 # 🗺️ Project Roadmap
 
-This roadmap outlines the strategic vision to establish **TreineticEpubReader** as the de facto open-source EPUB solution for the web.
+This roadmap outlines our strategic vision: **To establish TreineticEpubReader as the de facto open-source engine for EPUB manipulation and rendering on the web.**
+
+We aim to replace legacy, heavy readers with a modern, modular, and high-performance TypeScript solution that powers the next generation of reading apps.
 
 ## ✅ Phase 1: Foundation & Core Experience (Current)
-*Focus: Rendering, Performance, and Visual Polish.*
-- [x] **Core Engine**: Wrapper around `epub.js` with improved error handling.
-- [x] **Responsive Layout**: "Split-View" desktop and native-feeling mobile/tablet layouts.
+*Goal: A modern, stable, and drop-in replacement for legacy readers.*
+- [x] **Core Architecture**: Rewritten in TypeScript with zero heavy dependencies.
+- [x] **Responsive Layout**: "Split-View" desktop and native-feeling mobile/tablet layouts (Internal Wrapper Pattern).
 - [x] **Visual Customization**:
     - [x] Theming Engine (Day, Night, Authentic Kindle/Paper modes).
     - [x] API for custom reader themes (`registerTheme`).
 
-## 📲 Phase 1.5: Mobile & UI Polish (Deferred Priority)
-*Focus: Completing the "App-Like" feel.*
-- [ ] **Mobile Interactions**:
-    - Swipe-to-Turn gestures (TouchManager).
-    - Hide/Show controls on tap.
-    - Prevent viewport bouncing (overscroll-behavior).
-- [ ] **UI Theme Engine**:
-    - API to skin the *Application UI* (Sidebar, Toolbar) not just the book.
-    - Presets: "Kindle Gray", "Apple Translucency".
+## 📲 Phase 2: App-Like Experience
+*Goal: Closing the gap between web readers and native apps (Kindle/Apple Books).*
+- [ ] **Mobile Interaction Polish**:
+    - Swipe-to-Turn gestures with physics.
+    - Smart "immersive mode" (hide controls on tap).
+- [ ] **Rich UI Components**:
+    - Provide optional, skinnable UI kits (Sidebars, Settings Modals) for developers who want a "complete app" out of the box.
 
-## 🚀 Phase 2: Interaction & "Smart" Features (Next)
-*Focus: Closing the gap with native readers (Apple Books, Moon+).*
-- [ ] **Full-Text Search**: Index book content for instant results.
-- [ ] **Selection & Annotations**:
-    - Native-feeling text selection.
-    - Highlighting (Colors) & Sticky Notes.
-    - Persistence (Save/Load to JSON).
-- [ ] **Lookup & Translation** (De-facto Feature):
-    - Dictionary integration (Select word -> Definition).
-    - Google/DeepL Translate integration for foreign books.
+## 🚀 Phase 3: "Smart" Features & Research
+*Goal: Features that static PDF/EPUB readers can't duplicate.*
+- [ ] **Full-Text Search**: High-performance client-side indexing.
+- [ ] **Data Persistence**:
+    - Standardized format for Highlights, Bookmarks, and Reading Progress.
+    - Sync adapters for backend databases.
+- [ ] **Lookup & Translation**: 
+    - Contextual dictionary and translation integrations (Google/DeepL).
 
-## 🎧 Phase 3: Accessibility & Performance
-*Focus: Speed and Universality.*
-- [ ] **Text-to-Speech (TTS)**: "Read Aloud" with word highlighting.
-- [ ] **Virtualization**: Handle 1000+ page books without DOM lag (Render optimization).
-- [ ] **Focus Mode**: Distraction-free interaction. summarization of chapters.
-- **Contextual Dictionary**: AI-powered definitions and translations for selected text.
-- **Natural Language Query**: "Ask the book" questions (e.g., "What is the relationship between character A and B?").
+## ⚡ Phase 4: Performance & Accessibility
+*Goal: Handling libraries of thousands of books and thousands of pages.*
+- [ ] **Virtualization Engine**: Render huge chapters without DOM lag.
+- [ ] **Accessibility First**: Full Screen Reader support (ARIA), Text-to-Speech (TTS) integration.
+- [ ] **Offline-First**: Service Worker strategies for reading without internet.
 
 ---
-
-> *This roadmap is a living document and will evolve based on community feedback and market trends.*
+> *This roadmap is a living document. We welcome community contributions to help us build the future of reading on the web.*

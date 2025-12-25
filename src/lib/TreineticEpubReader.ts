@@ -1,13 +1,14 @@
-// TreineticEpubReader.ts
-import { ModuleConfig } from './ModuleConfig';
+
 import { Settings } from './Settings';
-import { TOCJsonCreator } from './TOCJsonCreator';
 import { ExternalControls } from './ExternalControls';
 import { TreineticHelpers } from './TreineticHelpers';
 import { Keyboard } from './Keyboard';
 import { EpubParser } from './parser/EpubParser';
 import { ReaderView } from './view/ReaderView';
 import { ThemeManager, ReaderTheme } from './ThemeManager';
+// Import Library Styles
+import '../css/main.css';
+import '../css/responsive.css';
 
 // Declare globals that might be available from the legacy bundle
 declare const Readium: any;
@@ -18,7 +19,7 @@ declare global {
     }
 }
 
-export const TreineticEpubReader = {
+const TreineticEpubReader = {
     readium: null as any,
     readerView: null as ReaderView | null, // Added property
     currentPackageDocument: null as any,
@@ -88,17 +89,17 @@ export const TreineticEpubReader = {
         const CONTENT_DOCUMENT_LOADED = ReadiumSDK?.Events?.CONTENT_DOCUMENT_LOADED || "CONTENT_DOCUMENT_LOADED";
         const PAGINATION_CHANGED = ReadiumSDK?.Events?.PAGINATION_CHANGED || "PAGINATION_CHANGED";
 
-        reader.on(CONTENT_DOCUMENT_LOAD_START, ($iframe: any, spineItem: any) => {
+        reader.on(CONTENT_DOCUMENT_LOAD_START, (_$iframe: any, _spineItem: any) => {
             console.log("Event: Load Start");
             // spin(true);
         });
 
-        reader.on(CONTENT_DOCUMENT_LOADED, ($iframe: any, spineItem: any) => {
+        reader.on(CONTENT_DOCUMENT_LOADED, (_$iframe: any, _spineItem: any) => {
             console.log("Event: Loaded");
             // spin(false);
         });
 
-        reader.on(PAGINATION_CHANGED, (pageChangeData: any) => {
+        reader.on(PAGINATION_CHANGED, (_pageChangeData: any) => {
             console.log("Event: Pagination Changed");
             if (ExternalControls.getInstance().isAutoBookmark()) {
                 TreineticEpubReader.savePlace();
@@ -106,7 +107,7 @@ export const TreineticEpubReader = {
         });
     },
 
-    loadEpub: async (readerSettings: any, ebookURL: string, openPageRequest: any) => {
+    loadEpub: async (_readerSettings: any, ebookURL: string, _openPageRequest: any) => {
         try {
             console.log("Loading epub via modern parser:", ebookURL);
             const epubPackage = await EpubParser.load(ebookURL);
@@ -144,7 +145,7 @@ export const TreineticEpubReader = {
         return { reader: readerSettings };
     },
 
-    getOpenPageRequest: (settings: any, ebookURL: string) => {
+    getOpenPageRequest: (_settings: any, _ebookURL: string) => {
         // Simplified
         return null;
     },
@@ -177,3 +178,5 @@ export const TreineticEpubReader = {
     }
 };
 
+
+export default TreineticEpubReader;
