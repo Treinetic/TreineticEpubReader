@@ -3,21 +3,7 @@ import './css/main.css';
 import { TreineticEpubReader } from './lib/TreineticEpubReader';
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Initializing Modern Reader...");
-
-    // Initialize UI Handlers
-    const sidebar = document.getElementById('sidebar');
-
-    document.getElementById('btn-toggle-sidebar')?.addEventListener('click', () => {
-        sidebar?.classList.toggle('visible'); // Check css if it uses .visible or transform
-        // The original desktop.html uses .visible in css or inline styles? 
-        // original desktop.js: $('#sidebar').toggleClass('visible');
-        // original css: .desktop-sidebar.visible
-    });
-
-    document.getElementById('btn-close-sidebar')?.addEventListener('click', () => {
-        sidebar?.classList.remove('visible');
-    });
+    console.log("Initializing Split-View Reader...");
 
     // Theme Handlers
     document.querySelectorAll('.swatch').forEach(el => {
@@ -61,25 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'ArrowRight') TreineticEpubReader.nextPage();
     });
 
+    // Scroll Toggle
     let isScroll = false;
-
-    const updateNavVisibility = () => {
-        const btns = document.querySelectorAll('.nav-overlay-btn');
-        btns.forEach(b => {
-            if (isScroll) b.classList.remove('visible');
-            else b.classList.add('visible');
-        });
-    };
-
     document.getElementById('btn-toggle-scroll')?.addEventListener('click', () => {
         isScroll = !isScroll;
         TreineticEpubReader.setScrollOption(isScroll ? 'scroll-continuous' : 'auto');
-        updateNavVisibility();
         console.log("Scroll Mode:", isScroll);
     });
-
-    // Initial state
-    updateNavVisibility();
 
     // Initialize Reader
     const controls = TreineticEpubReader.init('#epub-reader-frame');
@@ -91,18 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         controls.registerEvent("onEpubLoadSuccess", () => {
             console.log("EPUB Loaded Success");
-            // Update Title
-            const meta = controls.metadata;
-            if (meta && meta.title) {
-                const header = document.getElementById('book-title');
-                if (header) {
-                    header.innerText = meta.title;
-                }
-            }
         });
     }
 
-    TreineticEpubReader.open('/epubs/alice.epub'); // Correct path for root-served project
+    TreineticEpubReader.open('/epubs/alice.epub');
 });
 
 function renderTOC(data: any) {

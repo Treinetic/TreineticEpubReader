@@ -130,9 +130,9 @@ export const TreineticEpubReader = {
 
     setReaderPreferences: () => {
         // Simplified
-        let set = Settings.get('reader') || { fontSize: 100, theme: 'default-theme' };
-        Settings.put('reader', set);
-        return { reader: set };
+        let readerSettings = Settings.get('reader') || { fontSize: 100, theme: 'default-theme', scroll: 'scroll-continuous' };
+        Settings.put('reader', readerSettings);
+        return { reader: readerSettings };
     },
 
     getOpenPageRequest: (settings: any, ebookURL: string) => {

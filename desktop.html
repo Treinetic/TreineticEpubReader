@@ -25,60 +25,94 @@
 </head>
 
 <body>
+    <div id="split-container" style="display:flex; height:100vh; width:100vw; overflow:hidden;">
 
-    <section id="desktop-view" class="view-section active" style="display:flex;">
-        <!-- Toolbar -->
-        <div class="desktop-toolbar">
-            <div class="toolbar-group">
-                <a href="#" class="icon-btn" title="Back to Home"><i class="fas fa-home"></i></a>
-                <button id="btn-toggle-sidebar" class="icon-btn"><i class="fas fa-bars"></i></button>
-                <!-- Themes -->
-                <div class="swatch swatch-default" data-theme="default-theme" title="Day"></div>
-                <div class="swatch swatch-night" data-theme="night-theme" title="Night"></div>
-                <div class="swatch swatch-sepia" data-theme="parchment-theme" title="Sepia"></div>
-                <div class="swatch swatch-blue" data-theme="ballard-theme" title="Navy"></div>
+        <!-- SECTION A: CONTROLS -->
+        <div id="section-a"
+            style="width:250px; min-width:200px; background:#f5f5f5; border-right:1px solid #ccc; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; overflow-y:auto;">
+            <h3 style="margin-top:0;">Debug Controls</h3>
+
+            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+                <strong>Navigation</strong><br>
+                <button id="btn-prev" style="padding:5px 10px;">Prev</button>
+                <button id="btn-next" style="padding:5px 10px;">Next</button>
             </div>
 
-            <div class="toolbar-group">
-                <span id="book-title" style="color:white; font-weight:bold; font-size:18px;">Treasure Island</span>
+            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+                <strong>Font Size</strong><br>
+                <button id="btn-font-dec">-</button>
+                <span id="font-val" style="margin:0 10px;">100%</span>
+                <button id="btn-font-inc">+</button>
             </div>
 
-            <div class="toolbar-group">
-                <button id="btn-font-dec" class="icon-btn"><i class="fas fa-minus"></i></button>
-                <span id="font-val" style="color:white; font-weight:bold;">100%</span>
-                <button id="btn-font-inc" class="icon-btn"><i class="fas fa-plus"></i></button>
-                <button id="btn-toggle-scroll" class="icon-btn" title="Toggle Scroll Mode"><i
-                        class="fas fa-scroll"></i></button>
+            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+                <strong>Themes</strong><br>
+                <button class="swatch" data-theme="default-theme">Day</button>
+                <button class="swatch" data-theme="night-theme">Night</button>
+                <button class="swatch" data-theme="parchment-theme">Sepia</button>
+            </div>
+
+            <div style="margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+                <strong>Layout</strong><br>
+                <button id="btn-toggle-scroll">Toggle Scroll Mode</button>
+            </div>
+
+            <div style="flex:1;">
+                <strong>Table of Contents</strong>
+                <ul id="toc-list" style="padding-left:15px; margin-top:5px; font-size:14px;">
+                    <li>Loading...</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Sidebar -->
-        <aside id="sidebar" class="desktop-sidebar">
-            <div class="sidebar-header">
-                <span>Table of Contents</span>
-                <button id="btn-close-sidebar" class="sidebar-close-btn"><i class="fas fa-times"></i></button>
-            </div>
-            <ul id="toc-list">
-                <li style="padding:20px; color:#666;">Loading...</li>
-            </ul>
-        </aside>
-
-        <!-- Reader Wrapper -->
-        <div class="desktop-reader-wrapper">
-            <div id="epub-reader-frame" class="desktop-reader-frame"></div>
-
-            <!-- Navigation Overlay Buttons -->
-            <button id="btn-prev" class="nav-overlay-btn prev"><i class="fas fa-chevron-left"></i></button>
-            <button id="btn-next" class="nav-overlay-btn next"><i class="fas fa-chevron-right"></i></button>
+        <!-- RESIZER -->
+        <div id="resizer"
+            style="width:8px; cursor:col-resize; background:#e0e0e0; border-left:1px solid #ccc; border-right:1px solid #ccc;">
         </div>
-    </section>
 
-    <!-- Inject Legacy Bundle for Readium Engine -->
-    <!-- Legacy Bundle Removed -->
+        <!-- SECTION B: READER -->
+        <div id="section-b"
+            style="flex:1; position:relative; overflow:hidden; background:purple; padding:100px 0; box-sizing:border-box;">
+            <!-- Inner Wrapper for Reader Area -->
+            <div id="reader-wrapper" style="width:100%; height:100%; background:#fff; position:relative;">
+                <!-- The Reader Frame -->
+                <div id="epub-reader-frame" style="width:100%; height:100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resizer Logic -->
+    <script>
+        const resizer = document.getElementById('resizer');
+        const leftSide = document.getElementById('section-a');
+        let x = 0;
+        let leftWidth = 0;
+
+        const mouseDownHandler = function (e) {
+            x = e.clientX;
+            leftWidth = leftSide.getBoundingClientRect().width;
+            document.addEventListener('mousemove', mouseMoveHandler);
+            document.addEventListener('mouseup', mouseUpHandler);
+            // Disable iframe pointer events while dragging to prevent capture
+            document.getElementById('epub-reader-frame').style.pointerEvents = 'none';
+        };
+
+        const mouseMoveHandler = function (e) {
+            const dx = e.clientX - x;
+            leftSide.style.width = `${leftWidth + dx}px`;
+        };
+
+        const mouseUpHandler = function () {
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+            document.getElementById('epub-reader-frame').style.pointerEvents = 'auto';
+        };
+
+        resizer.addEventListener('mousedown', mouseDownHandler);
+    </script>
+
+    <!-- Legacy Dependencies -->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <!-- Note: jQuery might be needed by the legacy bundle -->
-
-    <!-- Main Logic -->
     <script type="module" src="./src/main.ts"></script>
 </body>
 

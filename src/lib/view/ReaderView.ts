@@ -7,9 +7,53 @@ export class ReaderView {
     epubPackage?: Package;
     iframe?: HTMLIFrameElement;
 
+    private resizeObserver: ResizeObserver;
+    private isSingleImageMode = false;
+
     constructor(container: HTMLElement) {
         this.container = container;
         this.container.addEventListener('scroll', this.onContainerScroll.bind(this));
+
+        // Robust Resize Observer for layout changes (Split View resizing)
+        this.resizeObserver = new ResizeObserver(() => {
+            this.onContainerResize();
+        });
+        this.resizeObserver.observe(this.container);
+    }
+
+    private onContainerResize() {
+        if (!this.iframe) return;
+
+        // 1. Pagination Update
+        this.updatePagination(this.iframe);
+
+        // 2. Single Image Height Sync (Scroll Mode)
+        if (this.currentSettings.scroll === 'scroll-continuous' && this.isSingleImageMode) {
+            // Explicitly sync iframe height to container height to ensure fit
+            const h = this.container.clientHeight;
+            const w = this.container.clientWidth;
+            this.iframe.style.height = `${h}px`;
+
+            // Sync internal content (User Suggestion: dynamic width/height for SVG)
+            if (this.iframe.contentDocument) {
+                const svgs = this.iframe.contentDocument.getElementsByTagName('svg');
+                if (svgs.length > 0) {
+                    const svg = svgs[0] as HTMLElement;
+                    svg.style.height = `${h}px`;
+                    svg.style.width = `${w}px`;
+                    svg.style.maxHeight = '100%';
+                    svg.style.maxWidth = '100%';
+                }
+                const imgs = this.iframe.contentDocument.getElementsByTagName('img');
+                if (imgs.length > 0) {
+                    const img = imgs[0] as HTMLElement;
+                    // For images, object-fit: contain usually handles it, but enforcing max-height helps
+                    img.style.maxHeight = '100%';
+                    img.style.maxWidth = '100%';
+                }
+            }
+            console.log("Syncing Single Image Height:", h);
+        }
     }
 
     openBook(epubPackage: Package) {
@@ -18,6 +62,8 @@ export class ReaderView {
         const firstItem = epubPackage.spine.firstLinear();
         if (firstItem) this.openSpineItem(firstItem);
     }
+
+    // ... Methods ...
 
     // ... (rest of method)
 
@@ -169,6 +215,7 @@ export class ReaderView {
         const html = doc.documentElement;
         const body = doc.body;
 
+
         // INTERCEPT CLICKS
         body.addEventListener('click', (e) => {
             let target = e.target as HTMLElement;
@@ -187,6 +234,54 @@ export class ReaderView {
         // Apply Styles
         this.applySettingsToDoc(doc, iframe);
 
+        // --- Single Image Heuristic (Applied AFTER settings) ---
+        // Must run after applySettingsToDoc to override 'height: auto' in scroll mode
+        const images = body.getElementsByTagName('img');
+        const svgs = body.getElementsByTagName('svg');
+        const textContent = body.textContent || "";
+        const hasMinimalText = textContent.replace(/\s/g, '').length < 50;
+
+        let isSingleImage = false;
+
+        if ((images.length === 1 && svgs.length === 0 && hasMinimalText) ||
+            (svgs.length === 1 && images.length === 0 && hasMinimalText)) {
+
+            isSingleImage = true;
+            console.log("Detected Single Image / Cover Page. Applying 'Contain' styles.");
+
+            // Override and force 100% height
+            html.style.height = "100%";
+            body.style.height = "100%";
+            body.style.margin = "0";
+
+            body.style.display = "flex";
+            body.style.flexDirection = "column";
+            body.style.justifyContent = "center";
+            body.style.alignItems = "center";
+            body.style.overflow = "hidden"; // Prevent scrollbars inside
+
+            if (images.length > 0) {
+                const img = images[0] as HTMLElement;
+                img.style.maxWidth = "100%";
+                img.style.maxHeight = "100%";
+                img.style.objectFit = "contain";
+                img.style.margin = "0 auto";
+                img.style.display = "block";
+            } else if (svgs.length > 0) {
+                const svg = svgs[0] as HTMLElement;
+                // SVGs need explicit width/height to fill the flex container strictly
+                // CSS overrides attributes like width="800"
+                svg.style.width = "100%";
+                svg.style.height = "100%";
+                svg.style.maxHeight = "100%";
+                svg.style.maxWidth = "100%";
+                svg.style.margin = "0 auto";
+                svg.style.display = "block";
+            }
+        }
+
+        this.isSingleImageMode = isSingleImage;
+
         // Setup Pagination (CSS Columns) or Content Height
         this.updatePagination(iframe);
 
@@ -197,20 +292,31 @@ export class ReaderView {
 
         // Scroll Mode: Resize iframe to fit content
         if (this.currentSettings.scroll === 'scroll-continuous') {
-            const updateHeight = () => {
-                if (iframe.contentDocument) {
-                    const newHeight = iframe.contentDocument.documentElement.scrollHeight;
-                    iframe.style.height = `${newHeight}px`;
-                }
-            };
-            // Initial sizing
-            setTimeout(updateHeight, 100);
+            if (isSingleImage) {
+                // FIXED HEIGHT MODE for Covers/Images
+                // do NOT use ResizeObserver to grow the iframe.
+                // Just lock it to the container's height (minus padding implicitly via the parent div).
+                // "100%" of the parent (#reader-wrapper which is 100% of #section-b area).
+                iframe.style.height = "100%";
+                // Also ensure scrolling='no' is enforced (it is in createIframe but double check)
+                iframe.scrolling = "no";
+            } else {
+                // NORMAL TEXT MODE
+                const updateHeight = () => {
+                    if (iframe.contentDocument) {
+                        const newHeight = iframe.contentDocument.documentElement.scrollHeight;
+                        iframe.style.height = `${newHeight}px`;
+                    }
+                };
+                // Initial sizing
+                setTimeout(updateHeight, 100);
 
-            // Observe changes
-            const observer = new ResizeObserver(updateHeight);
-            observer.observe(body);
-            // Also listen to images load?
-            iframe.contentWindow?.addEventListener('load', updateHeight);
+                // Observe changes
+                const observer = new ResizeObserver(updateHeight);
+                observer.observe(body);
+                // Also listen to images load?
+                iframe.contentWindow?.addEventListener('load', updateHeight);
+            }
         }
 
         // Handle case where we came from previous chapter and need to go to last page
@@ -293,9 +399,18 @@ export class ReaderView {
 
         if (isScroll) {
             // Vertical Scroll Mode
-            html.style.height = 'auto'; // let it grow
-            html.style.width = '100vw'; // full width usually
-            html.style.overflowY = 'auto';
+            if (this.isSingleImageMode) {
+                // Force full height for single images/covers to prevent overflow
+                html.style.height = '100%';
+                html.style.width = '100%';
+                html.style.overflow = 'hidden'; // Contain it
+                body.style.height = '100%';
+                body.style.overflow = 'hidden';
+            } else {
+                html.style.height = 'auto'; // let it grow
+                html.style.width = '100vw'; // full width usually
+                html.style.overflowY = 'auto';
+            }
             html.style.overflowX = 'hidden';
 
             // Ensure body allows scrolling
