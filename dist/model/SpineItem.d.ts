@@ -1,0 +1,34 @@
+import { Spine } from './Spine';
+export declare class SpineItem {
+    idref: string;
+    href: string;
+    cfi: string;
+    linear: string;
+    page_spread: string;
+    rendition_viewport?: string;
+    rendition_spread?: string;
+    rendition_orientation?: string;
+    rendition_layout?: string;
+    rendition_flow?: string;
+    media_overlay_id?: string;
+    media_type?: string;
+    index: number;
+    spine: Spine;
+    static readonlyRENDITION_LAYOUT_REFLOWABLE: string;
+    static readonly RENDITION_LAYOUT_PREPAGINATED = "pre-paginated";
+    static readonly SPREAD_LEFT = "page-spread-left";
+    static readonly SPREAD_RIGHT = "page-spread-right";
+    static readonly SPREAD_CENTER = "page-spread-center";
+    static readonly SPREAD_NONE = "none";
+    static readonly SPREAD_AUTO = "auto";
+    static readonly FLOW_PAGINATED = "paginated";
+    static readonly FLOW_SCROLLED_CONTINUOUS = "scrolled-continuous";
+    static readonly FLOW_SCROLLED_DOC = "scrolled-doc";
+    static readonly FLOW_AUTO = "auto";
+    constructor(itemData: any, index: number, spine: Spine);
+    private validateSpread;
+    isReflowable(): boolean;
+    isFixedLayout(): boolean;
+    getRenditionLayout(): string | undefined;
+    static alternateSpread(spread: string): string;
+}

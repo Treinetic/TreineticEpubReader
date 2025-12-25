@@ -1,6 +1,6 @@
 {
     "name": "@treinetic/treinetic-epub-reader",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "type": "module",
     "description": "A modern, lightweight, and framework-agnostic EPUB reader for the web, built with TypeScript.",
     "keywords": [

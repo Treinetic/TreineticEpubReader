@@ -17,7 +17,7 @@ dev/grunt_build/js/TreineticEpubReader.js
 dev/grunt_build/css/TreineticEpubReader.css
 
 # Build Artifacts
-/dist
+# /dist
 dist-modern
 coverage
 *.local
