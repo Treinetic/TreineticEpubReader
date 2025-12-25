@@ -24,6 +24,16 @@ export const Settings = {
         if (callback) callback();
     },
 
+    clear: (key: string, callback?: () => void) => {
+        if (!_isLocalStorageEnabled()) {
+            if (callback) callback();
+            return;
+        }
+
+        localStorage.removeItem(key);
+        if (callback) callback();
+    },
+
     get: (key: string, callback?: (val: any) => void): any => {
         if (!_isLocalStorageEnabled()) {
             if (callback) callback(null);

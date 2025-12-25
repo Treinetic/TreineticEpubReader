@@ -72,7 +72,7 @@ export const TreineticEpubReader = {
             readerSettings = settings.reader;
         }
 
-        // TreineticHelpers.updateReader(TreineticEpubReader.readerView, readerSettings);
+        TreineticHelpers.updateReader(TreineticEpubReader.readerView, readerSettings);
     },
 
     handleReaderEvents: () => {
@@ -130,7 +130,13 @@ export const TreineticEpubReader = {
 
     setReaderPreferences: () => {
         // Simplified
-        let readerSettings = Settings.get('reader') || { fontSize: 100, theme: 'default-theme', scroll: 'scroll-continuous' };
+        let readerSettings = Settings.get('reader') || { fontSize: 100, theme: 'default-theme', scroll: 'auto' };
+
+        // MIGRATION FIX: Force reset 'scroll-continuous' back to 'auto' for users affected by the previous default
+        if (readerSettings.scroll === 'scroll-continuous') {
+            readerSettings.scroll = 'auto';
+        }
+
         Settings.put('reader', readerSettings);
         return { reader: readerSettings };
     },
@@ -157,6 +163,11 @@ export const TreineticEpubReader = {
     },
     setScrollOption: (type: 'auto' | 'scroll-continuous') => {
         ExternalControls.getInstance().setScrollOption(type);
+    },
+
+    clearSettings: () => {
+        Settings.clear('reader');
+        console.log("Reader settings cleared.");
     }
 };
 

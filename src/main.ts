@@ -5,6 +5,9 @@ import { TreineticEpubReader } from './lib/TreineticEpubReader';
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Initializing Split-View Reader...");
 
+    // User Request: Always start fresh on refresh for this demo
+    TreineticEpubReader.clearSettings();
+
     // Theme Handlers
     document.querySelectorAll('.swatch').forEach(el => {
         el.addEventListener('click', (e) => {
@@ -67,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("EPUB Loaded Success");
         });
     }
+
+    // Set Default Theme
+    TreineticEpubReader.setTheme('default-theme');
 
     TreineticEpubReader.open('/epubs/alice.epub');
 });

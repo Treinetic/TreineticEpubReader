@@ -202,10 +202,12 @@ export class ReaderView {
     private currentPageIndex = 0;
     private pageCount = 0;
     private currentSettings: any = {};
+    private currentBookStyles: any[] = [];
 
     // Frame Management
     private frames: { item: SpineItem, element: HTMLIFrameElement }[] = [];
     private isLoadingNext = false;
+    private activeFrameObserver: ResizeObserver | null = null;
 
     private initFrameContent(iframe: HTMLIFrameElement) {
         if (!iframe || !iframe.contentDocument) return;
@@ -233,6 +235,8 @@ export class ReaderView {
 
         // Apply Styles
         this.applySettingsToDoc(doc, iframe);
+        // Apply Persisted Theme Styles
+        this.applyStylesToFrame(iframe);
 
         // --- Single Image Heuristic (Applied AFTER settings) ---
         // Must run after applySettingsToDoc to override 'height: auto' in scroll mode
@@ -251,6 +255,7 @@ export class ReaderView {
 
             // Override and force 100% height
             html.style.height = "100%";
+
             body.style.height = "100%";
             body.style.margin = "0";
 
@@ -277,6 +282,9 @@ export class ReaderView {
                 svg.style.maxWidth = "100%";
                 svg.style.margin = "0 auto";
                 svg.style.display = "block";
+
+                // User Request: Make sure SVG is transparent (for dark mode support)
+                svg.style.backgroundColor = "transparent";
             }
         }
 
@@ -294,28 +302,47 @@ export class ReaderView {
         if (this.currentSettings.scroll === 'scroll-continuous') {
             if (isSingleImage) {
                 // FIXED HEIGHT MODE for Covers/Images
-                // do NOT use ResizeObserver to grow the iframe.
-                // Just lock it to the container's height (minus padding implicitly via the parent div).
-                // "100%" of the parent (#reader-wrapper which is 100% of #section-b area).
+                if (this.activeFrameObserver) {
+                    this.activeFrameObserver.disconnect();
+                    this.activeFrameObserver = null;
+                }
                 iframe.style.height = "100%";
                 // Also ensure scrolling='no' is enforced (it is in createIframe but double check)
                 iframe.scrolling = "no";
             } else {
                 // NORMAL TEXT MODE
                 const updateHeight = () => {
+                    // Safety: Don't resize if we switched to paginated
+                    if (this.currentSettings.scroll !== 'scroll-continuous') {
+                        iframe.style.height = '100%';
+                        if (this.activeFrameObserver) {
+                            this.activeFrameObserver.disconnect();
+                            this.activeFrameObserver = null;
+                        }
+                        return;
+                    }
                     if (iframe.contentDocument) {
                         const newHeight = iframe.contentDocument.documentElement.scrollHeight;
                         iframe.style.height = `${newHeight}px`;
                     }
                 };
+
+                // Disconnect old
+                if (this.activeFrameObserver) this.activeFrameObserver.disconnect();
+
+                this.activeFrameObserver = new ResizeObserver(updateHeight);
+                this.activeFrameObserver.observe(body);
+
                 // Initial sizing
                 setTimeout(updateHeight, 100);
-
-                // Observe changes
-                const observer = new ResizeObserver(updateHeight);
-                observer.observe(body);
                 // Also listen to images load?
                 iframe.contentWindow?.addEventListener('load', updateHeight);
+            }
+        } else {
+            // Paginated Mode: Ensure no observer is messing with height
+            if (this.activeFrameObserver) {
+                this.activeFrameObserver.disconnect();
+                this.activeFrameObserver = null;
             }
         }
 
@@ -328,9 +355,15 @@ export class ReaderView {
     }
 
     public updateSettings(settings: any) {
+        // 1. Capture current reading position (First visible element)
+        let anchorElement: HTMLElement | null = null;
+        if (this.currentSettings.scroll !== 'scroll-continuous' && this.iframe) {
+            anchorElement = this.getVisibleElement();
+        }
+
         this.currentSettings = { ...this.currentSettings, ...settings };
 
-        // Apply to ALL active frames
+        // 2. Apply to ALL active frames
         this.frames.forEach(f => {
             if (f.element.contentDocument) {
                 this.applySettingsToDoc(f.element.contentDocument, f.element);
@@ -338,29 +371,151 @@ export class ReaderView {
             }
         });
 
+        // 3. Restore Position
+        if (anchorElement && this.iframe) {
+            console.log("Restoring position to anchor element:", anchorElement);
+            // We need to wait for layout to settle? updatePagination is synchronous mostly
+            this.scrollToElement(anchorElement);
+        }
+
         // Handle scroll mode container style update
         if (this.currentSettings.scroll === 'scroll-continuous') {
             this.container.style.overflowY = "auto";
         } else {
             this.container.style.overflowY = "hidden";
+            // Disable any active observer if we switched to paginated
+            if (this.activeFrameObserver) {
+                this.activeFrameObserver.disconnect();
+                this.activeFrameObserver = null;
+            }
         }
     }
 
+    private getVisibleElement(): HTMLElement | null {
+        if (!this.iframe || !this.iframe.contentDocument) return null;
+        const doc = this.iframe.contentDocument;
+        const body = doc.body;
+
+        const viewWidth = this.iframe.clientWidth;
+        // Current scroll offset (paginated uses 'left' shift)
+        const html = doc.documentElement;
+        // absolute value of left shift
+        const currentScrollX = Math.abs(parseFloat(html.style.left || "0"));
+
+        // Helper to check visibility
+        // We want an element that starts AFTER the current scrollX
+        // But BEFORE (currentScrollX + viewWidth)
+
+        // Iterate all elements? Expensive but robust?
+        // Let's try traversing p, h1-h6, li
+        const candidates = Array.from(body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, div'));
+
+        for (const el of candidates) {
+            const rect = el.getBoundingClientRect();
+            // In CSS columns, getBoundingClientRect().left is relative to the viewport.
+            // But the 'viewport' here is the iframe window.
+            // AND the content itself is shifted left by `html.style.left`.
+            // Wait. 
+            // If `html.style.left` is -800px.
+            // And an element is on the second page (starts at 800px).
+            // Its rect.left relative to the iframe viewport should be 0.
+
+            // So we just check if rect.left >= 0 && rect.left < viewWidth.
+
+            if (rect.left >= -50 && rect.top >= 0 && rect.left < viewWidth) {
+                // Found a visible candidate
+                return el as HTMLElement;
+            }
+        }
+        return null;
+    }
+
+    private scrollToElement(el: HTMLElement) {
+        if (!this.iframe || !this.iframe.contentDocument) return;
+
+        // Find which page this element is on now
+        // We temporarily reset scroll to 0 to measure 'true' offset? 
+        // No, in CSS columns, the layout is fixed.
+        // We need its offset relative to the flow.
+
+        // Problem: getBoundingClientRect depends on current scroll position?
+        // In our paginated implementation (shifting absolute left), 
+        // elements lay out horizontally.
+
+        // Wait, if we just updated pagination, `html.style.left` might be wrong or reset?
+        // `updatePagination` sets `scrollToPage(this.currentPageIndex)`.
+        // So the view is currently at `oldIndex * newWidth`.
+
+        // Let's calculate the element's absolute offset from start.
+        // But `rect.left` changes based on `html.style.left`.
+
+        // We know: existing left shift is applied.
+        const html = this.iframe.contentDocument.documentElement;
+        const currentShift = Math.abs(parseFloat(html.style.left || "0"));
+        const rect = el.getBoundingClientRect();
+
+        // True distance from start of content
+        const absoluteLeft = rect.left + currentShift;
+
+        const viewWidth = this.iframe.clientWidth;
+        const pageWidth = viewWidth + this.columnGap;
+
+        const newPageIndex = Math.floor(absoluteLeft / pageWidth);
+
+        console.log(`Restoring Element: absoluteLeft=${absoluteLeft}, newPageIndex=${newPageIndex}`);
+
+        this.currentPageIndex = newPageIndex;
+        // Clamp
+        if (this.currentPageIndex >= this.pageCount) this.currentPageIndex = this.pageCount - 1;
+        if (this.currentPageIndex < 0) this.currentPageIndex = 0;
+
+        this.scrollToPage(this.currentPageIndex);
+    }
+
     public setBookStyles(styles: any[]) {
+        this.currentBookStyles = styles;
+
+        // User Request: Apply theme background to .tr-epub-reader-element directly
+        const readerElement = document.querySelector('.tr-epub-reader-element') as HTMLElement;
+        // Logic Update: TreineticHelpers uses ':not(a):not(hypothesis-highlight)' as the main selector, not 'body'
+        const bodyStyle = styles.find(s => s.selector === 'body' || s.selector === ':not(a):not(hypothesis-highlight)') || (styles.length > 0 ? styles[0] : null);
+
+        console.log("setBookStyles: Applying styles to container. Found element:", !!readerElement, readerElement);
+        console.log("setBookStyles: Body style found:", bodyStyle);
+
+        if (readerElement) {
+            if (bodyStyle && bodyStyle.declarations && bodyStyle.declarations.backgroundColor) {
+                console.log("setBookStyles: Setting background color to", bodyStyle.declarations.backgroundColor);
+                readerElement.style.backgroundColor = bodyStyle.declarations.backgroundColor;
+            } else {
+                console.log("setBookStyles: Clearing background color");
+                readerElement.style.backgroundColor = '';
+            }
+        } else {
+            console.warn("setBookStyles: .tr-epub-reader-element NOT FOUND in DOM");
+        }
+
         this.frames.forEach(f => {
-            const iframe = f.element;
-            if (!iframe || !iframe.contentDocument) return;
-            const doc = iframe.contentDocument;
+            this.applyStylesToFrame(f.element);
+        });
+    }
 
-            // Remove old theme styles
-            const oldStyle = doc.getElementById('readium-theme-style');
-            if (oldStyle) oldStyle.remove();
+    private applyStylesToFrame(iframe: HTMLIFrameElement) {
+        if (!iframe || !iframe.contentDocument) return;
+        const doc = iframe.contentDocument;
 
-            const styleEl = doc.createElement('style');
-            styleEl.id = 'readium-theme-style';
+        // Remove old theme styles
+        const oldStyle = doc.getElementById('readium-theme-style');
+        if (oldStyle) oldStyle.remove();
 
-            let css = '';
-            styles.forEach(s => {
+        const styleEl = doc.createElement('style');
+        styleEl.id = 'readium-theme-style';
+
+        let css = '';
+
+        // Theme Styles
+        if (this.currentBookStyles && this.currentBookStyles.length > 0) {
+            this.currentBookStyles.forEach(s => {
                 let decls = '';
                 for (const [prop, val] of Object.entries(s.declarations)) {
                     // Convert camelCase to kebab-case
@@ -369,16 +524,19 @@ export class ReaderView {
                 }
                 css += `${s.selector} { ${decls} } \n`;
             });
+        }
 
-            // FIX: Inject structural styles for decent pagination and scroll
-            css += `
-                 img { max-width: 100%; box-sizing: border-box; break-inside: avoid; page-break-inside: avoid; }
-                 p, h1, h2, h3, h4, h5, h6 { break-inside: avoid; page-break-inside: avoid; }
-             `;
+        // FIX: Inject structural styles for decent pagination and scroll
+        css += `
+                img { max-width: 100%; box-sizing: border-box; break-inside: avoid; page-break-inside: avoid; }
+                p, h1, h2, h3, h4, h5, h6 { break-inside: avoid; page-break-inside: avoid; }
+                
+                /* User Request: Force specific EPUB cover class to be transparent */
+                .x-ebookmaker-cover { background-color: transparent !important; background: transparent !important; }
+            `;
 
-            styleEl.textContent = css;
-            doc.head.appendChild(styleEl);
-        });
+        styleEl.textContent = css;
+        doc.head.appendChild(styleEl);
     }
 
     private applySettingsToDoc(doc: Document, iframe: HTMLIFrameElement) {
@@ -409,6 +567,7 @@ export class ReaderView {
             } else {
                 html.style.height = 'auto'; // let it grow
                 html.style.width = '100vw'; // full width usually
+
                 html.style.overflowY = 'auto';
             }
             html.style.overflowX = 'hidden';
@@ -426,6 +585,10 @@ export class ReaderView {
             iframe.style.overflow = 'hidden'; // Hide scrollbars on iframe, container handles it
         } else {
             // Paginated Mode (CSS Columns)
+
+            // DEFENSIVE FIX: Ensure iframe is 100% height
+            iframe.style.height = '100%';
+
             html.style.height = `${height}px`;
             html.style.width = '100%'; // Not 100vw, but 100% of iframe
 
@@ -505,6 +668,10 @@ export class ReaderView {
         if (this.currentSettings.scroll === 'scroll-continuous') return;
 
         console.log("updatePagination executing...");
+
+        // DEFENSIVE: Enforce 100% dimensions when paginating
+        iframe.style.height = '100%';
+        iframe.style.width = '100%';
 
         const html = iframe.contentDocument.documentElement;
 

@@ -366,8 +366,7 @@ body {
     height: 100%;
     width: 100%;
     position: relative;
-    border-left: 40px solid transparent;
-    border-right: 40px solid transparent;
+    border: none;
     box-sizing: border-box;
     /* Safer choice for modern layout */
 }
