@@ -1,3 +1,8 @@
+![Banner](readme_banner.jpg)
+
+Try out before you actually use it 
+`docker run --pull always -p 9090:80 treineticprojects/demo_opensource:latest`
+
 # Treinetic Epub Reader 2.0.3
 
 A modern, lightweight, and framework-agnostic EPUB reader for the web, built with TypeScript.
